@@ -40,7 +40,7 @@ public class RestControllerAdvice {
         ValidationErrorResponse validationErrorResponse = new ValidationErrorResponse();
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
             validationErrorResponse.setIsSuccess(false);
-            validationErrorResponse.setStatus(400);
+            validationErrorResponse.setStatus(4500);
             validationErrorResponse.setMessage(fieldError.getDefaultMessage());
         }
 
