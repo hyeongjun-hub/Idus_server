@@ -9,14 +9,12 @@ import com.example.demo.src.user.model.response.GetUserRes;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Mapper
 @Repository
 public interface UserMapper {
-    List<GetUserRes> getUsers();
+    List<User> getUsers();
 
     GetUserRes getUser(int userId);
 

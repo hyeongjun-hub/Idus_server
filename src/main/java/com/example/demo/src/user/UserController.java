@@ -44,8 +44,8 @@ public class UserController {
      * @return BaseResponse<List < GetUserRes>>
      */
     @GetMapping("/all") // (GET) 127.0.0.1:9000/users/all
-    public BaseResponse<List<GetUserRes>> getUsers() throws BaseException {
-        List<GetUserRes> getUsersRes = userProvider.getUsers();
+    public BaseResponse<List<User>> getUsers() throws BaseException {
+        List<User> getUsersRes = userProvider.getUsers();
         return new BaseResponse<>(getUsersRes);
     }
 

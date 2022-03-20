@@ -2,6 +2,7 @@ package com.example.demo.src.user;
 
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.user.model.entity.User;
 import com.example.demo.src.user.model.response.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,7 @@ public class UserProvider {
         this.userMapper = userMapper;
     }
 
-    public List<GetUserRes> getUsers() throws BaseException{
+    public List<User> getUsers() throws BaseException{
         try{
             return userMapper.getUsers();
         }

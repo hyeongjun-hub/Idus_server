@@ -68,7 +68,7 @@ public class UserService {
             throw new BaseException(USERS_STATUS_NOT_Y);
         }
         //이메일 중복확인
-        if(this.checkEmail(user.getUserEmail()) == 1){
+        if(this.checkEmail(user.getEmail()) == 1){
             throw new BaseException(POST_USERS_EXISTS_EMAIL);
         }
         String pwd;

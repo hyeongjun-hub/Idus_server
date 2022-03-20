@@ -17,18 +17,26 @@ public class User {
     private String userName;
     @NotBlank(message = "이메일을 입력하세요.")
     @Email(message = "이메일 형식을 확인해주세요.")
-    private String userEmail;
+    private String email;
     @NotBlank(message = "비밀번호를 입력하세요.")
     @Length(min = 8, max = 20, message = "비밀번호 길이를 확인해주세요")
     private String password;
-    private String profileImageUrl;
+    private String grade;
     @NotBlank(message = "전화번호를 입력하세요")
     @Pattern(regexp = "^01(?:0|1|[6-9])[.-]?(\\d{3}|\\d{4})[.-]?(\\d{4})$", message = "전화번호 형식을 확인해주세요.")
     private String phoneNumber;
+    private String profileImageUrl;
     @PositiveOrZero(message = "0 또는 양수만 가능")
     private int point;
-    private String mailAccept;
-    private String smsAccept;
-    private String grade;
+    private String birthday;
+    private String gender;
+    private String identityTest;
+    private String isLogin;
+    private String platform;
+    private String fingerPrint;
+    private int productId;
+    private String alarm;
+    private String createdAt;
+    private String updateAt;
     private String status;
 }

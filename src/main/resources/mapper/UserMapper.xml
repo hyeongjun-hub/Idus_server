@@ -9,7 +9,7 @@
         </selectKey>
     </insert>
 
-    <select id="getUsers" resultType="GetUserRes">
+    <select id="getUsers" resultType="com.example.demo.src.user.model.entity.User">
         select * from User
     </select>
 
