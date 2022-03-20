@@ -21,7 +21,7 @@ public class User {
     @NotBlank(message = "비밀번호를 입력하세요.")
     @Length(min = 8, max = 20, message = "비밀번호 길이를 확인해주세요")
     private String password;
-    private String grade;
+    private String gradeId;
     @NotBlank(message = "전화번호를 입력하세요")
     @Pattern(regexp = "^01(?:0|1|[6-9])[.-]?(\\d{3}|\\d{4})[.-]?(\\d{4})$", message = "전화번호 형식을 확인해주세요.")
     private String phoneNumber;
@@ -37,6 +37,6 @@ public class User {
     private int productId;
     private String alarm;
     private String createdAt;
-    private String updateAt;
+    private String updatedAt;
     private String status;
 }
