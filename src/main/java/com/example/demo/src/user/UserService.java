@@ -5,7 +5,6 @@ import com.example.demo.config.BaseException;
 import com.example.demo.src.user.model.entity.KaKaoUser;
 import com.example.demo.src.user.model.entity.User;
 import com.example.demo.src.user.model.request.*;
-import com.example.demo.src.user.model.response.PatchUserRes;
 import com.example.demo.src.user.model.response.PostLoginRes;
 import com.example.demo.src.user.model.response.PostUserRes;
 import com.example.demo.utils.JwtService;
@@ -34,11 +33,10 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    //POST
     @Transactional(rollbackFor = {BaseException.class, MethodArgumentNotValidException.class})
     public PostUserRes createUser(PostUserReq postUserReq) throws BaseException {
         //중복
-        if(this.checkEmail(postUserReq.getUserEmail()) == 1){
+        if(this.checkEmail(postUserReq.getEmail()) == 1){
             throw new BaseException(POST_USERS_EXISTS_EMAIL);
         }
         String pwd;
@@ -130,7 +128,7 @@ public class UserService {
     public PostUserRes login(PostLoginReq postLoginReq) throws BaseException{
         User user = userMapper.getLoginUser(postLoginReq);
         //이메일 존재여부 확인
-        if(this.checkEmail(postLoginReq.getUserEmail()) != 1){
+        if(this.checkEmail(postLoginReq.getEmail()) != 1){
             throw new BaseException(POST_USERS_NOT_EXISTS_EMAIL);
         }
         //status 값 확인
@@ -147,6 +145,8 @@ public class UserService {
         if(user.getPassword().equals(encryptPwd)){
             int userId = user.getUserId();
             String jwt = jwtService.createJwt(userId);
+            //isLogin 값 "Y"로 변경
+            userMapper.updateIsLogin(userId);
             return new PostUserRes(userId,jwt);
         }
         else{
@@ -169,8 +169,9 @@ public class UserService {
                 throw new BaseException(USERS_INAPP_EXISTS); // 해당 이메일로 자체 이메일가입한 상태라면 카카오로그인, 가입 X, 자체로그인으로.
             }
         } else { // 가입이 되어 있지 않다면 가입 진행
-            PostUserReq kaKaoSignUp = new PostUserReq(kaKaoUser.getUserName(), kaKaoUser.getEmail(), "socialLogin", "kaKao" ,0);
-            userId = userMapper.createUser(kaKaoSignUp); // + KaKao
+            PostUserReq kaKaoSignUp = new PostUserReq(kaKaoUser.getUserName(), kaKaoUser.getEmail(),"socialLogin", null, "kaKao" ,"N", 0);
+            userMapper.createUser(kaKaoSignUp); // + KaKao
+            userId = kaKaoSignUp.getUserId();
             jwt = jwtService.createJwt(userId);
         }
         return new PostLoginRes(userId, jwt);

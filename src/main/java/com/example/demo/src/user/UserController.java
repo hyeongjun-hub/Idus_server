@@ -1,31 +1,25 @@
 package com.example.demo.src.user;
 
-import com.example.demo.config.Constant;
 import com.example.demo.src.user.model.entity.KaKaoUser;
 import com.example.demo.src.user.model.entity.User;
 import com.example.demo.src.user.model.request.*;
 import com.example.demo.src.user.model.response.*;
 import com.example.demo.utils.KaKaoLoginService;
+import com.example.demo.utils.SmsAuthService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.utils.JwtService;
-import org.springframework.data.redis.core.RedisHash;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
 import static com.example.demo.config.BaseResponseStatus.*;
-import static com.example.demo.utils.ValidationRegex.isRegexEmail;
 
 @RestController
 @AllArgsConstructor
@@ -36,7 +30,7 @@ public class UserController {
     private final UserProvider userProvider;
     private final UserService userService;
     private final JwtService jwtService;
-//    private final RedisTemplate<String, String> redisTemplate;
+    private final SmsAuthService smsAuthService;
 
     /**
      * 전체 유저 조회 API
@@ -66,13 +60,22 @@ public class UserController {
      * @return BaseResponse<PostUserRes>
      */
     // Body
-    @PostMapping("")  // (POST) 127.0.0.1:9000/users
-    public BaseResponse<PostUserRes> createUser(@Valid @RequestBody PostUserReq postUserReq) throws BaseException {
-        if (postUserReq.getUserEmail() == null) {
-            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
-        }
+    @PostMapping("/join")  // (POST) 127.0.0.1:9000/users
+    public BaseResponse<PostUserRes> join(@Valid @RequestBody PostUserReq postUserReq) throws BaseException {
         PostUserRes postUserRes = userService.createUser(postUserReq);
         return new BaseResponse<>(postUserRes);
+    }
+
+    /**
+     * 휴대폰 인증번호 발송 API
+     * @param postPhoneAuthReq
+     * @return
+     */
+    @ResponseBody
+    @PostMapping("/auth/phone")
+    public BaseResponse<PostPhoneAuthRes> sendMessage(@RequestBody PostPhoneAuthReq postPhoneAuthReq) throws BaseException {
+        PostPhoneAuthRes postPhoneAuthRes = smsAuthService.sendPhoneAuth(postPhoneAuthReq.getPhone()); // 문자 발송
+        return new BaseResponse<>(new PostPhoneAuthRes(postPhoneAuthRes.getPhone(), postPhoneAuthRes.getAuthNumber()));
     }
 
     /**
@@ -81,9 +84,6 @@ public class UserController {
      */
     @PostMapping("/login")  // (POST) 127.0.0.1:9000/users/login
     public BaseResponse<PostUserRes> login(@Valid @RequestBody PostLoginReq postLoginReq) throws BaseException {
-        if (postLoginReq.getUserEmail() == null) {
-            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
-        }
         PostUserRes postUserRes = userService.login(postLoginReq);
         return new BaseResponse<>(postUserRes);
     }
@@ -92,7 +92,6 @@ public class UserController {
      * 카카오 로그인 API
      * @return BaseResponse<String>>
      */
-    @ResponseBody
     @PostMapping("/login/kakao")
     public BaseResponse<PostLoginRes> kaKaoLogin(@RequestBody PostKaKaoLoginReq postKaKaoLogin) throws BaseException {
         if (postKaKaoLogin.getAccessToken() == null || postKaKaoLogin.getAccessToken().isEmpty()) {
