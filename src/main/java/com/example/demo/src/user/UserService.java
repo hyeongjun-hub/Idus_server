@@ -128,7 +128,7 @@ public class UserService {
     public PostUserRes login(PostLoginReq postLoginReq) throws BaseException{
         User user = userMapper.getLoginUser(postLoginReq);
         //이메일 존재여부 확인
-        if(this.checkEmail(postLoginReq.getUserEmail()) != 1){
+        if(this.checkEmail(postLoginReq.getEmail()) != 1){
             throw new BaseException(POST_USERS_NOT_EXISTS_EMAIL);
         }
         //status 값 확인
@@ -145,6 +145,8 @@ public class UserService {
         if(user.getPassword().equals(encryptPwd)){
             int userId = user.getUserId();
             String jwt = jwtService.createJwt(userId);
+            //isLogin 값 "Y"로 변경
+            userMapper.updateIsLogin(userId);
             return new PostUserRes(userId,jwt);
         }
         else{
@@ -168,7 +170,8 @@ public class UserService {
             }
         } else { // 가입이 되어 있지 않다면 가입 진행
             PostUserReq kaKaoSignUp = new PostUserReq(kaKaoUser.getUserName(), kaKaoUser.getEmail(),"socialLogin", null, "kaKao" ,"N", 0);
-            userId = userMapper.createUser(kaKaoSignUp); // + KaKao
+            userMapper.createUser(kaKaoSignUp); // + KaKao
+            userId = kaKaoSignUp.getUserId();
             jwt = jwtService.createJwt(userId);
         }
         return new PostLoginRes(userId, jwt);
