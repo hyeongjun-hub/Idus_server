@@ -26,7 +26,7 @@ public class RestControllerAdvice {
     // BaseException
     @ExceptionHandler({BaseException.class})
     public BaseResponse<Object> handleException(BaseException ex) {
-        logger.warn("error", ex.getMessage());
+        logger.warn("error", ex);
         return new BaseResponse<>(ex.getStatus());
     }
 
