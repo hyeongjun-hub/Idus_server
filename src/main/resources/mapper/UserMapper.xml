@@ -3,7 +3,7 @@
 <mapper namespace="com.example.demo.src.user.UserMapper">
 
     <insert id="createUser" parameterType="PostUserReq">
-        insert into User (userName, password, userEmail, platform) VALUES (#{userName}, #{password}, #{userEmail}, #{platform})
+        insert into User (userName, email, password, gradeId, phoneNumber, profileImageUrl, point, birthday, gender, identityTest, isLogin, platform, fingerPrint, productId, alarm) VALUES (#{userName}, #{email}, #{password}, DEFAULT, #{phoneNumber}, null, DEFAULT, null, DEFAULT, DEFAULT, DEFAULT, #{platform}, DEFAULT, null, DEFAULT)
         <selectKey keyProperty="userId" resultType="int" order="AFTER">
             select LAST_INSERT_ID()
         </selectKey>
@@ -19,11 +19,11 @@
 
 
     <select id="checkEmail" parameterType="string" resultType="int">
-        select exists(select userEmail from User where userEmail = #{email})
+        select exists(select email from User where email = #{email})
     </select>
 
     <select id="getPlatform" parameterType="string" resultType="string">
-        select platform from User where userEmail = #{email}
+        select platform from User where email = #{email}
     </select>
 
     <select id="checkAddress" parameterType="string" resultType="int">
@@ -35,7 +35,7 @@
     </select>
 
     <update id="editUser" parameterType="Object">
-        UPDATE User SET userName = #{param2.userName}, userEmail = #{param2.userEmail} , password = #{param2.password}, profileImageUrl = #{param2.profileImageUrl}, phoneNumber=#{param2.phoneNumber}, mailAccept =#{param2.mailAccept}, smsAccept=#{param2.smsAccept} WHERE userId = #{param1}
+        UPDATE User SET userName = #{param2.userName}, email = #{param2.email} , password = #{param2.password}, profileImageUrl = #{param2.profileImageUrl}, phoneNumber=#{param2.phoneNumber}, mailAccept =#{param2.mailAccept}, smsAccept=#{param2.smsAccept} WHERE userId = #{param1}
     </update>
 
     <update id="delUser" parameterType="PostUserDelReq">
@@ -43,7 +43,7 @@
     </update>
 
     <select id="getLoginUser" parameterType="PostLoginReq" resultType="User">
-        select * from User where userEmail = #{userEmail}
+        select * from User where email = #{email}
     </select>
 
     <select id="getUserId" parameterType="int" resultType="int">
@@ -51,7 +51,7 @@
     </select>
 
     <select id="getUserIdByEmail" parameterType="string" resultType="int">
-        select userId from User where userEmail = #{userEmail}
+        select userId from User where email = #{email}
     </select>
 
     <select id="getPoint" parameterType="int" resultType="int">

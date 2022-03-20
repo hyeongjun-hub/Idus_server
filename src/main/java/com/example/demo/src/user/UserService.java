@@ -5,7 +5,6 @@ import com.example.demo.config.BaseException;
 import com.example.demo.src.user.model.entity.KaKaoUser;
 import com.example.demo.src.user.model.entity.User;
 import com.example.demo.src.user.model.request.*;
-import com.example.demo.src.user.model.response.PatchUserRes;
 import com.example.demo.src.user.model.response.PostLoginRes;
 import com.example.demo.src.user.model.response.PostUserRes;
 import com.example.demo.utils.JwtService;
@@ -34,11 +33,10 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    //POST
     @Transactional(rollbackFor = {BaseException.class, MethodArgumentNotValidException.class})
     public PostUserRes createUser(PostUserReq postUserReq) throws BaseException {
         //중복
-        if(this.checkEmail(postUserReq.getUserEmail()) == 1){
+        if(this.checkEmail(postUserReq.getEmail()) == 1){
             throw new BaseException(POST_USERS_EXISTS_EMAIL);
         }
         String pwd;
@@ -169,7 +167,7 @@ public class UserService {
                 throw new BaseException(USERS_INAPP_EXISTS); // 해당 이메일로 자체 이메일가입한 상태라면 카카오로그인, 가입 X, 자체로그인으로.
             }
         } else { // 가입이 되어 있지 않다면 가입 진행
-            PostUserReq kaKaoSignUp = new PostUserReq(kaKaoUser.getUserName(), kaKaoUser.getEmail(), "socialLogin", "kaKao" ,0);
+            PostUserReq kaKaoSignUp = new PostUserReq(kaKaoUser.getUserName(), kaKaoUser.getEmail(),"socialLogin", null, "kaKao" ,"N", 0);
             userId = userMapper.createUser(kaKaoSignUp); // + KaKao
             jwt = jwtService.createJwt(userId);
         }
