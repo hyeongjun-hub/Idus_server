@@ -37,6 +37,6 @@ public class User {
     private int productId;
     private String alarm;
     private String createdAt;
-    private String updateAt;
+    private String updatedAt;
     private String status;
 }
