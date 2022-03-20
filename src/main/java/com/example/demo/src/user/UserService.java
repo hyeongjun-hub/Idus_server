@@ -158,10 +158,11 @@ public class UserService {
     public PostLoginRes kaKaoLogin(KaKaoUser kaKaoUser) throws BaseException {
         int userId;
         String jwt;
+        System.out.println("kaKaoUser = " + kaKaoUser.getEmail());
 //        // 카카오에서 받아온 사용자 정보의 이메일을 가지고 User테이블에 있는지 확인한다.
         if (userMapper.checkEmail(kaKaoUser.getEmail()) == 1) {
 //            // 해당 이메일이 카카오 가입으로 가입된 계정이 맞는지 확인한다.
-            if (userMapper.getPlatform(kaKaoUser.getEmail()).equals("KaKao")) {
+            if (userMapper.getPlatform(kaKaoUser.getEmail()).equals("kaKao")) {
 //                //카카오 가입 이메일이 맞다면 로그인 처리
                 userId = userMapper.getUserIdByEmail(kaKaoUser.getEmail());
                 jwt = jwtService.createJwt(userId);
