@@ -67,40 +67,25 @@ public class UserController {
     }
 
     /**
-     * 로그인 API
-     * @return BaseResponse<PostLoginRes>
-     */
-    @PostMapping("/login")  // (POST) 127.0.0.1:9000/users/login
-    public BaseResponse<PostUserRes> login(@Valid @RequestBody PostLoginReq postLoginReq) throws BaseException {
-        if (postLoginReq.getUserEmail() == null) {
-            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
-        }
-        PostUserRes postUserRes = userService.login(postLoginReq);
-        return new BaseResponse<>(postUserRes);
-    }
-
-    /**
      * 휴대폰 인증번호 발송 API
      * @param postPhoneAuthReq
      * @return
      */
     @ResponseBody
     @PostMapping("/auth/phone")
-    public BaseResponse<PostPhoneAuthRes> sendMessage(@RequestBody PostPhoneAuthReq postPhoneAuthReq) {
-//        if(postPhoneAuthReq.getPhone() == null || postPhoneAuthReq.getPhone().isEmpty()) {
-//            return new BaseResponse<>(POST_USERS_EMPTY_PHONE);
-//        }
-//        if(!isRegexPhone(postPhoneAuthReq.getPhone())) {
-//            return new BaseResponse<>(POST_USERS_INVALID_PHONE);
-//        }
+    public BaseResponse<PostPhoneAuthRes> sendMessage(@RequestBody PostPhoneAuthReq postPhoneAuthReq) throws BaseException {
+        PostPhoneAuthRes postPhoneAuthRes = smsAuthService.sendPhoneAuth(postPhoneAuthReq.getPhone()); // 문자 발송
+        return new BaseResponse<>(new PostPhoneAuthRes(postPhoneAuthRes.getPhone(), postPhoneAuthRes.getAuthNumber()));
+    }
 
-        try{
-            PostPhoneAuthRes postPhoneAuthRes = smsAuthService.sendPhoneAuth(postPhoneAuthReq.getPhone()); // 문자 발송
-            return new BaseResponse<>(new PostPhoneAuthRes(postPhoneAuthRes.getPhone(), postPhoneAuthRes.getAuthNumber()));
-        } catch(BaseException exception){
-            logger.warn("#7 {} - phone : {}", exception.getStatus().getMessage(), postPhoneAuthReq.getPhone());
-            return new BaseResponse<>(exception.getStatus());
-        }
+    /**
+     * 로그인 API
+     * @return BaseResponse<PostLoginRes>
+     */
+    @PostMapping("/login")  // (POST) 127.0.0.1:9000/users/login
+    public BaseResponse<PostUserRes> login(@Valid @RequestBody PostLoginReq postLoginReq) throws BaseException {
+        PostUserRes postUserRes = userService.login(postLoginReq);
+        return new BaseResponse<>(postUserRes);
     }
 
     /**
