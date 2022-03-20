@@ -58,4 +58,6 @@ public interface UserMapper {
 
     void logout(int userId);
 
+    void updateIsLogin(int userId);
+
 }

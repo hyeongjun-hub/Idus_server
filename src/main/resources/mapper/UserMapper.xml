@@ -17,7 +17,6 @@
         select * from User where userId = #{userId} and status = 'Y'
     </select>
 
-
     <select id="checkEmail" parameterType="string" resultType="int">
         select exists(select email from User where email = #{email})
     </select>
@@ -95,6 +94,10 @@
 
     <update id="logout" parameterType="int">
         UPDATE User SET isLogin = 'N' WHERE userId = #{userId}
+    </update>
+
+    <update id="updateIsLogin" parameterType="int">
+        UPDATE User SET isLogin = 'Y' WHERE userId = #{userId}
     </update>
 
 </mapper>
