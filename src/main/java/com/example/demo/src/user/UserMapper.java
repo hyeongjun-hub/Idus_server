@@ -46,7 +46,7 @@ public interface UserMapper {
 
     List<GetAddressRes> getAddress(int userId);
 
-    int createAddress(int userId, PostAddressReq postAddressReq);
+    int createAddress(int userId);
 
     void editAddress(int addressId, PatchAddressReq patchAddressReq);
 

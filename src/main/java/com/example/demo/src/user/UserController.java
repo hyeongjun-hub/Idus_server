@@ -14,7 +14,6 @@ import com.example.demo.config.BaseResponse;
 import com.example.demo.utils.JwtService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -33,7 +32,7 @@ public class UserController {
     private final SmsAuthService smsAuthService;
 
     /**
-     * 전체 유저 조회 API
+     * 1. 전체 유저 조회 API
      * 회원 번호 및 이메일 검색 조회 API
      * @return BaseResponse<List < GetUserRes>>
      */
@@ -44,19 +43,8 @@ public class UserController {
     }
 
     /**
-     * 유저 조회 API
-     * @return BaseResponse<GetUserRes>
-     */
-    @GetMapping("") // (GET) 127.0.0.1:9000/users
-    public BaseResponse<GetUserRes> getUser() throws BaseException {
-        int userId = jwtService.getUserId();
-        GetUserRes getUserRes = userProvider.getUser(userId);
-        return new BaseResponse<>(getUserRes);
-
-    }
-
-    /**
-     * 회원가입 API
+     * 2. inApp 유저 생성 API (회원가입)
+     * @param postUserReq
      * @return BaseResponse<PostUserRes>
      */
     // Body
@@ -67,19 +55,20 @@ public class UserController {
     }
 
     /**
-     * 휴대폰 인증번호 발송 API
+     * 3. 휴대폰 인증번호 발송 API
      * @param postPhoneAuthReq
      * @return
      */
     @ResponseBody
     @PostMapping("/auth/phone")
-    public BaseResponse<PostPhoneAuthRes> sendMessage(@RequestBody PostPhoneAuthReq postPhoneAuthReq) throws BaseException {
+    public BaseResponse<PostPhoneAuthRes> sendMessage(@Valid @RequestBody PostPhoneAuthReq postPhoneAuthReq) throws BaseException {
         PostPhoneAuthRes postPhoneAuthRes = smsAuthService.sendPhoneAuth(postPhoneAuthReq.getPhone()); // 문자 발송
         return new BaseResponse<>(new PostPhoneAuthRes(postPhoneAuthRes.getPhone(), postPhoneAuthRes.getAuthNumber()));
     }
 
     /**
-     * 로그인 API
+     * 4. 이메일 로그인 API
+     * @param postLoginReq
      * @return BaseResponse<PostLoginRes>
      */
     @PostMapping("/login")  // (POST) 127.0.0.1:9000/users/login
@@ -89,7 +78,8 @@ public class UserController {
     }
 
     /**
-     * 카카오 로그인 API
+     * 5. 카카오 로그인, 회원가입 API
+     * @param postKaKaoLogin
      * @return BaseResponse<String>>
      */
     @PostMapping("/login/kakao")
@@ -102,6 +92,17 @@ public class UserController {
         // 로그인 처리 or 회원가입 진행 후 jwt, userIdx 반환
         PostLoginRes postLoginRes = userService.kaKaoLogin(kaKaoUser);
         return new BaseResponse<>(postLoginRes);
+    }
+
+    /**
+     * 6. 유저 정보 조회 API
+     * @return BaseResponse<GetUserRes>
+     */
+    @GetMapping("") // (GET) 127.0.0.1:9000/users
+    public BaseResponse<GetUserRes> getUser() throws BaseException {
+        int userId = jwtService.getUserId();
+        GetUserRes getUserRes = userProvider.getUser(userId);
+        return new BaseResponse<>(getUserRes);
     }
 
     /**
@@ -178,18 +179,6 @@ public class UserController {
         int userId = jwtService.getUserId();
         List<GetAddressRes> getAddressRes = userProvider.getAddress(userId);
         return new BaseResponse<>(getAddressRes);
-    }
-
-    /**
-     * 회원 주소 생성 API
-     * @param postAddressReq
-     * @return BaseResponse<Integer>
-     */
-    @PostMapping("/address")
-    public BaseResponse<Integer> createAddress(@RequestBody PostAddressReq postAddressReq) throws BaseException {
-        int userId = jwtService.getUserId();
-        int addressId = userService.createAddress(userId, postAddressReq);
-        return new BaseResponse<>(addressId);
     }
 
     /**
