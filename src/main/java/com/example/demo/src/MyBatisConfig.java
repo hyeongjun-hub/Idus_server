@@ -25,9 +25,7 @@ public class MyBatisConfig {
 
     @Bean
     public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
-
         SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
-
         sessionFactory.setDataSource(dataSource);
 //        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 
@@ -47,9 +45,7 @@ public class MyBatisConfig {
     @Bean
     public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) throws Exception {
         SqlSessionTemplate sqlSessionTemplate = new SqlSessionTemplate(sqlSessionFactory);
-
         sqlSessionTemplate.getConfiguration().setMapUnderscoreToCamelCase(true);
-
 //        sqlSessionTemplate.getConfiguration().setUseGeneratedKeys(true);
         return sqlSessionTemplate;
     }

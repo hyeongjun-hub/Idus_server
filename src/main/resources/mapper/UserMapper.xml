@@ -3,7 +3,7 @@
 <mapper namespace="com.example.demo.src.user.UserMapper">
 
     <insert id="createUser" parameterType="PostUserReq">
-        insert into User (userName, email, password, gradeId, phoneNumber, profileImageUrl, point, birthday, gender, identityTest, isLogin, platform, fingerPrint, productId, alarm) VALUES (#{userName}, #{email}, #{password}, DEFAULT, #{phoneNumber}, null, DEFAULT, null, DEFAULT, DEFAULT, DEFAULT, #{platform}, DEFAULT, null, DEFAULT)
+        insert into User (userName, email, password, gradeId, phone, profileImageUrl, point, birthday, gender, identityTest, isLogin, platform, fingerPrint, productId, alarm) VALUES (#{userName}, #{email}, #{password}, DEFAULT, #{phone}, null, DEFAULT, null, DEFAULT, DEFAULT, DEFAULT, #{platform}, DEFAULT, null, DEFAULT)
         <selectKey keyProperty="userId" resultType="int" order="AFTER">
             select LAST_INSERT_ID()
         </selectKey>
@@ -14,7 +14,7 @@
     </select>
 
     <select id="getUser" parameterType="int" resultType="GetUserRes">
-        select * from User where userId = #{userId} and status = 'Y'
+        select User.userId, userName, email, phone, (select count(userId) from Coupon where userId = #{userId} and status = 'Y') as couponCount, User.gradeId, G.iconUrl, G.gradeName, profileImageUrl, point, birthday, gender, identityTest, fingerPrint, alarm from User inner join Grade G on User.gradeId = G.gradeId where User.userId = #{userId} and User.status = 'Y';
     </select>
 
     <select id="checkEmail" parameterType="string" resultType="int">
@@ -33,8 +33,36 @@
         select exists(select addressName from Address where addressName = #{addressName})
     </select>
 
-    <update id="editUser" parameterType="Object">
-        UPDATE User SET userName = #{param2.userName}, email = #{param2.email} , password = #{param2.password}, profileImageUrl = #{param2.profileImageUrl}, phoneNumber=#{param2.phoneNumber}, mailAccept =#{param2.mailAccept}, smsAccept=#{param2.smsAccept} WHERE userId = #{param1}
+    <update id="editUserName" parameterType="Object">
+        UPDATE User SET userName = #{param2.userName} WHERE userId = #{param1}
+    </update>
+
+    <update id="editEmail" parameterType="Object">
+        UPDATE User SET email=#{param2.email} WHERE userId = #{param1}
+    </update>
+
+    <update id="editProfileImageUrl" parameterType="Object">
+        UPDATE User SET email=#{param2.profileImageUrl} WHERE userId = #{param1}
+    </update>
+
+    <update id="editBirthday" parameterType="Object">
+        UPDATE User SET birthday=#{param2.birthday} WHERE userId = #{param1}
+    </update>
+
+    <update id="editGender" parameterType="Object">
+        UPDATE User SET gender = #{param2.gender} WHERE userId = #{param1}
+    </update>
+
+    <update id="editFingerPrint" parameterType="Object">
+        UPDATE User SET fingerPrint=#{param2.fingerPrint} WHERE userId = #{param1}
+    </update>
+
+    <update id="editAlarm" parameterType="Object">
+        UPDATE User SET alarm = #{param2.alarm} WHERE userId = #{param1}
+    </update>
+
+    <update id="editPhone" parameterType="Object">
+        UPDATE User SET phone=#{param2.phone} WHERE userId = #{param1}
     </update>
 
     <update id="delUser" parameterType="PostUserDelReq">
@@ -69,11 +97,8 @@
         select Address.addressId, addressName, address, Address.status from Address inner join User U on Address.userId = U.userId where U.userId = #{userId} and Address.status = 'Y'
     </select>
 
-    <insert id="createAddress" parameterType="Object">
-        INSERT INTO Address (addressName, address, userId) VALUES (#{param2.addressName}, #{param2.address}, #{param1})
-        <selectKey keyProperty="addressId" resultType="int">
-            select LAST_INSERT_ID()
-        </selectKey>
+    <insert id="createAddress" parameterType="int">
+        INSERT INTO Address (userId) VALUES (#{userId})
     </insert>
 
     <update id="editAddress" parameterType="Object">

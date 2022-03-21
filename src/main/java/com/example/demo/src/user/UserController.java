@@ -12,9 +12,9 @@ import org.slf4j.LoggerFactory;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.utils.JwtService;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class UserController {
     private final SmsAuthService smsAuthService;
 
     /**
-     * 전체 유저 조회 API
+     * 1. 전체 유저 조회 API
      * 회원 번호 및 이메일 검색 조회 API
      * @return BaseResponse<List < GetUserRes>>
      */
@@ -44,19 +44,8 @@ public class UserController {
     }
 
     /**
-     * 유저 조회 API
-     * @return BaseResponse<GetUserRes>
-     */
-    @GetMapping("") // (GET) 127.0.0.1:9000/users
-    public BaseResponse<GetUserRes> getUser() throws BaseException {
-        int userId = jwtService.getUserId();
-        GetUserRes getUserRes = userProvider.getUser(userId);
-        return new BaseResponse<>(getUserRes);
-
-    }
-
-    /**
-     * 회원가입 API
+     * 2. inApp 유저 생성 API (회원가입)
+     * @param postUserReq
      * @return BaseResponse<PostUserRes>
      */
     // Body
@@ -67,19 +56,20 @@ public class UserController {
     }
 
     /**
-     * 휴대폰 인증번호 발송 API
+     * 3. 휴대폰 인증번호 발송 API
      * @param postPhoneAuthReq
      * @return
      */
     @ResponseBody
     @PostMapping("/auth/phone")
-    public BaseResponse<PostPhoneAuthRes> sendMessage(@RequestBody PostPhoneAuthReq postPhoneAuthReq) throws BaseException {
+    public BaseResponse<PostPhoneAuthRes> sendMessage(@Valid @RequestBody PostPhoneAuthReq postPhoneAuthReq) throws BaseException {
         PostPhoneAuthRes postPhoneAuthRes = smsAuthService.sendPhoneAuth(postPhoneAuthReq.getPhone()); // 문자 발송
         return new BaseResponse<>(new PostPhoneAuthRes(postPhoneAuthRes.getPhone(), postPhoneAuthRes.getAuthNumber()));
     }
 
     /**
-     * 로그인 API
+     * 4. 이메일 로그인 API
+     * @param postLoginReq
      * @return BaseResponse<PostLoginRes>
      */
     @PostMapping("/login")  // (POST) 127.0.0.1:9000/users/login
@@ -89,7 +79,8 @@ public class UserController {
     }
 
     /**
-     * 카카오 로그인 API
+     * 5. 카카오 로그인, 회원가입 API
+     * @param postKaKaoLogin
      * @return BaseResponse<String>>
      */
     @PostMapping("/login/kakao")
@@ -105,35 +96,58 @@ public class UserController {
     }
 
     /**
-     * 유저정보변경 API
+     * 6. 유저 정보 조회 API
+     * @return BaseResponse<GetUserRes>
+     */
+    @GetMapping("") // (GET) 127.0.0.1:9000/users
+    public BaseResponse<GetUserRes> getUser() throws BaseException {
+        int userId = jwtService.getUserId();
+        GetUserRes getUserRes = userProvider.getUser(userId);
+        return new BaseResponse<>(getUserRes);
+    }
+
+    /**
+     * 10. 유저 정보 수정 API
      * [PATCH] /users/detail
-     * @return BaseResponse<String>
+     * @return BaseResponse<PostUserRes>
      */
     @ResponseBody
-    @PatchMapping("/detail")  // (GET) 127.0.0.1:9000/users/detail
-    public BaseResponse<PostUserRes> editUser(@Valid @RequestBody User user) throws BaseException {
-        //jwt에서 id 추출.
+    @PatchMapping("/detail")
+    public BaseResponse<PostUserDelRes> editUser(@Valid @RequestBody PatchUserReq user) throws BaseException {
         int userId = jwtService.getUserId();
-        PostUserRes patchUserRes = userService.editUser(userId, user);
+
+        PostUserDelRes patchUserRes = userService.editUser(userId, user);
         return new BaseResponse<>(patchUserRes);
     }
 
     /**
-     * 회원 삭제 API
-     * @return BaseResponse<List < GetUserRes>>
+     * 18. 회원 삭제 API
+     * @return BaseResponse<PostUserDelRes>
      */
     @PatchMapping("/delete")
-    public BaseResponse<String> delUser() throws BaseException {
-        //jwt에서 idx 추출.
+    public BaseResponse<PostUserDelRes> delUser() throws BaseException {
         int userId = jwtService.getUserId();
 
         // 상태값 D로 변경
         PostUserDelReq postUserDelReq = new PostUserDelReq(userId);
         userService.delUser(postUserDelReq);
-
-        String result = "";
-        return new BaseResponse<>(result);
+        PostUserDelRes postUserDelRes = new PostUserDelRes(userId);
+        return new BaseResponse<>(postUserDelRes);
     }
+
+    /**
+     * 19. 로그아웃 API
+     * @return
+     * @throws BaseException
+     */
+    @PostMapping("/logout")
+    public BaseResponse<PostUserDelRes> logoutUser() throws BaseException {
+        int userId = jwtService.getUserId();
+        userService.logoutUser(userId);
+        PostUserDelRes logoutRes = new PostUserDelRes(userId);
+        return new BaseResponse<>(logoutRes);
+    }
+
 
     /**
      * 회원 포인트조회 API
@@ -170,7 +184,6 @@ public class UserController {
 
     /**
      * 회원 주소 조회 API
-     *
      * @return BaseResponse<List<GetAddressRes>>
      */
     @GetMapping("/address")
@@ -178,18 +191,6 @@ public class UserController {
         int userId = jwtService.getUserId();
         List<GetAddressRes> getAddressRes = userProvider.getAddress(userId);
         return new BaseResponse<>(getAddressRes);
-    }
-
-    /**
-     * 회원 주소 생성 API
-     * @param postAddressReq
-     * @return BaseResponse<Integer>
-     */
-    @PostMapping("/address")
-    public BaseResponse<Integer> createAddress(@RequestBody PostAddressReq postAddressReq) throws BaseException {
-        int userId = jwtService.getUserId();
-        int addressId = userService.createAddress(userId, postAddressReq);
-        return new BaseResponse<>(addressId);
     }
 
     /**
@@ -204,37 +205,6 @@ public class UserController {
             return new BaseResponse<>(INVALID_USER_JWT);
         }
         userService.editAddress(addressId, patchAddressReq);
-        return new BaseResponse<>("");
-    }
-
-    /**
-     * 회원 주소 삭제 API
-     * @param addressId
-     * @return BaseResponse<String>
-     */
-    @PatchMapping("/{addressId}/address/delete")
-    public BaseResponse<String> delAddress(@PathVariable("addressId") int addressId) throws BaseException {
-        if (jwtService.getUserId() != userService.getUserId(addressId)) {
-            return new BaseResponse<>(INVALID_USER_JWT);
-        }
-        userService.delAddress(addressId);
-        return new BaseResponse<>("");
-    }
-
-    @PostMapping("/logout-user")
-    public BaseResponse<String> logoutUser() throws BaseException {
-        int userId = jwtService.getUserId();
-        userService.logoutUser(userId);
-//        String token = jwtService.getJwt();
-//        if(jwtService.isTokenValid(token)){
-//            Date expirationDate = jwtService.getExpirationDate(token);
-//            redisTemplate.opsForValue().set(
-//                    Constant.REDIS_PREFIX + token, "l",
-//                    expirationDate.getTime() - System.currentTimeMillis(),
-//                    TimeUnit.MILLISECONDS
-//            );
-//            logger.info("redis value : " + redisTemplate.opsForValue().get(Constant.REDIS_PREFIX + token));
-//        }
         return new BaseResponse<>("");
     }
 }
