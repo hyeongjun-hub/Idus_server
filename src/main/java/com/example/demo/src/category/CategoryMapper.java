@@ -12,6 +12,4 @@ public interface CategoryMapper {
 
     List<GetCategoryRes> getCategories();
 
-    List<GetCategoryRes> getCategoriesByServiceId(int serviceId);
-
 }

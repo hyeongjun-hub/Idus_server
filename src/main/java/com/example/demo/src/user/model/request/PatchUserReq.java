@@ -26,8 +26,6 @@ public class PatchUserReq {
     @Length(max = 1, message = "'Y' 또는 'N'을 입력하세요.")
     private String identityTest;
     @Length(max = 1, message = "'Y' 또는 'N'을 입력하세요.")
-    private String platform;
-    @Length(max = 1, message = "'Y' 또는 'N'을 입력하세요.")
     private String fingerPrint;
     @Length(max = 1, message = "'Y' 또는 'N'을 입력하세요.")
     private String alarm;
