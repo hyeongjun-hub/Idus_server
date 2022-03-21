@@ -14,7 +14,6 @@ import com.example.demo.config.BaseResponse;
 import com.example.demo.utils.JwtService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -73,7 +72,7 @@ public class UserController {
      */
     @ResponseBody
     @PostMapping("/auth/phone")
-    public BaseResponse<PostPhoneAuthRes> sendMessage(@RequestBody PostPhoneAuthReq postPhoneAuthReq) throws BaseException {
+    public BaseResponse<PostPhoneAuthRes> sendMessage(@Valid @RequestBody PostPhoneAuthReq postPhoneAuthReq) throws BaseException {
         PostPhoneAuthRes postPhoneAuthRes = smsAuthService.sendPhoneAuth(postPhoneAuthReq.getPhone()); // 문자 발송
         return new BaseResponse<>(new PostPhoneAuthRes(postPhoneAuthRes.getPhone(), postPhoneAuthRes.getAuthNumber()));
     }
@@ -178,18 +177,6 @@ public class UserController {
         int userId = jwtService.getUserId();
         List<GetAddressRes> getAddressRes = userProvider.getAddress(userId);
         return new BaseResponse<>(getAddressRes);
-    }
-
-    /**
-     * 회원 주소 생성 API
-     * @param postAddressReq
-     * @return BaseResponse<Integer>
-     */
-    @PostMapping("/address")
-    public BaseResponse<Integer> createAddress(@RequestBody PostAddressReq postAddressReq) throws BaseException {
-        int userId = jwtService.getUserId();
-        int addressId = userService.createAddress(userId, postAddressReq);
-        return new BaseResponse<>(addressId);
     }
 
     /**

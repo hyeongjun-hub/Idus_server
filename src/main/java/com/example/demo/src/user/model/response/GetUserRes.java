@@ -22,5 +22,4 @@ public class GetUserRes {
     private String smsAccept;
     private String grade;
     private String status;
-
 }

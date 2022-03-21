@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
@@ -13,7 +14,7 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class PostPhoneAuthReq {
     @NotBlank
-    // todo: regex valid
+    @Pattern(regexp = "^01(?:0|1|[6-9])(\\d{8})$", message = "전화번호 형식을 확인해주세요.")
     private String phone;
     private String authNumber;
 }
