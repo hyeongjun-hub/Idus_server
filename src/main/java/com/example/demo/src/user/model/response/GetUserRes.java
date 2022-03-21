@@ -5,6 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.PositiveOrZero;
 
 @Getter
 @Setter
@@ -13,13 +19,17 @@ import lombok.Setter;
 public class GetUserRes {
     private int userId;
     private String userName;
-    private String userEmail;
-    private String password;
+    private String email;
+    private String phone;
+    private int couponCount;
+    private String gradeId;
+    private String iconUrl;
+    private String gradeName;
     private String profileImageUrl;
-    private String phoneNumber;
     private int point;
-    private String mailAccept;
-    private String smsAccept;
-    private String grade;
-    private String status;
+    private String birthday;
+    private String gender;
+    private String identityTest;
+    private String fingerPrint;
+    private String alarm;
 }
