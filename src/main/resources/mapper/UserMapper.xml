@@ -33,8 +33,36 @@
         select exists(select addressName from Address where addressName = #{addressName})
     </select>
 
-    <update id="editUser" parameterType="Object">
-        UPDATE User SET userName = #{param2.userName}, email = #{param2.email} , password = #{param2.password}, profileImageUrl = #{param2.profileImageUrl}, phone=#{param2.phone}, mailAccept =#{param2.mailAccept}, smsAccept=#{param2.smsAccept} WHERE userId = #{param1}
+    <update id="editUserName" parameterType="Object">
+        UPDATE User SET userName = #{param2.userName} WHERE userId = #{param1}
+    </update>
+
+    <update id="editEmail" parameterType="Object">
+        UPDATE User SET email=#{param2.email} WHERE userId = #{param1}
+    </update>
+
+    <update id="editProfileImageUrl" parameterType="Object">
+        UPDATE User SET email=#{param2.profileImageUrl} WHERE userId = #{param1}
+    </update>
+
+    <update id="editBirthday" parameterType="Object">
+        UPDATE User SET birthday=#{param2.birthday} WHERE userId = #{param1}
+    </update>
+
+    <update id="editGender" parameterType="Object">
+        UPDATE User SET gender = #{param2.gender} WHERE userId = #{param1}
+    </update>
+
+    <update id="editFingerPrint" parameterType="Object">
+        UPDATE User SET fingerPrint=#{param2.fingerPrint} WHERE userId = #{param1}
+    </update>
+
+    <update id="editAlarm" parameterType="Object">
+        UPDATE User SET alarm = #{param2.alarm} WHERE userId = #{param1}
+    </update>
+
+    <update id="editPhone" parameterType="Object">
+        UPDATE User SET phone=#{param2.phone} WHERE userId = #{param1}
     </update>
 
     <update id="delUser" parameterType="PostUserDelReq">

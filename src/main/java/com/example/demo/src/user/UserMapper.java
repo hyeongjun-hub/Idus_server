@@ -20,15 +20,20 @@ public interface UserMapper {
 
     int createUser(PostUserReq postUserReq);
 
-    int checkEmail(String email);
-
     String getPlatform(String email);
 
+    int checkEmail(String email);
     int checkAddress(String address);
-
     int checkAddressName(String address);
 
-    int editUser(int userId, User user);
+    int editEmail(int userId, PatchUserReq user);
+    int editUserName(int userId, PatchUserReq user);
+    int editProfileImageUrl(int userId, PatchUserReq user);
+    int editBirthday(int userId, PatchUserReq user);
+    int editGender(int userId, PatchUserReq user);
+    int editFingerPrint(int userId, PatchUserReq user);
+    int editAlarm(int userId, PatchUserReq user);
+    int editPhone(int userId, PatchUserReq user);
 
     int delUser(PostUserDelReq postUserDelReq);
 

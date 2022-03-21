@@ -107,6 +107,20 @@ public class UserController {
     }
 
     /**
+     * 10. 유저 정보 수정 API
+     * [PATCH] /users/detail
+     * @return BaseResponse<PostUserRes>
+     */
+    @ResponseBody
+    @PatchMapping("/detail")
+    public BaseResponse<PostUserDelRes> editUser(@Valid @RequestBody PatchUserReq user) throws BaseException {
+        int userId = jwtService.getUserId();
+
+        PostUserDelRes patchUserRes = userService.editUser(userId, user);
+        return new BaseResponse<>(patchUserRes);
+    }
+
+    /**
      * 18. 회원 삭제 API
      * @return BaseResponse<PostUserDelRes>
      */
@@ -134,21 +148,6 @@ public class UserController {
         return new BaseResponse<>(logoutRes);
     }
 
-
-    /**
-     * 유저정보변경 API
-     * [PATCH] /users/detail
-     * @return BaseResponse<String>
-     */
-    @ResponseBody
-    @PatchMapping("/detail")  // (GET) 127.0.0.1:9000/users/detail
-    public BaseResponse<PostUserRes> editUser(@Valid @RequestBody User user) throws BaseException {
-        //jwt에서 id 추출.
-        int userId = jwtService.getUserId();
-
-        PostUserRes patchUserRes = userService.editUser(userId, user);
-        return new BaseResponse<>(patchUserRes);
-    }
 
     /**
      * 회원 포인트조회 API
@@ -185,7 +184,6 @@ public class UserController {
 
     /**
      * 회원 주소 조회 API
-     *
      * @return BaseResponse<List<GetAddressRes>>
      */
     @GetMapping("/address")
@@ -207,20 +205,6 @@ public class UserController {
             return new BaseResponse<>(INVALID_USER_JWT);
         }
         userService.editAddress(addressId, patchAddressReq);
-        return new BaseResponse<>("");
-    }
-
-    /**
-     * 회원 주소 삭제 API
-     * @param addressId
-     * @return BaseResponse<String>
-     */
-    @PatchMapping("/{addressId}/address/delete")
-    public BaseResponse<String> delAddress(@PathVariable("addressId") int addressId) throws BaseException {
-        if (jwtService.getUserId() != userService.getUserId(addressId)) {
-            return new BaseResponse<>(INVALID_USER_JWT);
-        }
-        userService.delAddress(addressId);
         return new BaseResponse<>("");
     }
 }
