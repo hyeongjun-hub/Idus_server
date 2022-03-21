@@ -17,19 +17,23 @@
         select User.userId, userName, email, phone, (select count(userId) from Coupon where userId = #{userId} and status = 'Y') as couponCount, User.gradeId, G.iconUrl, G.gradeName, profileImageUrl, point, birthday, gender, identityTest, fingerPrint, alarm from User inner join Grade G on User.gradeId = G.gradeId where User.userId = #{userId} and User.status = 'Y';
     </select>
 
-    <select id="checkEmail" parameterType="string" resultType="int">
-        select exists(select email from User where email = #{email})
-    </select>
-
-    <select id="getPlatform" parameterType="string" resultType="string">
+    <select id="getPlatform" parameterType="String" resultType="string">
         select platform from User where email = #{email}
     </select>
 
-    <select id="checkAddress" parameterType="string" resultType="int">
+    <select id="checkEmail" parameterType="String" resultType="int">
+        select exists(select email from User where email = #{email})
+    </select>
+
+    <select id="checkPhone" parameterType="String" resultType="int">
+        select exists(select phone from User where phone = #{phone})
+    </select>
+
+    <select id="checkAddress" parameterType="String" resultType="int">
         select exists(select address from Address where address = #{address})
     </select>
 
-    <select id="checkAddressName" parameterType="string" resultType="int">
+    <select id="checkAddressName" parameterType="String" resultType="int">
         select exists(select addressName from Address where addressName = #{addressName})
     </select>
 

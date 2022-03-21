@@ -33,6 +33,7 @@ public enum BaseResponseStatus {
     POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다."),
     POST_USERS_PASSWORD_MIN(false, 2018, "비밀번호를 8자 이상 입력하세요"),
     POST_USERS_NOT_EXISTS_EMAIL(false, 2019, "없는 이메일입니다. 회원가입이 필요합니다."),
+    POST_USERS_EXISTS_PHONE(false, 2021, "중복된 전화번호입니다."),
 
     // [POST] /users/auth/phone
     FAILED_TO_SEND_PHONE_AUTH(false, 2020, "인증번호 전송에 실패하였습니다."),
