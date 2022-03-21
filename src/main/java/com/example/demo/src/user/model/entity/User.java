@@ -23,8 +23,8 @@ public class User {
     private String password;
     private String gradeId;
     @NotBlank(message = "전화번호를 입력하세요")
-    @Pattern(regexp = "^01(?:0|1|[6-9])[.-]?(\\d{3}|\\d{4})[.-]?(\\d{4})$", message = "전화번호 형식을 확인해주세요.")
-    private String phoneNumber;
+    @Pattern(regexp = "^01(?:0|1|[6-9])(\\d{8})$", message = "전화번호 형식을 확인해주세요.")
+    private String phone;
     private String profileImageUrl;
     @PositiveOrZero(message = "0 또는 양수만 가능")
     private int point;

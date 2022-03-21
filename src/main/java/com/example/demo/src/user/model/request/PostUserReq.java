@@ -22,7 +22,7 @@ public class PostUserReq {
     @Length(min = 8, max = 20, message = "비밀번호 길이를 확인해주세요")
     private String password;
     // todo: valid 처리
-    private String phoneNumber;
+    private String phone;
     private String platform;
     private String alarm;
     private int userId;

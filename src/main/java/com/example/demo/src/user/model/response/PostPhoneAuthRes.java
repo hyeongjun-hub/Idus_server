@@ -1,4 +1,4 @@
-package com.example.demo.src.user.model.request;
+package com.example.demo.src.user.model.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostAddressReq {
-    private String addressName;
-    private String address;
-    private int addressId;
+public class PostPhoneAuthRes {
+    private String phone;
+    private String authNumber;
 }

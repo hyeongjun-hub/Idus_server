@@ -1,7 +1,7 @@
 package com.example.demo.utils;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.user.model.request.PostPhoneAuthRes;
+import com.example.demo.src.user.model.response.PostPhoneAuthRes;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
@@ -24,15 +24,6 @@ import static com.example.demo.config.Constant.*;
 
 @Service
 public class SmsAuthService {
-
-//    public PhoneAuthInfo checkExistUserPhoneAndSendAuth(PostFindEmailAuthReq postFindEmailAuthReq) throws BaseException {
-//        if (userMapper.checkUserByNameAndPhone(postFindEmailAuthReq.getUserName(), postFindEmailAuthReq.getPhone()) == 1) {
-//            return sendPhoneAuth(postFindEmailAuthReq.getPhone()); // 해당 이름과 전화번호로 가입된 회원이 있다면 인증번호를 발송한다.
-//        } else {
-//            throw new BaseException(USERS_NOT_FOUND_INFO); // 입력된 이름과 전화번호로 가입된 회원이 없음
-//        }
-//    }
-
     public PostPhoneAuthRes sendPhoneAuth(String toPhone) throws BaseException {
         int authNumber = (int) (Math.random() * (99999 - 10000 + 1)) + 10000; // 인증번호 난수 생성
         String accessKey = ACCESS_KEY;
@@ -57,7 +48,7 @@ public class SmsAuthService {
         bodyJson.put("messages", toArr);
 
         String body = bodyJson.toJSONString();
-        System.out.println("body: : " + body);
+//        System.out.println("body: : " + body);
 
         try {
             URL url = new URL(requestURL);
@@ -80,7 +71,7 @@ public class SmsAuthService {
 
             int responseCode = con.getResponseCode();
             BufferedReader br;
-            System.out.println("responseCode : " + responseCode);
+//            System.out.println("responseCode : " + responseCode);
             br = new BufferedReader(new InputStreamReader(con.getInputStream()));
 
             String inputLine;
