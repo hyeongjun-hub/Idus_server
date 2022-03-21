@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.utils.JwtService;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -105,6 +106,7 @@ public class UserController {
         return new BaseResponse<>(getUserRes);
     }
 
+
     /**
      * 유저정보변경 API
      * [PATCH] /users/detail
@@ -115,25 +117,24 @@ public class UserController {
     public BaseResponse<PostUserRes> editUser(@Valid @RequestBody User user) throws BaseException {
         //jwt에서 id 추출.
         int userId = jwtService.getUserId();
+
         PostUserRes patchUserRes = userService.editUser(userId, user);
         return new BaseResponse<>(patchUserRes);
     }
 
     /**
-     * 회원 삭제 API
-     * @return BaseResponse<List < GetUserRes>>
+     * 18. 회원 삭제 API
+     * @return BaseResponse<PostUserDelRes>
      */
     @PatchMapping("/delete")
-    public BaseResponse<String> delUser() throws BaseException {
-        //jwt에서 idx 추출.
+    public BaseResponse<PostUserDelRes> delUser() throws BaseException {
         int userId = jwtService.getUserId();
 
         // 상태값 D로 변경
         PostUserDelReq postUserDelReq = new PostUserDelReq(userId);
         userService.delUser(postUserDelReq);
-
-        String result = "";
-        return new BaseResponse<>(result);
+        PostUserDelRes postUserDelRes = new PostUserDelRes(userId);
+        return new BaseResponse<>(postUserDelRes);
     }
 
     /**
