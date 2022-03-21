@@ -106,6 +106,34 @@ public class UserController {
         return new BaseResponse<>(getUserRes);
     }
 
+    /**
+     * 18. 회원 삭제 API
+     * @return BaseResponse<PostUserDelRes>
+     */
+    @PatchMapping("/delete")
+    public BaseResponse<PostUserDelRes> delUser() throws BaseException {
+        int userId = jwtService.getUserId();
+
+        // 상태값 D로 변경
+        PostUserDelReq postUserDelReq = new PostUserDelReq(userId);
+        userService.delUser(postUserDelReq);
+        PostUserDelRes postUserDelRes = new PostUserDelRes(userId);
+        return new BaseResponse<>(postUserDelRes);
+    }
+
+    /**
+     * 19. 로그아웃 API
+     * @return
+     * @throws BaseException
+     */
+    @PostMapping("/logout")
+    public BaseResponse<PostUserDelRes> logoutUser() throws BaseException {
+        int userId = jwtService.getUserId();
+        userService.logoutUser(userId);
+        PostUserDelRes logoutRes = new PostUserDelRes(userId);
+        return new BaseResponse<>(logoutRes);
+    }
+
 
     /**
      * 유저정보변경 API
@@ -120,21 +148,6 @@ public class UserController {
 
         PostUserRes patchUserRes = userService.editUser(userId, user);
         return new BaseResponse<>(patchUserRes);
-    }
-
-    /**
-     * 18. 회원 삭제 API
-     * @return BaseResponse<PostUserDelRes>
-     */
-    @PatchMapping("/delete")
-    public BaseResponse<PostUserDelRes> delUser() throws BaseException {
-        int userId = jwtService.getUserId();
-
-        // 상태값 D로 변경
-        PostUserDelReq postUserDelReq = new PostUserDelReq(userId);
-        userService.delUser(postUserDelReq);
-        PostUserDelRes postUserDelRes = new PostUserDelRes(userId);
-        return new BaseResponse<>(postUserDelRes);
     }
 
     /**
@@ -208,23 +221,6 @@ public class UserController {
             return new BaseResponse<>(INVALID_USER_JWT);
         }
         userService.delAddress(addressId);
-        return new BaseResponse<>("");
-    }
-
-    @PostMapping("/logout-user")
-    public BaseResponse<String> logoutUser() throws BaseException {
-        int userId = jwtService.getUserId();
-        userService.logoutUser(userId);
-//        String token = jwtService.getJwt();
-//        if(jwtService.isTokenValid(token)){
-//            Date expirationDate = jwtService.getExpirationDate(token);
-//            redisTemplate.opsForValue().set(
-//                    Constant.REDIS_PREFIX + token, "l",
-//                    expirationDate.getTime() - System.currentTimeMillis(),
-//                    TimeUnit.MILLISECONDS
-//            );
-//            logger.info("redis value : " + redisTemplate.opsForValue().get(Constant.REDIS_PREFIX + token));
-//        }
         return new BaseResponse<>("");
     }
 }
