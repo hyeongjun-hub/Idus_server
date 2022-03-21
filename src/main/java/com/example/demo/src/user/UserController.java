@@ -32,7 +32,7 @@ public class UserController {
     private final SmsAuthService smsAuthService;
 
     /**
-     * 전체 유저 조회 API
+     * 1. 전체 유저 조회 API
      * 회원 번호 및 이메일 검색 조회 API
      * @return BaseResponse<List < GetUserRes>>
      */
@@ -43,19 +43,8 @@ public class UserController {
     }
 
     /**
-     * 유저 조회 API
-     * @return BaseResponse<GetUserRes>
-     */
-    @GetMapping("") // (GET) 127.0.0.1:9000/users
-    public BaseResponse<GetUserRes> getUser() throws BaseException {
-        int userId = jwtService.getUserId();
-        GetUserRes getUserRes = userProvider.getUser(userId);
-        return new BaseResponse<>(getUserRes);
-
-    }
-
-    /**
-     * 회원가입 API
+     * 2. inApp 유저 생성 API (회원가입)
+     * @param postUserReq
      * @return BaseResponse<PostUserRes>
      */
     // Body
@@ -66,7 +55,7 @@ public class UserController {
     }
 
     /**
-     * 휴대폰 인증번호 발송 API
+     * 3. 휴대폰 인증번호 발송 API
      * @param postPhoneAuthReq
      * @return
      */
@@ -78,7 +67,8 @@ public class UserController {
     }
 
     /**
-     * 로그인 API
+     * 4. 이메일 로그인 API
+     * @param postLoginReq
      * @return BaseResponse<PostLoginRes>
      */
     @PostMapping("/login")  // (POST) 127.0.0.1:9000/users/login
@@ -88,7 +78,8 @@ public class UserController {
     }
 
     /**
-     * 카카오 로그인 API
+     * 5. 카카오 로그인, 회원가입 API
+     * @param postKaKaoLogin
      * @return BaseResponse<String>>
      */
     @PostMapping("/login/kakao")
@@ -101,6 +92,17 @@ public class UserController {
         // 로그인 처리 or 회원가입 진행 후 jwt, userIdx 반환
         PostLoginRes postLoginRes = userService.kaKaoLogin(kaKaoUser);
         return new BaseResponse<>(postLoginRes);
+    }
+
+    /**
+     * 6. 유저 정보 조회 API
+     * @return BaseResponse<GetUserRes>
+     */
+    @GetMapping("") // (GET) 127.0.0.1:9000/users
+    public BaseResponse<GetUserRes> getUser() throws BaseException {
+        int userId = jwtService.getUserId();
+        GetUserRes getUserRes = userProvider.getUser(userId);
+        return new BaseResponse<>(getUserRes);
     }
 
     /**

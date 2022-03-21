@@ -14,7 +14,7 @@
     </select>
 
     <select id="getUser" parameterType="int" resultType="GetUserRes">
-        select * from User where userId = #{userId} and status = 'Y'
+        select User.userId, userName, email, phone, (select count(userId) from Coupon where userId = #{userId} and status = 'Y') as couponCount, User.gradeId, G.iconUrl, G.gradeName, profileImageUrl, point, birthday, gender, identityTest, fingerPrint, alarm from User inner join Grade G on User.gradeId = G.gradeId where User.userId = #{userId} and User.status = 'Y';
     </select>
 
     <select id="checkEmail" parameterType="string" resultType="int">
