@@ -107,7 +107,7 @@ public class UserController {
     }
 
     /**
-     * 10. 유저 정보 수정 API
+     * 8. 유저 정보 수정 API
      * [PATCH] /users/detail
      * @return BaseResponse<PostUserRes>
      */
@@ -121,7 +121,7 @@ public class UserController {
     }
 
     /**
-     * 18. 회원 삭제 API
+     * 16. 회원 삭제 API
      * @return BaseResponse<PostUserDelRes>
      */
     @PatchMapping("/delete")
@@ -136,7 +136,7 @@ public class UserController {
     }
 
     /**
-     * 19. 로그아웃 API
+     * 17. 로그아웃 API
      * @return
      * @throws BaseException
      */
