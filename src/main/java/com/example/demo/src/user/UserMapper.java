@@ -22,6 +22,7 @@ public interface UserMapper {
 
     String getPlatform(String email);
 
+    int checkPhone(String phone);
     int checkEmail(String email);
     int checkAddress(String address);
     int checkAddressName(String address);

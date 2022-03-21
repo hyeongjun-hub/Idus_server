@@ -32,23 +32,25 @@ public class UserService {
     @Transactional(rollbackFor = {BaseException.class, MethodArgumentNotValidException.class})
     public PostUserRes createUser(PostUserReq postUserReq) throws BaseException {
         //중복
-        if(this.checkEmail(postUserReq.getEmail()) == 1){
+        if (this.checkEmail(postUserReq.getEmail()) == 1) {
             throw new BaseException(POST_USERS_EXISTS_EMAIL);
         }
         String pwd;
-        try{
+        try {
             //암호화
             pwd = new SHA256().encrypt(postUserReq.getPassword());
             postUserReq.setPassword(pwd);
         } catch (Exception ignored) {
             throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
         }
-        try{
+        try {
             postUserReq.setPlatform("inApp");
             userMapper.createUser(postUserReq);
             int userId = postUserReq.getUserId();
             // 빈 주소 3개 생성
-            for(int i=0; i<3; i++){this.createAddress(userId);}
+            for (int i = 0; i < 3; i++) {
+                this.createAddress(userId);
+            }
             //jwt 발급.
             String jwt = jwtService.createJwt(userId);
             return new PostUserRes(userId, jwt);
@@ -70,6 +72,10 @@ public class UserService {
         // 이메일 변경일 때
         if (user.getEmail() != null) {
             editEmail(userId, user);
+        }
+        // 전화번호 변경일 때
+        if (user.getPhone() != null) {
+            editPhone(userId, user);
         }
         // 프로필 이미지 변경일 때
         if (user.getProfileImageUrl() != null) {
@@ -95,11 +101,7 @@ public class UserService {
         if (user.getFingerPrint() != null) {
             editFingerPrint(userId, user);
         }
-        // 전화번호 변경일 때
-        if (user.getPhone() != null) {
-            editPhone(userId, user);
-        }
-        try{
+        try {
             return new PostUserDelRes(userId);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
@@ -108,118 +110,99 @@ public class UserService {
 
     @Transactional(rollbackFor = {BaseException.class, MethodArgumentNotValidException.class})
     public void editEmail(int userId, PatchUserReq user) throws BaseException {
-        try{
-            //이메일 중복확인
-            if(this.checkEmail(user.getEmail()) == 1){
-                throw new BaseException(POST_USERS_EXISTS_EMAIL);
-            }
-            int result = userMapper.editEmail(userId, user);
-            if(result == 0){
-                throw new BaseException(EDIT_FAIL_CONTENT);
-            }
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
+        //이메일 중복확인
+        if (this.checkEmail(user.getEmail()) == 1) {
+            throw new BaseException(POST_USERS_EXISTS_EMAIL);
+        }
+        int result = userMapper.editEmail(userId, user);
+        if (result == 0) {
+            throw new BaseException(EDIT_FAIL_CONTENT);
         }
     }
 
     @Transactional(rollbackFor = {BaseException.class, MethodArgumentNotValidException.class})
     public void editUserName(int userId, PatchUserReq user) throws BaseException {
-        try{
-            int result = userMapper.editUserName(userId, user);
-            if(result == 0){
-                throw new BaseException(EDIT_FAIL_CONTENT);
-            }
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
+        int result = userMapper.editUserName(userId, user);
+        if (result == 0) {
+            throw new BaseException(EDIT_FAIL_CONTENT);
         }
     }
 
     @Transactional(rollbackFor = {BaseException.class, MethodArgumentNotValidException.class})
     public void editProfileImageUrl(int userId, PatchUserReq user) throws BaseException {
-        try{
-            int result = userMapper.editProfileImageUrl(userId, user);
-            if(result == 0){
-                throw new BaseException(EDIT_FAIL_CONTENT);
-            }
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
+        int result = userMapper.editProfileImageUrl(userId, user);
+        if (result == 0) {
+            throw new BaseException(EDIT_FAIL_CONTENT);
         }
     }
 
     @Transactional(rollbackFor = {BaseException.class, MethodArgumentNotValidException.class})
     public void editBirthday(int userId, PatchUserReq user) throws BaseException {
-        try{
-            int result = userMapper.editBirthday(userId, user);
-            if(result == 0){
-                throw new BaseException(EDIT_FAIL_CONTENT);
-            }
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
+
+        int result = userMapper.editBirthday(userId, user);
+        if (result == 0) {
+            throw new BaseException(EDIT_FAIL_CONTENT);
         }
+
     }
 
     @Transactional(rollbackFor = {BaseException.class, MethodArgumentNotValidException.class})
     public void editGender(int userId, PatchUserReq user) throws BaseException {
-        try{
-            int result = userMapper.editGender(userId, user);
-            if(result == 0){
-                throw new BaseException(EDIT_FAIL_CONTENT);
-            }
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
+        int result = userMapper.editGender(userId, user);
+        if (result == 0) {
+            throw new BaseException(EDIT_FAIL_CONTENT);
         }
     }
 
     @Transactional(rollbackFor = {BaseException.class, MethodArgumentNotValidException.class})
     public void editFingerPrint(int userId, PatchUserReq user) throws BaseException {
-        try{
-            int result = userMapper.editGender(userId, user);
-            if(result == 0){
-                throw new BaseException(EDIT_FAIL_CONTENT);
-            }
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
+        int result = userMapper.editFingerPrint(userId, user);
+        if (result == 0) {
+            throw new BaseException(EDIT_FAIL_CONTENT);
         }
     }
 
     @Transactional(rollbackFor = {BaseException.class, MethodArgumentNotValidException.class})
     public void editAlarm(int userId, PatchUserReq user) throws BaseException {
-        try{
-            int result = userMapper.editAlarm(userId, user);
-            if(result == 0){
-                throw new BaseException(EDIT_FAIL_CONTENT);
-            }
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
+        int result = userMapper.editAlarm(userId, user);
+        if (result == 0) {
+            throw new BaseException(EDIT_FAIL_CONTENT);
         }
     }
 
     @Transactional(rollbackFor = {BaseException.class, MethodArgumentNotValidException.class})
     public void editPhone(int userId, PatchUserReq user) throws BaseException {
-        try{
-            int result = userMapper.editPhone(userId, user);
-            if(result == 0){
-                throw new BaseException(EDIT_FAIL_CONTENT);
-            }
+        if (this.checkPhone(user.getPhone()) == 1) {
+            throw new BaseException(POST_USERS_EXISTS_PHONE);
+        }
+        int result = userMapper.editPhone(userId, user);
+        if (result == 0) {
+            throw new BaseException(EDIT_FAIL_CONTENT);
+        }
+
+    }
+
+    @Transactional(rollbackFor = {BaseException.class, MethodArgumentNotValidException.class})
+    public void delUser(PostUserDelReq postUserDelReq) throws BaseException {
+        try {
+            userMapper.delUser(postUserDelReq);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
-    @Transactional(rollbackFor = {BaseException.class, MethodArgumentNotValidException.class})
-    public void delUser(PostUserDelReq postUserDelReq) throws BaseException {
-        try{
-            userMapper.delUser(postUserDelReq);
-        } catch(Exception exception){
+    public int checkPhone(String phone) throws BaseException {
+        try {
+            return userMapper.checkPhone(phone);
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
-
-    public int checkEmail(String email) throws BaseException{
-        try{
+    public int checkEmail(String email) throws BaseException {
+        try {
             return userMapper.checkEmail(email);
-        } catch (Exception exception){
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
@@ -241,10 +224,10 @@ public class UserService {
     }
 
     @Transactional(rollbackFor = {BaseException.class, MethodArgumentNotValidException.class})
-    public PostUserRes login(PostLoginReq postLoginReq) throws BaseException{
+    public PostUserRes login(PostLoginReq postLoginReq) throws BaseException {
         User user = userMapper.getLoginUser(postLoginReq);
         //이메일 존재여부 확인
-        if(this.checkEmail(postLoginReq.getEmail()) != 1){
+        if (this.checkEmail(postLoginReq.getEmail()) != 1) {
             throw new BaseException(POST_USERS_NOT_EXISTS_EMAIL);
         }
         //status 값 확인
@@ -253,19 +236,18 @@ public class UserService {
         }
         String encryptPwd;
         try {
-            encryptPwd=new SHA256().encrypt(postLoginReq.getPassword());
+            encryptPwd = new SHA256().encrypt(postLoginReq.getPassword());
         } catch (Exception ignored) {
             throw new BaseException(PASSWORD_DECRYPTION_ERROR);
         }
         //암호화한 비밀번호가 동일한지 확인
-        if(user.getPassword().equals(encryptPwd)){
+        if (user.getPassword().equals(encryptPwd)) {
             int userId = user.getUserId();
             String jwt = jwtService.createJwt(userId);
             //isLogin 값 "Y"로 변경
             userMapper.updateIsLogin(userId);
-            return new PostUserRes(userId,jwt);
-        }
-        else{
+            return new PostUserRes(userId, jwt);
+        } else {
             throw new BaseException(FAILED_TO_LOGIN);
         }
     }
@@ -286,12 +268,13 @@ public class UserService {
                 throw new BaseException(USERS_INAPP_EXISTS); // 해당 이메일로 자체 이메일가입한 상태라면 카카오로그인, 가입 X, 자체로그인으로.
             }
         } else { // 가입이 되어 있지 않다면 가입 진행
-            PostUserReq kaKaoSignUp = new PostUserReq(kaKaoUser.getUserName(), kaKaoUser.getEmail(),"socialLogin", null, "kaKao" ,"N", 0);
+            PostUserReq kaKaoSignUp = new PostUserReq(kaKaoUser.getUserName(), kaKaoUser.getEmail(), "socialLogin", null, "kaKao", "N", 0);
             userMapper.createUser(kaKaoSignUp); // + KaKao
             userId = kaKaoSignUp.getUserId();
-            // todo: 빈 주소 3개 생성
             // 빈 주소 3개 생성
-            for(int i=0; i<3; i++){this.createAddress(userId);}
+            for (int i = 0; i < 3; i++) {
+                this.createAddress(userId);
+            }
             // jwt 발급
             jwt = jwtService.createJwt(userId);
         }
@@ -300,18 +283,18 @@ public class UserService {
 
     @Transactional(rollbackFor = {BaseException.class, MethodArgumentNotValidException.class})
     public void createAddress(int userId) throws BaseException {
-        try{
+        try {
             userMapper.createAddress(userId);
-        } catch(Exception exception){
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
     public int getUserId(int addressId) throws BaseException {
-        try{
+        try {
             int userId = userMapper.getUserId(addressId);
             return userId;
-        } catch(Exception exception){
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
@@ -324,16 +307,16 @@ public class UserService {
             throw new BaseException(POST_ADDRESS_STATUS_NOT_Y);
         }
         //address 중복 확인
-        if(this.checkAddress(patchAddressReq.getAddress()) == 1){
+        if (this.checkAddress(patchAddressReq.getAddress()) == 1) {
             throw new BaseException(POST_ADDRESS_EXISTS_ADDRESS);
         }
         // 주소이름 중복 확인
-        if(this.checkAddressName(patchAddressReq.getAddressName()) == 1){
+        if (this.checkAddressName(patchAddressReq.getAddressName()) == 1) {
             throw new BaseException(POST_ADDRESS_EXISTS_ADDRESS_NAME);
         }
-        try{
+        try {
             userMapper.editAddress(addressId, patchAddressReq);
-        } catch(Exception exception){
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
@@ -345,18 +328,18 @@ public class UserService {
         if (!addressStatus.equals("Y")) {
             throw new BaseException(POST_ADDRESS_STATUS_NOT_Y);
         }
-        try{
+        try {
             userMapper.delAddress(addressId);
-        } catch(Exception exception){
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
     @Transactional(rollbackFor = {BaseException.class, MethodArgumentNotValidException.class})
     public void logoutUser(int userId) throws BaseException {
-        try{
+        try {
             userMapper.logout(userId);
-        } catch(Exception exception){
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
