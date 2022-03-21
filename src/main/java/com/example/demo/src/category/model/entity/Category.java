@@ -10,8 +10,7 @@ import lombok.Setter;
 public class Category {
     private int categoryId;
     private String categoryName;
-    private String categoryImageUrl;
-    private int serviceId;
+    private String iconUrl;
     private String createdAt;
     private String updatedAt;
     private String status;
