@@ -10,6 +10,5 @@ import lombok.Setter;
 public class GetCategoryRes {
     private int categoryId;
     private String categoryName;
-    private String categoryImageUrl;
-    private int serviceId;
+    private String iconUrl;
 }

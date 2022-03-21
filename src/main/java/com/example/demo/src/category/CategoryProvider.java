@@ -25,14 +25,4 @@ public class CategoryProvider {
         }
     }
 
-    public List<GetCategoryRes> getCategoriesByServiceId(int serviceId) throws BaseException{
-        try{
-            List<GetCategoryRes> getCategoriesRes = categoryMapper.getCategoriesByServiceId(serviceId);
-            return getCategoriesRes;
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
-
-
 }
