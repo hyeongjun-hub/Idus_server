@@ -51,6 +51,8 @@ public class UserService {
             postUserReq.setPlatform("inApp");
             userMapper.createUser(postUserReq);
             int userId = postUserReq.getUserId();
+            // 빈 주소 3개 생성
+            for(int i=0; i<3; i++){this.createAddress(userId);}
             //jwt 발급.
             String jwt = jwtService.createJwt(userId);
             return new PostUserRes(userId, jwt);
@@ -173,24 +175,19 @@ public class UserService {
             PostUserReq kaKaoSignUp = new PostUserReq(kaKaoUser.getUserName(), kaKaoUser.getEmail(),"socialLogin", null, "kaKao" ,"N", 0);
             userMapper.createUser(kaKaoSignUp); // + KaKao
             userId = kaKaoSignUp.getUserId();
+            // todo: 빈 주소 3개 생성
+            // 빈 주소 3개 생성
+            for(int i=0; i<3; i++){this.createAddress(userId);}
+            // jwt 발급
             jwt = jwtService.createJwt(userId);
         }
         return new PostLoginRes(userId, jwt);
     }
 
     @Transactional(rollbackFor = {BaseException.class, MethodArgumentNotValidException.class})
-    public int createAddress(int userId, PostAddressReq postAddressReq) throws BaseException {
-        // 주소 중복 확인
-        if(this.checkAddress(postAddressReq.getAddress()) == 1){
-            throw new BaseException(POST_ADDRESS_EXISTS_ADDRESS);
-        }
-        // 주소이름 중복 확인
-        if(this.checkAddressName(postAddressReq.getAddressName()) == 1){
-            throw new BaseException(POST_ADDRESS_EXISTS_ADDRESS_NAME);
-        }
+    public void createAddress(int userId) throws BaseException {
         try{
-            userMapper.createAddress(userId, postAddressReq);
-            return postAddressReq.getAddressId();
+            userMapper.createAddress(userId);
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
