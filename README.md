@@ -26,7 +26,7 @@
   * 유저 정보 수정 api
   * 유저 삭제 api
   * 유저 로그아웃 api
-* category doamin api 구축 (0%)
+* category domain api 구축 (0%)
   * 카테고리 조회 api
 * products domain의 우선순위 api들 구축 (0%)
   * 투데이 탭 조회 api
