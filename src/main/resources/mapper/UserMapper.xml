@@ -3,7 +3,7 @@
 <mapper namespace="com.example.demo.src.user.UserMapper">
 
     <insert id="createUser" parameterType="PostUserReq">
-        insert into User (userName, email, password, gradeId, phone, profileImageUrl, point, birthday, gender, identityTest, isLogin, platform, fingerPrint, productId, alarm) VALUES (#{userName}, #{email}, #{password}, DEFAULT, #{phone}, null, DEFAULT, null, DEFAULT, DEFAULT, DEFAULT, #{platform}, DEFAULT, null, DEFAULT)
+        insert into User (userName, email, password, gradeId, phone, profileImageUrl, point, birthday, gender, identityTest, isLogin, platform, fingerPrint, productId, alarm) VALUES (#{userName}, #{email}, #{password}, DEFAULT, #{phone}, DEFAULT, DEFAULT, null, DEFAULT, DEFAULT, DEFAULT, #{platform}, DEFAULT, null, DEFAULT)
         <selectKey keyProperty="userId" resultType="int" order="AFTER">
             select LAST_INSERT_ID()
         </selectKey>

@@ -12,4 +12,31 @@
             left join Review R on Product.productId = R.productId
         group by Product.productId ORDER BY RAND()
     </select>
+
+    <select id="getLiveProducts" resultType="GetLiveRes">
+        select Product.productId,
+               productName,
+               makerName,
+               thumbnailImageUrl,
+               (select AVG(star) from Review where Product.productId = Review.productId) as star,
+               (select COUNT(star) from Review where Product.productId = Review.productId) as reviewCount,
+               (select content from Review R where R.productId=Product.productId limit 1) as review,
+       TIMESTAMP(OL.updatedAt) date
+        from Product
+            left join Review R on Product.productId = R.productId
+            inner join Maker M on Product.makerId = M.makerId
+            left join OrderList OL on R.orderListId = OL.orderListId
+        group by Product.productId ORDER BY date DESC
+    </select>
+
+    <select id="getNewProducts" resultType="GetNewRes">
+        select Product.productId,
+               productName,
+               makerName,
+               thumbnailImageUrl,
+            TIMESTAMP (Product.createdAt) as date
+        from Product
+            inner join Maker M on Product.makerId = M.makerId
+        group by Product.productId ORDER BY date DESC
+    </select>
 </mapper>
