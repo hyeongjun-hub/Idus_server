@@ -25,8 +25,6 @@ import static com.example.demo.config.BaseResponseStatus.*;
 @AllArgsConstructor
 @RequestMapping("/users")
 public class UserController {
-    final Logger logger = LoggerFactory.getLogger(this.getClass());
-
     private final UserProvider userProvider;
     private final UserService userService;
     private final JwtService jwtService;
@@ -37,7 +35,7 @@ public class UserController {
      * 회원 번호 및 이메일 검색 조회 API
      * @return BaseResponse<List < GetUserRes>>
      */
-    @GetMapping("/all") // (GET) 127.0.0.1:9000/users/all
+    @GetMapping("/all")
     public BaseResponse<List<User>> getUsers() throws BaseException {
         List<User> getUsersRes = userProvider.getUsers();
         return new BaseResponse<>(getUsersRes);
@@ -48,8 +46,7 @@ public class UserController {
      * @param postUserReq
      * @return BaseResponse<PostUserRes>
      */
-    // Body
-    @PostMapping("/join")  // (POST) 127.0.0.1:9000/users
+    @PostMapping("/join")
     public BaseResponse<PostUserRes> join(@Valid @RequestBody PostUserReq postUserReq) throws BaseException {
         PostUserRes postUserRes = userService.createUser(postUserReq);
         return new BaseResponse<>(postUserRes);
@@ -72,7 +69,7 @@ public class UserController {
      * @param postLoginReq
      * @return BaseResponse<PostLoginRes>
      */
-    @PostMapping("/login")  // (POST) 127.0.0.1:9000/users/login
+    @PostMapping("/login")
     public BaseResponse<PostUserRes> login(@Valid @RequestBody PostLoginReq postLoginReq) throws BaseException {
         PostUserRes postUserRes = userService.login(postLoginReq);
         return new BaseResponse<>(postUserRes);
