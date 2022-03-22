@@ -3,6 +3,7 @@ package com.example.demo.src.product;
 import com.example.demo.config.BaseException;
 import com.example.demo.src.product.model.response.GetLiveRes;
 import com.example.demo.src.product.model.response.GetNewRes;
+import com.example.demo.src.product.model.response.GetProductRes;
 import com.example.demo.src.product.model.response.GetTodayRes;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,15 @@ public class ProductProvider {
         try{
             List<GetNewRes> getNewRes = productMapper.getNewProducts();
             return getNewRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetProductRes> getCategoryProducts(int categoryId) throws BaseException{
+        try{
+            List<GetProductRes> categoryProducts = productMapper.getCategoryProducts(categoryId);
+            return categoryProducts;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
