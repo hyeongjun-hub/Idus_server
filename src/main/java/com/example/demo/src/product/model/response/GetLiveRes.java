@@ -7,10 +7,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class GetTodayRes {
+@NoArgsConstructor
+public class GetLiveRes {
     private int productId;
+    private String makerName;
     private String productName;
     private String thumbnailImageUrl;
 
