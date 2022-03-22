@@ -52,13 +52,33 @@ public class ProductController {
     }
 
     /**
-     * 22. 카테고리 작품 조회 API
+     * 25. 오늘의 작품 더보기 조회 API
+     * @return BaseException<List<GetProductRes>>
+     */
+    @GetMapping("/today/more")
+    public BaseResponse<List<GetProductRes>> getTodayMore() throws BaseException {
+        List<GetProductRes> getTodayMore = productProvider.getTodayMore();
+        return new BaseResponse<>(getTodayMore);
+    }
+
+    /**
+     * 26. 카테고리 작품 조회 API
      * @return BaseException<List<GetProductRes>>
      */
     @GetMapping("/categories")
     public BaseResponse<List<GetProductRes>> getCategoryProducts(@RequestParam("categoryId") int categoryId) throws BaseException {
         List<GetProductRes> getCategoryProducts = productProvider.getCategoryProducts(categoryId);
         return new BaseResponse<>(getCategoryProducts);
+    }
+
+    /**
+     * 27. 검색 작품 조회 API
+     * @return BaseException<List<GetProductRes>>
+     */
+    @GetMapping("/search")
+    public BaseResponse<List<GetProductRes>> getSearchProducts(@RequestParam("word") String word) throws BaseException {
+        List<GetProductRes> getSearchProducts = productProvider.getSearchProducts(word);
+        return new BaseResponse<>(getSearchProducts);
     }
 
 }

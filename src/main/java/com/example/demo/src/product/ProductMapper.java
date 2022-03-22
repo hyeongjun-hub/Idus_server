@@ -15,5 +15,7 @@ public interface ProductMapper {
     List<GetTodayRes> getTodayProducts();
     List<GetLiveRes> getLiveProducts();
     List<GetNewRes> getNewProducts();
+    List<GetProductRes> getTodayMore();
     List<GetProductRes> getCategoryProducts(int categoryId);
+    List<GetProductRes> getSearchProducts(String word);
 }

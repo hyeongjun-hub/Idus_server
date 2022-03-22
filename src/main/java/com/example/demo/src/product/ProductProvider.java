@@ -42,10 +42,28 @@ public class ProductProvider {
         }
     }
 
+    public List<GetProductRes> getTodayMore() throws BaseException{
+        try{
+            List<GetProductRes> getTodayMore = productMapper.getTodayMore();
+            return getTodayMore;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
     public List<GetProductRes> getCategoryProducts(int categoryId) throws BaseException{
         try{
             List<GetProductRes> categoryProducts = productMapper.getCategoryProducts(categoryId);
             return categoryProducts;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetProductRes> getSearchProducts(String word) throws BaseException{
+        try{
+            List<GetProductRes> searchProducts = productMapper.getSearchProducts(word);
+            return searchProducts;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

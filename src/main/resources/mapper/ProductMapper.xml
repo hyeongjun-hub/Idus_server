@@ -39,6 +39,24 @@
         ORDER BY date DESC
     </select>
 
+    <select id="getTodayMore" resultType="GetProductRes">
+        select Product.productId,
+               Product.categoryId,
+               productName,
+               makerName,
+               thumbnailImageUrl,
+               price,
+               discountRate,
+               tag,
+               (select AVG(star) from Review where Product.productId = Review.productId) as star,
+               (select COUNT(star) from Review where Product.productId = Review.productId) as reviewCount,
+               (select content from Review R where R.productId=Product.productId limit 1) as review,
+                vip
+        from Product
+            inner join Maker M on Product.makerId = M.makerId
+        ORDER BY RAND()
+    </select>
+
     <select id="getCategoryProducts" parameterType="int" resultType="GetProductRes">
         select Product.productId,
                Product.categoryId,
@@ -55,5 +73,23 @@
         from Product
             inner join Maker M on Product.makerId = M.makerId
         where categoryId = #{categoryId}
+    </select>
+
+    <select id="getSearchProducts" parameterType="String" resultType="GetProductRes">
+        select Product.productId,
+               Product.categoryId,
+               productName,
+               makerName,
+               thumbnailImageUrl,
+               price,
+               discountRate,
+               tag,
+               (select AVG(star) from Review where Product.productId = Review.productId) as star,
+               (select COUNT(star) from Review where Product.productId = Review.productId) as reviewCount,
+               (select content from Review R where R.productId=Product.productId limit 1) as review,
+                vip
+        from Product
+            inner join Maker M on Product.makerId = M.makerId
+        where productName like '%${word}%' or makerName like '%${word}%'
     </select>
 </mapper>
