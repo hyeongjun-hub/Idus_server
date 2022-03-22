@@ -9,8 +9,7 @@
                (select COUNT(star) from Review where Product.productId = Review.productId) as reviewCount,
                (select content from Review R where R.productId=Product.productId limit 1) as review
         from Product
-            left join Review R on Product.productId = R.productId
-        group by Product.productId ORDER BY RAND()
+        ORDER BY RAND()
     </select>
 
     <select id="getLiveProducts" resultType="GetLiveRes">
@@ -37,6 +36,24 @@
             TIMESTAMP (Product.createdAt) as date
         from Product
             inner join Maker M on Product.makerId = M.makerId
-        group by Product.productId ORDER BY date DESC
+        ORDER BY date DESC
+    </select>
+
+    <select id="getCategoryProducts" parameterType="int" resultType="GetProductRes">
+        select Product.productId,
+               Product.categoryId,
+               productName,
+               makerName,
+               thumbnailImageUrl,
+               price,
+               discountRate,
+               tag,
+               (select AVG(star) from Review where Product.productId = Review.productId) as star,
+               (select COUNT(star) from Review where Product.productId = Review.productId) as reviewCount,
+               (select content from Review R where R.productId=Product.productId limit 1) as review,
+                vip
+        from Product
+            inner join Maker M on Product.makerId = M.makerId
+        where categoryId = #{categoryId}
     </select>
 </mapper>
