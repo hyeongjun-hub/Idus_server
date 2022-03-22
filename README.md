@@ -24,8 +24,9 @@
   * 유저 정보 조회 api
   * 유저 삭제 api
   * 유저 로그아웃 api
-* category domain api 구축 (0%)
+* category domain api 구축 (100%)
   * 카테고리 조회 api
+* api 명세서 업데이트
 
 
 ## 2022-03-22 진행상황(4일차)
@@ -33,3 +34,4 @@
   * 투데이 탭 조회 api
   * 실시간 탭 조회 api
   * new 탭 조회 api
+* dummy data 생성 (maker, product)
