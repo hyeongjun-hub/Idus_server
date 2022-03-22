@@ -24,6 +24,7 @@ public class RestControllerAdvice {
     final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     // BaseException
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({BaseException.class})
     public BaseResponse<Object> handleException(BaseException ex) {
         logger.warn("error", ex);

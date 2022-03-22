@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.src.product.ProductMapper">
+    <select id="getTodayProducts" resultType="GetTodayRes">
+        select Product.productId,
+               productName,
+               thumbnailImageUrl,
+               (select AVG(star) from Review where Product.productId = Review.productId) as star,
+               (select COUNT(star) from Review where Product.productId = Review.productId) as reviewCount,
+               (select content from Review R where R.productId=Product.productId limit 1) as review
+        from Product
+            left join Review R on Product.productId = R.productId
+        group by Product.productId ORDER BY RAND()
+    </select>
+</mapper>
