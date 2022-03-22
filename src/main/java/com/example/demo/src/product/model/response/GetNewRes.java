@@ -7,14 +7,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class GetTodayRes {
+@NoArgsConstructor
+public class GetNewRes {
     private int productId;
+    private String makerName;
     private String productName;
     private String thumbnailImageUrl;
-
-    private double star;
-    private int reviewCount;
-    private String review;
 }
