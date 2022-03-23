@@ -127,6 +127,7 @@
                R.updatedAt updateDate,
                profileImageUrl,
                star,
+               imageUrl,
                R.content,
                (select group_concat(distinct ProductOption.content separator ' ')
                 from ProductOption
