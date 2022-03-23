@@ -179,7 +179,6 @@ public class UserService {
         if (result == 0) {
             throw new BaseException(EDIT_FAIL_CONTENT);
         }
-
     }
 
     @Transactional(rollbackFor = {BaseException.class, MethodArgumentNotValidException.class})
