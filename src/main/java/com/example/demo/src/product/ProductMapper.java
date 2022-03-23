@@ -1,9 +1,10 @@
 package com.example.demo.src.product;
 
-import com.example.demo.src.product.model.response.GetLiveRes;
-import com.example.demo.src.product.model.response.GetNewRes;
-import com.example.demo.src.product.model.response.GetProductRes;
-import com.example.demo.src.product.model.response.GetTodayRes;
+import com.example.demo.src.product.model.entity.Comment;
+import com.example.demo.src.product.model.entity.Maker;
+import com.example.demo.src.product.model.entity.ProductKeyword;
+import com.example.demo.src.product.model.entity.Review;
+import com.example.demo.src.product.model.response.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -18,4 +19,9 @@ public interface ProductMapper {
     List<GetProductRes> getTodayMore();
     List<GetProductRes> getCategoryProducts(int categoryId);
     List<GetProductRes> getSearchProducts(String word);
+    GetDetailRes getProductDetail(int productId);
+    List<Review> getProductReviews(int productId);
+    List<ProductKeyword> getProductKeywords(int productId);
+    List<Comment> getProductComments(int productId);
+    Maker getMakerInfo(int productId);
 }

@@ -92,4 +92,104 @@
             inner join Maker M on Product.makerId = M.makerId
         where productName like '%${word}%' or makerName like '%${word}%'
     </select>
+
+    <select id="getProductDetail" parameterType="int" resultType="GetDetailRes">
+        select Product.productId,
+               Product.categoryId,
+               makerName,
+               productName,
+               thumbnailImageUrl,
+               price,
+               discountRate,
+               tag,
+               (select AVG(star) from Review where Product.productId = Review.productId)   as star,
+               (select COUNT(star) from Review where Product.productId = Review.productId) as reviewCount,
+               (select COUNT(distinct orderListId)
+                from OrderList
+                         inner join Cart C on OrderList.cartId = C.cartId
+                         inner join SmallCart SC on C.cartId = SC.cartId
+                         inner join OrderDetail OD on SC.smallCartId = OD.smallCartId
+                         inner join Product P on OD.productId = #{productId}
+                where OD.productId = P.productId)                                           as orderCount,
+               deliveryTip,
+               tipFreeMin,
+               amount,
+               productInfo
+        from Product
+                 inner join Maker M on Product.makerId = M.makerId
+        where Product.productId = #{productId}
+    </select>
+
+    <select id="getProductReviews" parameterType="int" resultType="Review">
+        select R.reviewId,
+               U.userId,
+               userName,
+               R.updatedAt updateDate,
+               profileImageUrl,
+               star,
+               R.content,
+               (select group_concat(distinct ProductOption.content separator ' ')
+                from ProductOption
+                         inner join OrderDetail OD on ProductOption.productOptionId = OD.productOptionId
+                         inner join Review R on OD.productId = R.productId
+                where R.productId = 1) as productOption
+        from Review R
+                 inner join OrderList OL on R.orderListId = OL.orderListId
+                 inner join Cart C on OL.cartId = C.cartId
+                 inner join User U on C.userId = U.userId
+        where R.productId = #{productId}
+    </select>
+
+    <select id="getProductKeywords" parameterType="int" resultType="ProductKeyword">
+        select productKeyword
+        from ProductKeyword
+        where ProductKeyword.productId = #{productId};
+    </select>
+
+    <select id="getProductComments" parameterType="int" resultType="com.example.demo.src.product.model.entity.Comment">
+        select content
+        from Comment
+        where productId = #{productId}
+    </select>
+
+    <select id="getMakerInfo" parameterType="int" resultType="com.example.demo.src.product.model.entity.Maker">
+        select Product.makerId,
+               makerProfileImageUrl,
+               makerName,
+               IFNULL((select AVG(star)
+                       from OrderList OL
+                                inner join Review on Review.orderListId = OL.orderListId
+                                inner join Cart C on OL.cartId = C.cartId
+                                inner join SmallCart SC on C.cartId = SC.cartId
+                                inner join OrderDetail OD on SC.smallCartId = OD.smallCartId
+                                inner join Product P on OD.productId = P.productId
+                                inner join Maker M on P.makerId = M.makerId
+                       where M.makerId = Product.makerId
+                       group by P.productId), 0)   as star,
+               (select Count(star)
+                from OrderList OL
+                         inner join Review on Review.orderListId = OL.orderListId
+                         inner join Cart C on OL.cartId = C.cartId
+                         inner join SmallCart SC on C.cartId = SC.cartId
+                         inner join OrderDetail OD on SC.smallCartId = OD.smallCartId
+                         inner join Product P on OD.productId = P.productId
+                         inner join Maker M on P.makerId = M.makerId
+                where M.makerId = Product.makerId
+                group by P.productId)              as reviewCount,
+               (select Count(likeListId)
+                from LikeList
+                         inner join Product P on LikeList.productId = P.productId
+                         inner join Maker M on P.makerId = M.makerId
+                where M.makerId = Product.makerId) as likeCount,
+               (select Count(followId)
+                from Follow
+                where makerId = Product.makerId)   as followCount,
+               (select Count(supportId)
+                from Support
+                where makerId = Product.makerId)   as supportCount,
+               M.profileDetail
+        from Product
+                 inner join Maker M on Product.makerId = M.makerId
+        where Product.productId = #{productId}
+    </select>
 </mapper>
