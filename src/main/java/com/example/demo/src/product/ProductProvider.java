@@ -115,4 +115,13 @@ public class ProductProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public List<GetOptionRes> getProductOptions(int productId) throws BaseException{
+        try{
+            List<GetOptionRes> getProductOptions = productMapper.getProductOptions(productId);
+            return getProductOptions;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

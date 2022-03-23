@@ -49,6 +49,10 @@ public enum BaseResponseStatus {
     // cart
 
 
+    // Common
+    VALIDATION_ERROR(false, 2500, "잘못된 형식입니다."),
+
+
     /**
      * 3000 : 클라이언트 Response 오류
      */
@@ -75,10 +79,8 @@ public enum BaseResponseStatus {
 
     //[PATCH] /users
     MODIFY_FAIL_USERNAME(false,4014,"유저네임 수정 실패"),
-    EDIT_FAIL_CONTENT(false, 4015, "유저정보 수정 실패"),
+    EDIT_FAIL_CONTENT(false, 4015, "유저정보 수정 실패");
 
-    // Common
-    VALIDATION_ERROR(false, 4500, "잘못된 형식입니다.");
 
     private final boolean isSuccess;
     private final int code;

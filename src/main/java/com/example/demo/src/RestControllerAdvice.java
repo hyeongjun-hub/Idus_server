@@ -27,7 +27,7 @@ public class RestControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({BaseException.class})
     public BaseResponse<Object> handleException(BaseException ex) {
-        logger.warn("error", ex);
+        logger.warn("error", ex.getMessage());
         return new BaseResponse<>(ex.getStatus());
     }
 
@@ -41,7 +41,7 @@ public class RestControllerAdvice {
         ValidationErrorResponse validationErrorResponse = new ValidationErrorResponse();
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
             validationErrorResponse.setIsSuccess(false);
-            validationErrorResponse.setStatus(4500);
+            validationErrorResponse.setStatus(2500);
             validationErrorResponse.setMessage(fieldError.getDefaultMessage());
         }
 

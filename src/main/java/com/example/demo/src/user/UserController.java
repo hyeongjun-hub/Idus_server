@@ -145,7 +145,6 @@ public class UserController {
         return new BaseResponse<>(logoutRes);
     }
 
-
     /**
      * 회원 포인트조회 API
      * @return BaseResponse<Integer>

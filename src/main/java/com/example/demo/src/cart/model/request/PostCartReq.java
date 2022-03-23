@@ -9,9 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostAddCartReq {
-    private int menuId;
-    private int amount;
-    private int userCartId;
-    private int orderDetailId;
+public class PostCartReq {
+    private int[] productOptionId;
+    private int count;
+    private int price;
 }
