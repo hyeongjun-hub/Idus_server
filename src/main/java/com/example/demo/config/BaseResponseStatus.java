@@ -79,7 +79,10 @@ public enum BaseResponseStatus {
 
     //[PATCH] /users
     MODIFY_FAIL_USERNAME(false,4014,"유저네임 수정 실패"),
-    EDIT_FAIL_CONTENT(false, 4015, "유저정보 수정 실패");
+    EDIT_FAIL_CONTENT(false, 4015, "유저정보 수정 실패"),
+
+    //[POST] /carts
+    CREATE_FAIL_CONTENT(false, 4020, "장바구니 생성 실패");
 
 
     private final boolean isSuccess;

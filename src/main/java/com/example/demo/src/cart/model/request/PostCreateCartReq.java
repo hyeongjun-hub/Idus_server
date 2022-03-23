@@ -7,9 +7,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class PostCreateCartReq {
     private int userId;
-    private int userCartId;
+    private int cartId;
 }

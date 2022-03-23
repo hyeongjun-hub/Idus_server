@@ -10,5 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostCartRes {
-    private int userCartId;
+    private int cartId;
+    private int smallCartId;
 }
