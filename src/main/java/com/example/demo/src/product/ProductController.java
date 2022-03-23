@@ -2,15 +2,13 @@ package com.example.demo.src.product;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.product.model.response.GetLiveRes;
-import com.example.demo.src.product.model.response.GetNewRes;
-import com.example.demo.src.product.model.response.GetProductRes;
-import com.example.demo.src.product.model.response.GetTodayRes;
+import com.example.demo.src.product.model.entity.Comment;
+import com.example.demo.src.product.model.entity.Maker;
+import com.example.demo.src.product.model.entity.ProductKeyword;
+import com.example.demo.src.product.model.entity.Review;
+import com.example.demo.src.product.model.response.*;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -79,6 +77,21 @@ public class ProductController {
     public BaseResponse<List<GetProductRes>> getSearchProducts(@RequestParam("word") String word) throws BaseException {
         List<GetProductRes> getSearchProducts = productProvider.getSearchProducts(word);
         return new BaseResponse<>(getSearchProducts);
+    }
+
+    /**
+     * 28. 작품 상세 조회 API
+     * @return BaseException<GetDetailTotalRes>>
+     */
+    @GetMapping("/{productId}")
+    public BaseResponse<GetDetailTotalRes> getProductDetail(@PathVariable("productId") int productId) throws BaseException {
+        GetDetailRes getDetailRes = productProvider.getProductDetail(productId);
+        List<Review> getReview = productProvider.getProductReviews(productId);
+        List<ProductKeyword> getProductKeyword = productProvider.getProductKeywords(productId);
+        List<Comment> getComment = productProvider.getProductComments(productId);
+        Maker getMaker = productProvider.getMakerInfo(productId);
+        GetDetailTotalRes getDetailTotalRes = new GetDetailTotalRes(getDetailRes, getReview, getProductKeyword, getComment, getMaker);
+        return new BaseResponse<>(getDetailTotalRes);
     }
 
 }
