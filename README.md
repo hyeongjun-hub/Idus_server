@@ -28,10 +28,19 @@
   * 카테고리 조회 api
 * api 명세서 업데이트
 
-
 ## 2022-03-22 진행상황(4일차)
-* products domain의 우선순위 api들 구축 (0%)
+* product domain의 우선순위 api들 구축 (100%)
   * 투데이 탭 조회 api
   * 실시간 탭 조회 api
   * new 탭 조회 api
-* dummy data 생성 (maker, product)
+* 임의의 dummy data 생성 (maker, product)
+
+## 2022-03-23 진행상황(5일차)
+* product domain의 우선순위 api들 구축(60%)
+  * 카테고리 작품 조회 api
+  * 검색 작품 조회 api
+  * 작품 상세 조회 api
+* cart domain의 우선순위 api 구축(0%)
+  * 장바구니 작품 담기 api
+  * 장바구니 조회 api
+* front로 부터 받은 image와 어플 정보에 따라 dummy data 입력 (product) (100%)

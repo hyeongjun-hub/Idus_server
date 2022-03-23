@@ -1,10 +1,12 @@
 package com.example.demo.src.product;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.product.model.response.GetLiveRes;
-import com.example.demo.src.product.model.response.GetNewRes;
-import com.example.demo.src.product.model.response.GetProductRes;
-import com.example.demo.src.product.model.response.GetTodayRes;
+import com.example.demo.src.product.model.entity.Comment;
+import com.example.demo.src.product.model.entity.Maker;
+import com.example.demo.src.product.model.entity.ProductKeyword;
+import com.example.demo.src.product.model.entity.Review;
+import com.example.demo.src.product.model.response.*;
+import com.example.demo.src.review.model.response.GetReviewRes;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -64,6 +66,51 @@ public class ProductProvider {
         try{
             List<GetProductRes> searchProducts = productMapper.getSearchProducts(word);
             return searchProducts;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public GetDetailRes getProductDetail(int productId) throws BaseException{
+        try{
+            GetDetailRes getDetailRes = productMapper.getProductDetail(productId);
+            return getDetailRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<Review> getProductReviews(int productId) throws BaseException{
+        try{
+            List<Review> getReviews = productMapper.getProductReviews(productId);
+            return getReviews;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<ProductKeyword> getProductKeywords(int productId) throws BaseException{
+        try{
+            List<ProductKeyword> getKeyword = productMapper.getProductKeywords(productId);
+            return getKeyword;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<Comment> getProductComments(int productId) throws BaseException{
+        try{
+            List<Comment> getComment = productMapper.getProductComments(productId);
+            return getComment;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public Maker getMakerInfo(int productId) throws BaseException{
+        try{
+            Maker getMakerInfo = productMapper.getMakerInfo(productId);
+            return getMakerInfo;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
