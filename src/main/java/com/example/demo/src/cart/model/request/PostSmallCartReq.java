@@ -9,7 +9,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostCreateCartReq {
-    private int userId;
+public class PostSmallCartReq {
+    private int smallCartId;
     private int cartId;
+    private int productId;
+    private int count;
+    private int price;
+    private int deliveryTip;
 }

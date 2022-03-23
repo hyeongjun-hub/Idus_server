@@ -109,8 +109,9 @@
                          inner join Cart C on OrderList.cartId = C.cartId
                          inner join SmallCart SC on C.cartId = SC.cartId
                          inner join OrderDetail OD on SC.smallCartId = OD.smallCartId
-                         inner join Product P on OD.productId = #{productId}
-                where OD.productId = P.productId)                                           as orderCount,
+                         inner join ProductOption PO on OD.productOptionId = PO.productOptionId
+                         inner join Product P on PO.productId = P.productId
+                where PO.productId = P.productId)                                           as orderCount,
                deliveryTip,
                tipFreeMin,
                amount,
@@ -132,7 +133,8 @@
                (select group_concat(distinct ProductOption.content separator ' ')
                 from ProductOption
                          inner join OrderDetail OD on ProductOption.productOptionId = OD.productOptionId
-                         inner join Review R on OD.productId = R.productId
+                         inner join Product P on ProductOption.productId = P.productId
+                         inner join Review R on P.productId = R.productId
                 where R.productId = 1) as productOption
         from Review R
                  inner join OrderList OL on R.orderListId = OL.orderListId
@@ -163,7 +165,8 @@
                                 inner join Cart C on OL.cartId = C.cartId
                                 inner join SmallCart SC on C.cartId = SC.cartId
                                 inner join OrderDetail OD on SC.smallCartId = OD.smallCartId
-                                inner join Product P on OD.productId = P.productId
+                                inner join ProductOption PO on OD.productOptionId = PO.productOptionId
+                                inner join Product P on PO.productId = P.productId
                                 inner join Maker M on P.makerId = M.makerId
                        where M.makerId = Product.makerId
                        group by P.productId), 0)   as star,
@@ -173,7 +176,8 @@
                          inner join Cart C on OL.cartId = C.cartId
                          inner join SmallCart SC on C.cartId = SC.cartId
                          inner join OrderDetail OD on SC.smallCartId = OD.smallCartId
-                         inner join Product P on OD.productId = P.productId
+                         inner join ProductOption O on OD.productOptionId = O.productOptionId
+                         inner join Product P on O.productId = P.productId
                          inner join Maker M on P.makerId = M.makerId
                 where M.makerId = Product.makerId
                 group by P.productId)              as reviewCount,
@@ -192,5 +196,15 @@
         from Product
                  inner join Maker M on Product.makerId = M.makerId
         where Product.productId = #{productId}
+    </select>
+
+    <select id="getProductOptions" parameterType="int" resultType="GetOptionRes">
+        select productOptionId,
+               productId,
+               title,
+               content,
+               addPrice
+        from ProductOption
+        where productId = #{productId}
     </select>
 </mapper>
