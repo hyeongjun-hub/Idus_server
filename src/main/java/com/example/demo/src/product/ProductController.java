@@ -94,4 +94,13 @@ public class ProductController {
         return new BaseResponse<>(getDetailTotalRes);
     }
 
+    /**
+     * 29. 작품 옵션 조회 API
+     * @return BaseException
+     */
+    @GetMapping("/{productId}/option")
+    public BaseResponse<List<GetOptionRes>> getProductOptions(@PathVariable("productId") int productId) throws BaseException {
+        List<GetOptionRes> getProductOptions = productProvider.getProductOptions(productId);
+        return new BaseResponse<>(getProductOptions);
+    }
 }

@@ -3,7 +3,7 @@ package com.example.demo.src.cart;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.cart.model.request.PostAddAdditionalCartReq;
-import com.example.demo.src.cart.model.request.PostAddCartReq;
+import com.example.demo.src.cart.model.request.PostCartReq;
 import com.example.demo.src.cart.model.response.GetCartRes;
 import com.example.demo.src.cart.model.response.PostAddCartRes;
 import com.example.demo.src.cart.model.response.PostCartRes;
@@ -26,12 +26,17 @@ public class CartController {
     private final JwtService jwtService;
 
     /**
-     * 장바구니 생성 API
+     * 32. 장바구니에 작품담기 API
      *
      * @return BaseResponse<PostCartRes>
      */
+    // body에 productId, productOptionId의 List, 수량을 받음
+    // userId와 매칭하는 status=Y인 Cart 존재 여부 확인 없으면 생성 -> cartId return
+    // 받은 cartId + 수량으로 새로운 smallCart생성 후 smallCartId return (TODO: productID에 따라 List 처리)
+    // 받은 smallCartId로 여러 orderDetail생성
+    // 최종적으로 cartId, smallCartId return
     @PostMapping("/new")
-    public BaseResponse<PostCartRes> createCart() throws BaseException {
+    public BaseResponse<PostCartRes> createCart(@RequestBody PostCartReq postCartReq) throws BaseException {
         int userId = jwtService.getUserId();
         PostCartRes postCartRes = cartService.createCart(userId);
         return new BaseResponse<>(postCartRes);
@@ -41,38 +46,12 @@ public class CartController {
      * 장바구니 조회 API
      *
      * @param userCartId
-     * @return BaseResponse<List < GetCartRes>>
+     * @return BaseResponse<List<GetCartRes>>
      */
     @GetMapping("/{userCartId}")
     public BaseResponse<List<GetCartRes>> getUserCart(@PathVariable int userCartId) throws BaseException {
         List<GetCartRes> getCartRes = cartProvider.getCart(userCartId);
         return new BaseResponse<>(getCartRes);
-    }
-
-    /**
-     * 장바구니 메뉴담기 API
-     *
-     * @param userCartId
-     * @param postAddCartReq
-     * @return BaseResponse<PostAddCartRes>
-     */
-    @PostMapping("{userCartId}/menu")
-    public BaseResponse<PostAddCartRes> addMenu(@PathVariable int userCartId, @RequestBody PostAddCartReq postAddCartReq) throws BaseException {
-        PostAddCartRes postAddCartRes = cartService.addMenu(userCartId, postAddCartReq);
-        return new BaseResponse<>(postAddCartRes);
-    }
-
-    /**
-     * 장바구니 추가메뉴담기 API
-     *
-     * @param userCartId
-     * @param postAddAdditionalCartReq
-     * @return BaseResponse<PostAddCartRes>
-     */
-    @PostMapping("{userCartId}/additional-menu")
-    public BaseResponse<PostAddCartRes> addAdditionalMenu(@PathVariable int userCartId, @RequestBody PostAddAdditionalCartReq postAddAdditionalCartReq) throws BaseException {
-        PostAddCartRes postAddCartRes = cartService.addAdditionalMenu(userCartId, postAddAdditionalCartReq);
-        return new BaseResponse<>(postAddCartRes);
     }
 
     /**
