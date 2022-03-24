@@ -5,18 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetCartRes {
-    private int userCartId;
-    private String restaurantName;
-    private String menuImageUrl;
-    private String menuName;
-    private int menuPrice;
-    private String additionalMenuName;
-    private int additionalMenuPrice;
-    private int amount;
-    private int priceSum;
+    private int cartId;
+    private List<GetSmallCartRes> smallCart;
+    private int priceAll;
+    private int deliveryTipAll;
 }

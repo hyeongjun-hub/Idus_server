@@ -12,4 +12,5 @@ import lombok.Setter;
 public class PostCreateCartReq {
     private int userId;
     private int cartId;
+    private String isDirectOrder;
 }
