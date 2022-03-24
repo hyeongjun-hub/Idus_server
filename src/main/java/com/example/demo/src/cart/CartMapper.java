@@ -3,9 +3,12 @@ package com.example.demo.src.cart;
 import com.example.demo.src.cart.model.request.PostCreateCartReq;
 import com.example.demo.src.cart.model.request.PostSmallCartReq;
 import com.example.demo.src.cart.model.response.GetCartRes;
+import com.example.demo.src.cart.model.response.GetSmallCartRes;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Mapper
 @Repository
@@ -25,6 +28,8 @@ public interface CartMapper {
     int createOrderDetail(@Param("productOptionId") int productOptionId, @Param("smallCartId") int smallCartId);
 
     GetCartRes getCart(int userId);
+
+    List<GetSmallCartRes> getSmallCart(int cartId);
 
     void delCart(int userCartId);
 

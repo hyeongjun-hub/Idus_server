@@ -39,11 +39,35 @@
         </selectKey>
     </insert>
 
+    <select id="getCart" parameterType="int" resultType="GetCartRes">
+        select cartId, priceAll, deliveryTipAll from Cart where userId = #{userId} and status='Y'
+    </select>
+
+    <select id="getSmallCart" parameterType="int" resultType="GetSmallCartRes">
+        select smallCartId,
+               makerName,
+               thumbnailImageUrl,
+               productName,
+               amount,
+               (select group_concat(distinct ProductOption.content separator '\n')
+                from ProductOption
+                         inner join OrderDetail OD on ProductOption.productOptionId = OD.productOptionId
+                         inner join Product P on ProductOption.productId = P.productId
+                         inner join Review R on P.productId = R.productId
+                where R.productId = 1) as productOption,
+               SmallCart.price,
+               count,
+               SmallCart.deliveryTip,
+               tipFreeMin,
+               request
+        from SmallCart
+                 inner join Product P on SmallCart.productId = P.productId
+                 inner join Maker M on P.makerId = M.makerId
+        where cartId = #{cartId} and SmallCart.status = 'Y'
+    </select>
+
     <update id="delCart" parameterType="int">
         Update Cart set status = 'D' where CartId = #{CartId}
     </update>
-
-
-
 
 </mapper>

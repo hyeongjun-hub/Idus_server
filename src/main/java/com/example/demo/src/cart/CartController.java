@@ -50,16 +50,16 @@ public class CartController {
     }
 
     /**
-     * 장바구니 조회 API
+     * 34. 장바구니 조회 API
      *
      * @return BaseResponse<List<GetCartRes>>
      */
-//    @GetMapping("")
-//    public BaseResponse<List<GetCartRes>> getCart() throws BaseException {
-//        int userId = jwtService.getUserId();
-////        List<GetCartRes> getCartRes = cartProvider.getCart(userId);
-//        return new BaseResponse<>(getCartRes);
-//    }
+    @GetMapping("")
+    public BaseResponse<GetCartRes> getCart() throws BaseException {
+        int userId = jwtService.getUserId();
+        GetCartRes getCartRes = cartProvider.getCart(userId);
+        return new BaseResponse<>(getCartRes);
+    }
 
     /**
      * 장바구니 삭제 API
