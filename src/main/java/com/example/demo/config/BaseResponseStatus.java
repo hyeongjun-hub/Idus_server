@@ -49,6 +49,10 @@ public enum BaseResponseStatus {
     // cart
 
 
+    // Common
+    VALIDATION_ERROR(false, 2500, "잘못된 형식입니다."),
+
+
     /**
      * 3000 : 클라이언트 Response 오류
      */
@@ -74,11 +78,14 @@ public enum BaseResponseStatus {
     PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다."),
 
     //[PATCH] /users
-    MODIFY_FAIL_USERNAME(false,4014,"유저네임 수정 실패"),
-    EDIT_FAIL_CONTENT(false, 4015, "유저정보 수정 실패"),
+    MODIFY_FAIL_USERNAME(false,4014,"유저네임 수정에 실패하였습니다."),
+    EDIT_FAIL_CONTENT(false, 4015, "유저정보 수정에 실패하였습니다."),
 
-    // Common
-    VALIDATION_ERROR(false, 4500, "잘못된 형식입니다.");
+    //[POST] /carts
+    CREATE_FAIL_CART(false, 4020, "장바구니 생성에 실패하였습니다."),
+    UPDATE_FAIL_PRICE(false, 4021, "장바구니 가격 업데이트에 실패하였습니다."),
+    CREATE_FAIL_DELIVERY_TIP(false, 4022, "장바구니 배송비 업데이트에 실패하였습니다.");
+
 
     private final boolean isSuccess;
     private final int code;

@@ -18,10 +18,6 @@ import java.net.URL;
 import static com.example.demo.config.BaseResponseStatus.FAILED_TO_SEND_PHONE_AUTH;
 import static com.example.demo.config.Constant.*;
 
-/**
- * sens 가이드 : https://api.ncloud-docs.com/docs/ai-application-service-sens-smsv2#%EB%A9%94%EC%8B%9C%EC%A7%80%EB%B0%9C%EC%86%A1
- */
-
 @Service
 public class SmsAuthService {
     public PostPhoneAuthRes sendPhoneAuth(String toPhone) throws BaseException {

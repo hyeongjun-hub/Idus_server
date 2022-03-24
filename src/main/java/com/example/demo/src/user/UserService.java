@@ -22,7 +22,6 @@ import javax.sound.midi.Patch;
 
 import static com.example.demo.config.BaseResponseStatus.*;
 
-// Service Create, Update, Delete 의 로직 처리
 @Service
 @AllArgsConstructor
 public class UserService {
@@ -179,7 +178,6 @@ public class UserService {
         if (result == 0) {
             throw new BaseException(EDIT_FAIL_CONTENT);
         }
-
     }
 
     @Transactional(rollbackFor = {BaseException.class, MethodArgumentNotValidException.class})

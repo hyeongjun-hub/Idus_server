@@ -24,4 +24,5 @@ public interface ProductMapper {
     List<ProductKeyword> getProductKeywords(int productId);
     List<Comment> getProductComments(int productId);
     Maker getMakerInfo(int productId);
+    List<GetOptionRes> getProductOptions(int productId);
 }
