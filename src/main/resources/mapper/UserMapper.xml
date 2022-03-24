@@ -3,18 +3,58 @@
 <mapper namespace="com.example.demo.src.user.UserMapper">
 
     <insert id="createUser" parameterType="PostUserReq">
-        insert into User (userName, email, password, gradeId, phone, profileImageUrl, point, birthday, gender, identityTest, isLogin, platform, fingerPrint, productId, alarm) VALUES (#{userName}, #{email}, #{password}, DEFAULT, #{phone}, DEFAULT, DEFAULT, null, DEFAULT, DEFAULT, DEFAULT, #{platform}, DEFAULT, null, DEFAULT)
+        insert into User (userName, email, password, gradeId, phone, profileImageUrl, point, birthday, gender,
+        identityTest, isLogin, platform, fingerPrint, productId, alarm) VALUES (#{userName}, #{email}, #{password},
+        DEFAULT, #{phone}, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, #{platform}, DEFAULT, DEFAULT, DEFAULT);
+
         <selectKey keyProperty="userId" resultType="int" order="AFTER">
             select LAST_INSERT_ID()
         </selectKey>
     </insert>
 
     <select id="getUsers" resultType="com.example.demo.src.user.model.entity.User">
-        select * from User
+        select userId,
+               userName,
+               email,
+               password,
+               gradeId,
+               IFNULL(phone, '') phone,
+               IFNULL(profileImageUrl, '') profileImageUrl,
+               point,
+               IFNULL(birthday, '') birthday,
+               gender,
+               identityTest,
+               isLogin,
+               platform,
+               fingerPrint,
+               IFNULL(productId, 1) productId,
+               alarm,
+               createdAt,
+               updatedAt,
+               status
+        from User
     </select>
 
     <select id="getUser" parameterType="int" resultType="GetUserRes">
-        select User.userId, userName, email, phone, (select count(userId) from Coupon where userId = #{userId} and status = 'Y') as couponCount, User.gradeId, G.iconUrl, G.gradeName, profileImageUrl, point, birthday, gender, identityTest, fingerPrint, alarm from User inner join Grade G on User.gradeId = G.gradeId where User.userId = #{userId} and User.status = 'Y';
+        select User.userId,
+               userName,
+               email,
+               IFNULL(phone, '') phone,
+               (select count(userId) from Coupon where userId = #{userId} and status = 'Y') as couponCount,
+               User.gradeId,
+               IFNULL(G.iconUrl, '') iconUrl,
+               G.gradeName,
+               IFNULL(profileImageUrl, '') as profileImageUrl,
+               point,
+               IFNULL(birthday, '') birthday,
+               gender,
+               identityTest,
+               fingerPrint,
+               alarm
+        from User
+                 inner join Grade G on User.gradeId = G.gradeId
+        where User.userId = #{userId}
+          and User.status = 'Y'
     </select>
 
     <select id="getPlatform" parameterType="String" resultType="string">
@@ -74,7 +114,27 @@
     </update>
 
     <select id="getLoginUser" parameterType="PostLoginReq" resultType="User">
-        select * from User where email = #{email}
+        select userId,
+               userName,
+               email,
+               password,
+               gradeId,
+               IFNULL(phone, '')           phone,
+               IFNULL(profileImageUrl, '') profileImageUrl,
+               point,
+               IFNULL(birthday, '')        birthday,
+               gender,
+               identityTest,
+               isLogin,
+               platform,
+               fingerPrint,
+               IFNULL(productId, 1)        productId,
+               alarm,
+               createdAt,
+               updatedAt,
+               status
+        from User
+        where email = #{email}
     </select>
 
     <select id="getUserId" parameterType="int" resultType="int">
@@ -90,7 +150,7 @@
     </select>
 
     <select id="getCoupons" parameterType="int" resultType="GetCouponRes">
-        select Coupon.couponId couponId, amount, priceMin, startDate, Coupon.deadline deadLine, orderMethod, Coupon.status status from Coupon inner join RestaurantCoupon RC on Coupon.restaurantCouponId = RC.restaurantCouponId inner join User U on Coupon.userId = U.userId where U.userId = #{userId} and Coupon.status = 'Y'
+        select Coupon.couponId couponId, amount, priceMin, IFNULL(startDate, '') startDate, IFNULL(Coupon.deadline, '') deadLine, orderMethod, Coupon.status status from Coupon inner join RestaurantCoupon RC on Coupon.restaurantCouponId = RC.restaurantCouponId inner join User U on Coupon.userId = U.userId where U.userId = #{userId} and Coupon.status = 'Y'
     </select>
 
     <select id="getPresents" parameterType="int" resultType="GetPresentRes">

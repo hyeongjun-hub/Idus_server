@@ -3,23 +3,23 @@
 <mapper namespace="com.example.demo.src.product.ProductMapper">
     <select id="getTodayProducts" resultType="GetTodayRes">
         select Product.productId,
-               productName,
+               IFNULL(productName, "") productName,
                thumbnailImageUrl,
                (select AVG(star) from Review where Product.productId = Review.productId) as star,
                (select COUNT(star) from Review where Product.productId = Review.productId) as reviewCount,
-               (select content from Review R where R.productId=Product.productId limit 1) as review
+               IFNULL((select content from Review R where R.productId=Product.productId limit 1), '') as review
         from Product
         ORDER BY RAND()
     </select>
 
     <select id="getLiveProducts" resultType="GetLiveRes">
         select Product.productId,
-               productName,
-               makerName,
-               thumbnailImageUrl,
+               IFNULL(productName, "") as productName,
+               IFNULL(makerName, "") as makerName,
+               IFNULL(thumbnailImageUrl, "") as thumbnailImageUrl,
                (select AVG(star) from Review where Product.productId = Review.productId) as star,
                (select COUNT(star) from Review where Product.productId = Review.productId) as reviewCount,
-               (select content from Review R where R.productId=Product.productId limit 1) as review,
+               IFNULL((select content from Review R where R.productId=Product.productId limit 1), '') as review,
        TIMESTAMP(OL.updatedAt) date
         from Product
             left join Review R on Product.productId = R.productId
@@ -32,7 +32,7 @@
         select Product.productId,
                productName,
                makerName,
-               thumbnailImageUrl,
+               IFNULL(thumbnailImageUrl, "") as thumbnailImageUrl,
             TIMESTAMP (Product.createdAt) as date
         from Product
             inner join Maker M on Product.makerId = M.makerId
@@ -44,13 +44,13 @@
                Product.categoryId,
                productName,
                makerName,
-               thumbnailImageUrl,
+               IFNULL(thumbnailImageUrl, "") as thumbnailImageUrl,
                price,
                discountRate,
                tag,
                (select AVG(star) from Review where Product.productId = Review.productId) as star,
                (select COUNT(star) from Review where Product.productId = Review.productId) as reviewCount,
-               (select content from Review R where R.productId=Product.productId limit 1) as review,
+               IFNULL((select content from Review R where R.productId=Product.productId limit 1), '') as review,
                 vip
         from Product
             inner join Maker M on Product.makerId = M.makerId
@@ -62,13 +62,13 @@
                Product.categoryId,
                productName,
                makerName,
-               thumbnailImageUrl,
+               IFNULL(thumbnailImageUrl, "") as thumbnailImageUrl,
                price,
                discountRate,
                tag,
                (select AVG(star) from Review where Product.productId = Review.productId) as star,
                (select COUNT(star) from Review where Product.productId = Review.productId) as reviewCount,
-               (select content from Review R where R.productId=Product.productId limit 1) as review,
+               IFNULL((select content from Review R where R.productId=Product.productId limit 1), '') as review,
                 vip
         from Product
             inner join Maker M on Product.makerId = M.makerId
@@ -80,13 +80,13 @@
                Product.categoryId,
                productName,
                makerName,
-               thumbnailImageUrl,
+               IFNULL(thumbnailImageUrl, '') as thumbnailImageUrl,
                price,
                discountRate,
                tag,
                (select AVG(star) from Review where Product.productId = Review.productId) as star,
                (select COUNT(star) from Review where Product.productId = Review.productId) as reviewCount,
-               (select content from Review R where R.productId=Product.productId limit 1) as review,
+               IFNULL((select content from Review R where R.productId=Product.productId limit 1), '') as review,
                 vip
         from Product
             inner join Maker M on Product.makerId = M.makerId
@@ -98,7 +98,7 @@
                Product.categoryId,
                makerName,
                productName,
-               thumbnailImageUrl,
+               IFNULL(thumbnailImageUrl, '') thumbnailImageUrl,
                price,
                discountRate,
                tag,
@@ -115,7 +115,7 @@
                deliveryTip,
                tipFreeMin,
                amount,
-               productInfo
+               IFNULL(productInfo, '') productInfo
         from Product
                  inner join Maker M on Product.makerId = M.makerId
         where Product.productId = #{productId}
@@ -126,16 +126,16 @@
                U.userId,
                userName,
                R.updatedAt updateDate,
-               profileImageUrl,
+               IFNULL(profileImageUrl, "") profileImageUrl,
                star,
-               imageUrl,
-               R.content,
-               (select group_concat(distinct ProductOption.content separator ' ')
-                from ProductOption
-                         inner join OrderDetail OD on ProductOption.productOptionId = OD.productOptionId
-                         inner join Product P on ProductOption.productId = P.productId
-                         inner join Review R on P.productId = R.productId
-                where R.productId = #{productId}) as productOption
+               IFNULL(imageUrl, "") imageUrl,
+               IFNULL(R.content, "") content,
+               IFNULL((select group_concat(distinct ProductOption.content separator ' ')
+                       from ProductOption
+                                inner join OrderDetail OD on ProductOption.productOptionId = OD.productOptionId
+                                inner join Product P on ProductOption.productId = P.productId
+                                inner join Review R on P.productId = R.productId
+                       where R.productId = 1), '') as productOption
         from Review R
                  inner join OrderList OL on R.orderListId = OL.orderListId
                  inner join Cart C on OL.cartId = C.cartId
@@ -144,20 +144,20 @@
     </select>
 
     <select id="getProductKeywords" parameterType="int" resultType="ProductKeyword">
-        select productKeyword
+        select IFNULL(productKeyword, '') as productKeyword
         from ProductKeyword
         where ProductKeyword.productId = #{productId};
     </select>
 
     <select id="getProductComments" parameterType="int" resultType="com.example.demo.src.product.model.entity.Comment">
-        select content
+        select IFNULL(content, '') as content
         from Comment
         where productId = #{productId}
     </select>
 
     <select id="getMakerInfo" parameterType="int" resultType="com.example.demo.src.product.model.entity.Maker">
         select Product.makerId,
-               makerProfileImageUrl,
+               IFNULL(makerProfileImageUrl, '') makerProfileImageUrl,
                makerName,
                IFNULL((select AVG(star)
                        from OrderList OL
@@ -202,7 +202,7 @@
         select productOptionId,
                productId,
                title,
-               content,
+               IFNULL(content, '') content,
                addPrice
         from ProductOption
         where productId = #{productId}
