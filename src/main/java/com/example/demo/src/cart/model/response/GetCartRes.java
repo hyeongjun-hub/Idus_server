@@ -10,13 +10,5 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetCartRes {
-    private int userCartId;
-    private String restaurantName;
-    private String menuImageUrl;
-    private String menuName;
-    private int menuPrice;
-    private String additionalMenuName;
-    private int additionalMenuPrice;
-    private int amount;
-    private int priceSum;
+    private int cartId;
 }

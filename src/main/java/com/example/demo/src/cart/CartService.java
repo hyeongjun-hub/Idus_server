@@ -1,6 +1,7 @@
 package com.example.demo.src.cart;
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.cart.model.request.PostCartReq;
 import com.example.demo.src.cart.model.request.PostCreateCartReq;
 import com.example.demo.src.cart.model.request.PostOrderDetailReq;
 import com.example.demo.src.cart.model.request.PostSmallCartReq;
@@ -20,21 +21,20 @@ public class CartService {
     private final CartMapper cartMapper;
 
     @Transactional(rollbackFor = {BaseException.class})
-    public int createCart(int userId) throws BaseException {
+    public int createCart(int userId, PostCartReq postCartReq) throws BaseException {
         try{
             // 중복 체크
             if(cartMapper.checkCart(userId) == 1){
                 return cartMapper.getCartId(userId);
             }
             int cartId = 0;
-            PostCreateCartReq postCreateCartReq = new PostCreateCartReq(userId, cartId);
+            PostCreateCartReq postCreateCartReq = new PostCreateCartReq(userId, cartId, postCartReq.getIsDirectOrder());
             int result = cartMapper.createCart(postCreateCartReq);
             if (result == 0) {
-                throw new BaseException(CREATE_FAIL_CONTENT);
+                throw new BaseException(CREATE_FAIL_CART);
             }
             return postCreateCartReq.getCartId();
         } catch (Exception exception) {
-            System.out.println("exception = " + exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }
@@ -44,11 +44,18 @@ public class CartService {
         try{
             int result = cartMapper.createSmallCart(postSmallCartReq);
             if (result == 0) {
-                throw new BaseException(CREATE_FAIL_CONTENT);
+                throw new BaseException(CREATE_FAIL_CART);
+            }
+            result = cartMapper.updateCartPrice(postSmallCartReq.getCartId(), postSmallCartReq.getPrice());
+            if (result == 0) {
+                throw new BaseException(UPDATE_FAIL_PRICE);
+            }
+            result = cartMapper.updateDeliveryTip(postSmallCartReq.getCartId(), postSmallCartReq.getDeliveryTip());
+            if (result == 0) {
+                throw new BaseException(CREATE_FAIL_DELIVERY_TIP);
             }
             return postSmallCartReq.getSmallCartId();
         } catch (Exception exception) {
-            System.out.println("exception = " + exception.getMessage());
             throw new BaseException(DATABASE_ERROR);
         }
     }
@@ -60,11 +67,10 @@ public class CartService {
             for (int i = 0; i < postOrderDetailReq.getProductOptionId().size(); i++) {
                 int result = cartMapper.createOrderDetail(postOrderDetailReq.getProductOptionId().get(i), smallCartId);
                 if (result == 0) {
-                    throw new BaseException(CREATE_FAIL_CONTENT);
+                    throw new BaseException(CREATE_FAIL_CART);
                 }
             }
         } catch (Exception exception) {
-            System.out.println("exception = " + exception.getMessage());
             throw new BaseException(DATABASE_ERROR);
         }
     }

@@ -11,7 +11,7 @@
     </select>
 
     <insert id="createCart" parameterType="PostCreateCartReq">
-        insert into Cart (userId) values (#{userId})
+        insert into Cart (userId, isDirectOrder) values (#{userId}, #{isDirectOrder})
         <selectKey keyProperty="CartId" resultType="int" order="AFTER">
             select LAST_INSERT_ID()
         </selectKey>
@@ -23,6 +23,14 @@
             select LAST_INSERT_ID()
         </selectKey>
     </insert>
+
+    <update id="updateCartPrice" parameterType="int">
+        update Cart set priceAll = priceAll + ${price} where cartId = #{cartId}
+    </update>
+
+    <update id="updateDeliveryTip" parameterType="int">
+        update Cart set deliveryTipAll = deliveryTipAll + ${deliveryTip} where cartId = #{cartId}
+    </update>
 
     <insert id="createOrderDetail" parameterType="int">
         insert into OrderDetail (productOptionId, smallCartId) values (#{productOptionId}, #{smallCartId});
