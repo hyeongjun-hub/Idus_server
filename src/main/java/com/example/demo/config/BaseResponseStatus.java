@@ -87,7 +87,6 @@ public enum BaseResponseStatus {
     CREATE_FAIL_DELIVERY_TIP(false, 4022, "장바구니 배송비 업데이트에 실패하였습니다.");
 
 
-
     private final boolean isSuccess;
     private final int code;
     private final String message;

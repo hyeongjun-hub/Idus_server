@@ -79,7 +79,7 @@
   * ssh를 나의 ip에서만 접속할 수 있도록 변경
   * rds의 3306 포트를 내 ip와 ec2의 보안그룹이 접속할 수 있도록 인바운드 규칙을 변경
   * aws db brute force 해킹방지, 위치 이동 시에는 번거롭지만 인바운드 규칙을 재설정하기로 함
-* cart domain의 우선순위 api 구축(50%)
+* cart domain의 우선순위 api 구축(100%)
   * 장바구니 작품 담기 api
   * 장바구니 조회 api
 * req validation exception의 상태코드를 4500 -> 2500 으로 변경
