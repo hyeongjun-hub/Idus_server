@@ -83,3 +83,10 @@
   * 장바구니 작품 담기 api
   * 장바구니 조회 api
 * req validation exception의 상태코드를 4500 -> 2500 으로 변경
+* secret 파일 수정
+  * 모든 commit 에서 secret을 삭제
+  * .gitignore 추가
+  * 기본적인 실수를 범하고 말았다. .gitignore에 포함되어 있기에 github에 secret 파일이 올려지지 않은 줄 알았다. 하지만 내 착각이었고 git rm -r --cached .을 이용해 github에 있는 .ignore파일들을 삭제 할 수 있었다.
+* null값 수정
+  * 결과값에 null값을 포함해서 나오면 데이터를 다루기 어렵기 때문에 데이터베이스에 애초에 null을 잘 저장하지 않는 것이 좋다. 
+  * 따라서 IFNULL 문법을 통해 query문들을 수정했고 database의 dafault 값들을 null에서 ''으로 바꾸는 작업을 하였다.
