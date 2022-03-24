@@ -5,13 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class PostAddCartReq {
-    private int menuId;
-    private int amount;
-    private int userCartId;
-    private int orderDetailId;
+@NoArgsConstructor
+public class PostOrderDetailReq {
+    private List<Integer> productOptionId;
+    private int smallCartId;
 }

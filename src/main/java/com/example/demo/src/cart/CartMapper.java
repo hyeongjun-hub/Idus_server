@@ -1,10 +1,11 @@
 package com.example.demo.src.cart;
 
-import com.example.demo.src.cart.model.request.PostAddAdditionalCartReq;
-import com.example.demo.src.cart.model.request.PostAddCartReq;
 import com.example.demo.src.cart.model.request.PostCreateCartReq;
+import com.example.demo.src.cart.model.request.PostSmallCartReq;
 import com.example.demo.src.cart.model.response.GetCartRes;
+import com.example.demo.src.cart.model.response.GetSmallCartRes;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,21 +13,23 @@ import java.util.List;
 @Mapper
 @Repository
 public interface CartMapper {
+    int checkCart(int userId);
+
+    int getCartId(int userId);
+
     int createCart(PostCreateCartReq postCreateCartReq);
 
-    List<GetCartRes> getCart(int userCartId);
+    int createSmallCart(PostSmallCartReq postSmallCartReq);
 
-    int addMenu(PostAddCartReq postAddCartReq);
+    int updateCartPrice(@Param("cartId") int cartId, @Param("price") int price);
 
-    int calculatePrice(int orderDetailId);
+    int updateDeliveryTip(@Param("cartId") int cartId, @Param("deliveryTip") int deliveryTip);
 
-    void updateCart(int userCartId, int priceSum);
+    int createOrderDetail(@Param("productOptionId") int productOptionId, @Param("smallCartId") int smallCartId);
 
-    int calculateAdditionalPrice(int orderDetailId);
+    GetCartRes getCart(int userId);
 
-    void updateCartAdditional(int userCartId, int additionalPriceSum);
-
-    int addAdditionalMenu(PostAddAdditionalCartReq postAddAdditionalCartReq);
+    List<GetSmallCartRes> getSmallCart(int cartId);
 
     void delCart(int userCartId);
 
