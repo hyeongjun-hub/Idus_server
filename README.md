@@ -83,3 +83,7 @@
   * 장바구니 작품 담기 api
   * 장바구니 조회 api
 * req validation exception의 상태코드를 4500 -> 2500 으로 변경
+* secret 파일 수정
+  * 모든 commit 에서 secret을 삭제
+  * .gitignore 추가
+  * 기본적인 실수를 범하고 말았다. .gitignore에 포함되어 있기에 github에 secret 파일이 올려지지 않은 줄 알았다. 하지만 내 착각이었고 git rm -r --cached .을 이용해 github에 있는 .ignore파일들을 삭제 할 수 있었다.

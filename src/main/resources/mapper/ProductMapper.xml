@@ -135,7 +135,7 @@
                          inner join OrderDetail OD on ProductOption.productOptionId = OD.productOptionId
                          inner join Product P on ProductOption.productId = P.productId
                          inner join Review R on P.productId = R.productId
-                where R.productId = 1) as productOption
+                where R.productId = #{productId}) as productOption
         from Review R
                  inner join OrderList OL on R.orderListId = OL.orderListId
                  inner join Cart C on OL.cartId = C.cartId
