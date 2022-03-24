@@ -18,6 +18,10 @@ public interface CartMapper {
 
     int createSmallCart(PostSmallCartReq postSmallCartReq);
 
+    int updateCartPrice(@Param("cartId") int cartId, @Param("price") int price);
+
+    int updateDeliveryTip(@Param("cartId") int cartId, @Param("deliveryTip") int deliveryTip);
+
     int createOrderDetail(@Param("productOptionId") int productOptionId, @Param("smallCartId") int smallCartId);
 
     GetCartRes getCart(int userId);

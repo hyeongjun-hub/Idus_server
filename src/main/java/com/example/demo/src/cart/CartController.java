@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -37,9 +38,9 @@ public class CartController {
     // 받은 smallCartId로 여러 orderDetail생성
     // 최종적으로 cartId, smallCartId return
     @PostMapping("/new")
-    public BaseResponse<PostCartRes> createCart(@RequestBody PostCartReq postCartReq) throws BaseException {
+    public BaseResponse<PostCartRes> createCart(@Valid @RequestBody PostCartReq postCartReq) throws BaseException {
         int userId = jwtService.getUserId();
-        int cartId = cartService.createCart(userId);
+        int cartId = cartService.createCart(userId, postCartReq);
         PostSmallCartReq postSmallCartReq = new PostSmallCartReq(0, cartId, postCartReq.getProductId(), postCartReq.getCount(), postCartReq.getPrice(), postCartReq.getDeliveryTip());
         int smallCartId = cartService.createSmallCart(postSmallCartReq);
         PostOrderDetailReq postOrderDetailReq = new PostOrderDetailReq(postCartReq.getProductOptionId(), smallCartId);
@@ -51,12 +52,12 @@ public class CartController {
     /**
      * 장바구니 조회 API
      *
-     * @param userCartId
      * @return BaseResponse<List<GetCartRes>>
      */
-//    @GetMapping("/{userCartId}")
-//    public BaseResponse<List<GetCartRes>> getUserCart(@PathVariable int userCartId) throws BaseException {
-//        List<GetCartRes> getCartRes = cartProvider.getCart(userCartId);
+//    @GetMapping("")
+//    public BaseResponse<List<GetCartRes>> getCart() throws BaseException {
+//        int userId = jwtService.getUserId();
+////        List<GetCartRes> getCartRes = cartProvider.getCart(userId);
 //        return new BaseResponse<>(getCartRes);
 //    }
 
