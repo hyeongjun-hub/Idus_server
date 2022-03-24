@@ -2,18 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.src.order.OrderMapper">
     <insert id="createOrder" parameterType="PostOrderReq">
-        insert into OrderList (userCartId, request, toRider, usePoint, addressId, couponId, presentId, paymentMethodId) values (#{userCartId},#{request},#{toRider},#{usePoint},#{addressId},#{couponId},#{presentId},#{paymentMethodId})
+        insert into OrderList (userCartId, request, toRider, usePoint, addressId, couponId, presentId, paymentMethodId)
+        values
+        (#{userCartId},#{request},#{toRider},#{usePoint},#{addressId},#{couponId},#{presentId},#{paymentMethodId});
+
         <selectKey keyProperty="orderListId" resultType="int" order="AFTER">
             select LAST_INSERT_ID()
         </selectKey>
     </insert>
 
     <update id="updateCartStatus" parameterType="int">
-        update UserCart set status = 'N' where UserCartId = #{userCartId}
+        update UserCart
+        set status = 'N'
+        where UserCartId = #{userCartId};
     </update>
 
     <update id="updateCouponStatus" parameterType="int">
-        update Coupon set status = 'N' where couponId = #{couponId}
+        update Coupon
+        set status = 'N'
+        where couponId = #{couponId};
     </update>
 
     <update id="updatePresentStatus" parameterType="int">

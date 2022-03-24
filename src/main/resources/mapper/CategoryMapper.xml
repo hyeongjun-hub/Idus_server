@@ -2,6 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.src.category.CategoryMapper">
     <select id="getCategories" resultType="GetCategoryRes">
-        select categoryId, categoryName, iconUrl from Category where status='Y'
+        select categoryId, IFNULL(categoryName, "") as categoryName, IFNULL(iconUrl, "") as iconUrl
+        from Category
+        where status = 'Y';
     </select>
 </mapper>

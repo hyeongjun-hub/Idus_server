@@ -52,9 +52,8 @@
                (select group_concat(distinct ProductOption.content separator '\n')
                 from ProductOption
                          inner join OrderDetail OD on ProductOption.productOptionId = OD.productOptionId
-                         inner join Product P on ProductOption.productId = P.productId
-                         inner join Review R on P.productId = R.productId
-                where R.productId = 1) as productOption,
+                         inner join SmallCart SC on OD.smallCartId = SC.smallCartId
+                where SC.smallcartId = SmallCart.smallCartId) as productOption,
                SmallCart.price,
                count,
                SmallCart.deliveryTip,
