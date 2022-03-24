@@ -10,18 +10,24 @@
 ## 2022-03-20 진행상황(2일차)
 * ERD 설계 완료
   ![](https://user-images.githubusercontent.com/77392219/159211206-0745dabf-7e12-45d9-ad7d-640721967318.png)
-  * AqueryTool 링크 (읽기전용) : URL : https://aquerytool.com/aquerymain/index/?rurl=61c36d0c-50c8-4842-a357-d41aff6251e7&
+  * [AqueryTool 링크 (읽기전용)](https://aquerytool.com/aquerymain/index/?rurl=61c36d0c-50c8-4842-a357-d41aff6251e7&)
   * Password : 54dqy6
 * Datagrip에 쿼리문 작성
   * Dummy data 입력
 * local/prod server에서 api 호출 확인
-* user join, login, 휴대폰인증, kakao login api 구축
+* user domain의 우선순위 api들 구축 (100%)
+  * user join 
+  * login
+  * 휴대폰인증
+    * naver cloud platform의 sens api를 처음으로 사용해 보았다.
+    * [sens 가이드](https://api.ncloud-docs.com/docs/ai-application-service-sens-smsv2#%EB%A9%94%EC%8B%9C%EC%A7%80%EB%B0%9C%EC%86%A1)
+  * kakao login api 구축
 * api 명세서 작성
 
 ## 2022-03-21 진행상황(3일차)
 * api list up
   ![](https://user-images.githubusercontent.com/77392219/159756088-0bd30417-84f9-4f9b-a9e1-f916017b066e.png)
-  * 구글 스프레드 시트 링크 (읽기전용) :https://docs.google.com/spreadsheets/d/1AMx5SBhu-A5ioxLCpQpxCRIaPJfoBZN-5JOt1nCq71w/edit?usp=sharing
+  * [구글 스프레드 시트 링크 (읽기전용)](https://docs.google.com/spreadsheets/d/1AMx5SBhu-A5ioxLCpQpxCRIaPJfoBZN-5JOt1nCq71w/edit?usp=sharing)
   * 먼저 domain 별로 개발할 모든 api를 나열하고 우선순위에 따라 파랑: 우선순위 높음, 하양: 우선순위 중간, 회색: 우선순위 낮음으로 정리
 * user domain의 우선순위 api들 구축 (100%)
   * 유저 정보 조회 api
@@ -51,7 +57,8 @@
       * Y or N 인 값들은 boolean으로 처리
       * 각 테이블 id 이름은 id로 통일
       * double은 decimal로 처리 
-    * 보통 camelCase 보단 snake_case로 컬렴명을 생성 
+      * 컬럼이 많이 생기는 테이블은 int unsigned 에서 BIGINT로 변경
+    * 보통 camelCase 보단 snake_case로 컬렴명을 생성 (다음부터)
     * Enum 처리
   * api 명세서
     * 발생할 수 있는 exception 상상해서 설계 후 error status, message 작성
@@ -64,13 +71,15 @@
   검색 결과 char(1) 와 tinyint(1)의 차이가 거의 없고 enum 타입이 가장 빨랐음
   따라서 boolean으로 바꾸는 작업은 하지 않기로 결정
  ```
-참고 : [stackOverFlow](https://stackoverflow.com/questions/2023476/which-is-faster-char1-or-tinyint1-why)
+참고 : [stackOverFlow](https://stackoverflow.com/questions/2023476/which-is-faster-char1-or-tinyint1-why) <br>
+참고 : [mysql ENUM을 사용하지 말아야할 8가지 이유](https://velog.io/@leejh3224/%EB%B2%88%EC%97%AD-MySQL%EC%9D%98-ENUM-%ED%83%80%EC%9E%85%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%98%EC%A7%80-%EB%A7%90%EC%95%84%EC%95%BC-%ED%95%A0-8%EA%B0%80%EC%A7%80-%EC%9D%B4%EC%9C%A0)
     
 ## 2022-03-24 진행상황(6일차)
 * ec2,rds 보안그룹 변경
   * ssh를 나의 ip에서만 접속할 수 있도록 변경
   * rds의 3306 포트를 내 ip와 ec2의 보안그룹이 접속할 수 있도록 인바운드 규칙을 변경
   * aws db brute force 해킹방지, 위치 이동 시에는 번거롭지만 인바운드 규칙을 재설정하기로 함
-* cart domain의 우선순위 api 구축(0%)
+* cart domain의 우선순위 api 구축(100%)
   * 장바구니 작품 담기 api
   * 장바구니 조회 api
+* req validation exception의 상태코드를 4500 -> 2500 으로 변경
