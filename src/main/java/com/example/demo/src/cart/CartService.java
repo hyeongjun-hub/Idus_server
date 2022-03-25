@@ -23,9 +23,11 @@ public class CartService {
     @Transactional(rollbackFor = {BaseException.class})
     public int createCart(int userId, PostCartReq postCartReq) throws BaseException {
         // 중복 체크
+        // 있으면 return
         if (cartMapper.checkCart(userId) == 1) {
             return cartMapper.getCartId(userId);
         }
+        // 없으면 새로운 Cart 만들기
         int cartId = 0;
         PostCreateCartReq postCreateCartReq = new PostCreateCartReq(userId, cartId, postCartReq.getIsDirectOrder());
         int result = cartMapper.createCart(postCreateCartReq);
