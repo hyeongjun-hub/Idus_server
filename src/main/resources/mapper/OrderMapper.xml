@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.src.order.OrderMapper">
-    <select id="getCartStatus" parameterType="int">
+    <select id="getCartStatus" parameterType="int" resultType="String">
         select status from Cart where cartId = #{cartId}
     </select>
 
-    <select id="getSmallCartStatus" parameterType="int">
-        select status from Cart where smallCartId = #{smallCartId}
+    <select id="getSmallCartStatus" parameterType="int" resultType="String">
+        select status from SmallCart where smallCartId = #{smallCartId}
     </select>
 
     <insert id="createOrder" parameterType="PostOrderReq">
