@@ -7,8 +7,11 @@ import com.example.demo.src.product.model.entity.Maker;
 import com.example.demo.src.product.model.entity.ProductKeyword;
 import com.example.demo.src.product.model.entity.Review;
 import com.example.demo.src.product.model.response.*;
+import com.example.demo.utils.JwtService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.List;
 
@@ -18,6 +21,7 @@ import java.util.List;
 public class ProductController {
     private final ProductProvider productProvider;
     private final ProductService productService;
+    private final JwtService jwtService;
 
     /**
      * 19. 투데이 탭 조회 API
@@ -85,6 +89,11 @@ public class ProductController {
      */
     @GetMapping("/{productId}")
     public BaseResponse<GetDetailTotalRes> getProductDetail(@PathVariable("productId") int productId) throws BaseException {
+        if(jwtService.getJwt() != null){
+            int userId = jwtService.getUserId();
+            productService.addView(userId, productId);
+            productService.updateUserResent(userId, productId);
+        }
         GetDetailRes getDetailRes = productProvider.getProductDetail(productId);
         List<Review> getReview = productProvider.getProductReviews(productId);
         List<ProductKeyword> getProductKeyword = productProvider.getProductKeywords(productId);
