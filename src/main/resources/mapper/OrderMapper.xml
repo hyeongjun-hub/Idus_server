@@ -1,20 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.src.order.OrderMapper">
-    <insert id="createOrder" parameterType="PostOrderReq">
-        insert into OrderList (userCartId, request, toRider, usePoint, addressId, couponId, presentId, paymentMethodId)
-        values
-        (#{userCartId},#{request},#{toRider},#{usePoint},#{addressId},#{couponId},#{presentId},#{paymentMethodId});
+    <select id="getCartStatus" parameterType="int">
+        select status from Cart where cartId = #{cartId}
+    </select>
 
+    <select id="getSmallCartStatus" parameterType="int">
+        select status from Cart where smallCartId = #{smallCartId}
+    </select>
+
+    <insert id="createOrder" parameterType="PostOrderReq">
+        insert into OrderList (cartId, paymentMethodId, taker, phone, address, usePoint, isSupport, priceSum, finalPrice, isProtectNum, rewardPoint)
+        values
+        (#{cartId}, #{paymentMethodId}, #{taker}, #{phone}, #{address}, #{usePoint}, #{isSupport}, #{priceSum}, #{finalPrice}, #{isProtectNum}, #{rewardPoint});
         <selectKey keyProperty="orderListId" resultType="int" order="AFTER">
             select LAST_INSERT_ID()
         </selectKey>
     </insert>
 
     <update id="updateCartStatus" parameterType="int">
-        update UserCart
+        update Cart
         set status = 'N'
-        where UserCartId = #{userCartId};
+        where cartId = #{cartId};
+    </update>
+
+    <update id="updateSmallCartStatus" parameterType="int">
+        update SmallCart
+        set status = 'N'
+        where smallCartId = #{smallCartId};
     </update>
 
     <update id="updateCouponStatus" parameterType="int">
@@ -23,20 +36,8 @@
         where couponId = #{couponId};
     </update>
 
-    <update id="updatePresentStatus" parameterType="int">
-        update Present set status = 'N' where presentId = #{presentId}
-    </update>
-
-    <update id="updatePoint" parameterType="Object">
-        update User set point = point - #{param2} where userId = #{param1}
-    </update>
-    
-    <select id="calculateFinalPrice" parameterType="int" resultType="int">
-        select IFNULL(GREATEST(Sum(priceSum) - IFNULL(amount,0) - IFNULL(price, 0), 0), 0) as finalPrice from OrderList inner join UserCart UC on OrderList.userCartID = UC.userCartId left join Coupon C on OrderList.couponId = C.couponId left join RestaurantCoupon RC on C.restaurantCouponId = RC.restaurantCouponId left join Present P on OrderList.presentId = P.presentId where orderListId=#{orderListId}
-    </select>
-
-    <update id="updatePrice" parameterType="Object">
-        Update OrderList set finalPrice = #{param2} where orderListId = #{param1}
+    <update id="updatePoint" parameterType="int">
+        update User set point = point + #{point} where userId = #{userId}
     </update>
 
     <select id="getOrders" parameterType="int" resultType="GetOrderRes">

@@ -17,16 +17,16 @@ public class Product {
     private int productId;
     private int categoryId;
     private int makerId;
-    @NotBlank(message = "형식을 확인해주세요.")
+    @NotBlank(message = "상품 이름을 입력해주세요.")
     private String ProductName;
     private String thumbNailImageUrl;
     @PositiveOrZero(message = "0 또는 양수만 가능합니다.")
     private int price;
     @PositiveOrZero(message = "0 또는 양수만 가능합니다.")
     private double discountRate;
-    @Length(max = 1, message = "'M' 또는 'F'를 입력하세요.")
+    @Length(max = 1, message = "한 글자만 입력가능합니다.")
     private String tag;
-    @Length(max = 1, message = "'M' 또는 'F'를 입력하세요.")
+    @Length(max = 1, message = "한 글자만 입력가능합니다.")
     private String vip;
     @PositiveOrZero(message = "0 또는 양수만 가능합니다.")
     private int orderCount;
