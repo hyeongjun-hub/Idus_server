@@ -5,10 +5,11 @@
         select Product.productId,
                IFNULL(productName, "") productName,
                thumbnailImageUrl,
-               (select AVG(star) from Review where Product.productId = Review.productId) as star,
+               IFNULL((select AVG(star) from Review where Product.productId = Review.productId), 0) as star,
                (select COUNT(star) from Review where Product.productId = Review.productId) as reviewCount,
                IFNULL((select content from Review R where R.productId=Product.productId limit 1), '') as review
         from Product
+        where Product.status = 'Y'
         ORDER BY RAND()
     </select>
 
@@ -25,6 +26,7 @@
             left join Review R on Product.productId = R.productId
             inner join Maker M on Product.makerId = M.makerId
             left join OrderList OL on R.orderListId = OL.orderListId
+        where Product.status = 'Y'
         group by Product.productId ORDER BY date DESC
     </select>
 
@@ -36,6 +38,7 @@
             TIMESTAMP (Product.createdAt) as date
         from Product
             inner join Maker M on Product.makerId = M.makerId
+        where Product.status = 'Y'
         ORDER BY date DESC
     </select>
 
@@ -54,6 +57,7 @@
                 vip
         from Product
             inner join Maker M on Product.makerId = M.makerId
+        where Product.status = 'Y'
         ORDER BY RAND()
     </select>
 
@@ -72,7 +76,7 @@
                 vip
         from Product
             inner join Maker M on Product.makerId = M.makerId
-        where categoryId = #{categoryId}
+        where categoryId = #{categoryId} and Product.status = 'Y'
     </select>
 
     <select id="getSearchProducts" parameterType="String" resultType="GetProductRes">
@@ -90,7 +94,7 @@
                 vip
         from Product
             inner join Maker M on Product.makerId = M.makerId
-        where productName like '%${word}%' or makerName like '%${word}%'
+        where productName like '%${word}%' or makerName like '%${word}%' and Product.status = 'Y'
     </select>
 
     <select id="getProductDetail" parameterType="int" resultType="GetDetailRes">
@@ -146,13 +150,13 @@
     <select id="getProductKeywords" parameterType="int" resultType="ProductKeyword">
         select IFNULL(productKeyword, '') as productKeyword
         from ProductKeyword
-        where ProductKeyword.productId = #{productId};
+        where ProductKeyword.productId = #{productId} and status = 'Y'
     </select>
 
     <select id="getProductComments" parameterType="int" resultType="com.example.demo.src.product.model.entity.Comment">
         select IFNULL(content, '') as content
         from Comment
-        where productId = #{productId}
+        where productId = #{productId} and status = 'Y'
     </select>
 
     <select id="getMakerInfo" parameterType="int" resultType="com.example.demo.src.product.model.entity.Maker">
