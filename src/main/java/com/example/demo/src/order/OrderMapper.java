@@ -4,6 +4,7 @@ import com.example.demo.src.order.model.request.PostOrderReq;
 import com.example.demo.src.order.model.response.GetOrderDetailRes;
 import com.example.demo.src.order.model.response.GetOrderRes;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,19 +12,18 @@ import java.util.List;
 @Mapper
 @Repository
 public interface OrderMapper {
+
+    // check
+    String getCartStatus(int cartId);
+    String getSmallCartStatus(int smallCartId);
+
     int createOrder(PostOrderReq postOrderReq);
 
-    void updateCartStatus(int userCartId);
-
-    void updateCouponStatus(int couponId);
-
-    void updatePresentStatus(int presentId);
-
-    void updatePoint(int userId, int point);
-
-    int calculateFinalPrice(int OrderListId);
-
-    void updatePrice(int userId, int finalPrice);
+    // update
+    int updateCartStatus(int cartId);
+    int updateSmallCartStatus(int smallCartId);
+    int updateCouponStatus(int couponId);
+    int updatePoint(@Param("userId") int userId, @Param("point") int point);
 
     List<GetOrderRes> getOrders(int userId);
 

@@ -266,7 +266,7 @@ public class UserService {
                 throw new BaseException(USERS_INAPP_EXISTS); // 해당 이메일로 자체 이메일가입한 상태라면 카카오로그인, 가입 X, 자체로그인으로.
             }
         } else { // 가입이 되어 있지 않다면 가입 진행
-            PostUserReq kaKaoSignUp = new PostUserReq(kaKaoUser.getUserName(), kaKaoUser.getEmail(), "socialLogin", null, "kaKao", "N", 0);
+            PostUserReq kaKaoSignUp = new PostUserReq(kaKaoUser.getUserName(), kaKaoUser.getEmail(), "socialLogin", "kaKao", 0);
             userMapper.createUser(kaKaoSignUp); // + KaKao
             userId = kaKaoSignUp.getUserId();
             // 빈 주소 3개 생성

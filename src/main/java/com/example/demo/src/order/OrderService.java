@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
+import static com.example.demo.config.BaseResponseStatus.*;
 
 @Service
 @AllArgsConstructor
@@ -22,22 +22,40 @@ public class OrderService {
     @Transactional(rollbackFor = {BaseException.class})
     public int createOrder(int userId, PostOrderReq postOrderReq) throws BaseException {
         try{
+            // cart의 유효성 검사
+            if(!orderMapper.getCartStatus(postOrderReq.getCartId()).equals("Y")){
+                throw new BaseException(POST_CART_STATUS_NOT_Y);
+            }
+            // smallCart의 유효성 검사
+            if(!orderMapper.getCartStatus(postOrderReq.getSmallCartId()).equals("Y")){
+                throw new BaseException(POST_SMALL_CART_STATUS_NOT_Y);
+            }
+            // 주문내역 생성
             orderMapper.createOrder(postOrderReq);
             int orderListId = postOrderReq.getOrderListId();
-            System.out.println("orderListId = " + orderListId);
-            // userCart의 status를 N으로 변경
-            orderMapper.updateCartStatus(postOrderReq.getUserCartId());
+            // cart의 status를 N으로 변경
+            int result = orderMapper.updateCartStatus(postOrderReq.getCartId());
+            if(result == 0){
+                throw new BaseException(UPDATE_FAIL_CART_STATUS);
+            }
+            // smallCart의 status를 N으로 변경
+            result = orderMapper.updateSmallCartStatus(postOrderReq.getSmallCartId());
+            if(result == 0){
+                throw new BaseException(UPDATE_FAIL_SMALL_CART_STATUS);
+            }
             // coupon의 status를 N으로 변경
-            orderMapper.updateCouponStatus(postOrderReq.getCouponId());
-            // present의 status를 N으로 변경
-            orderMapper.updatePresentStatus(postOrderReq.getPresentId());
-            // User의 point를 차감
-            orderMapper.updatePoint(userId, postOrderReq.getUsePoint());
-            int finalPrice = orderMapper.calculateFinalPrice(orderListId);
-            orderMapper.updatePrice(orderListId, finalPrice);
+            result = orderMapper.updateCouponStatus(postOrderReq.getCouponId());
+            if(result == 0){
+                throw new BaseException(UPDATE_FAIL_COUPON_STATUS);
+            }
+            // User의 point를 적립
+            result = orderMapper.updatePoint(userId, postOrderReq.getUsePoint());
+            if(result == 0){
+                throw new BaseException(UPDATE_FAIL_USER_POINT);
+            }
             return orderListId;
         } catch(Exception exception){
-            System.out.println("exception = " + exception);
+            logger.warn(exception.getMessage());
             throw new BaseException(DATABASE_ERROR);
         }
     }
