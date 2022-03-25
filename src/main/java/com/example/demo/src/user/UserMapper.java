@@ -22,11 +22,13 @@ public interface UserMapper {
 
     String getPlatform(String email);
 
+    // 중복 check
     int checkPhone(String phone);
     int checkEmail(String email);
     int checkAddress(String address);
     int checkAddressName(String address);
 
+    // edit User
     int editEmail(int userId, PatchUserReq user);
     int editUserName(int userId, PatchUserReq user);
     int editProfileImageUrl(int userId, PatchUserReq user);
