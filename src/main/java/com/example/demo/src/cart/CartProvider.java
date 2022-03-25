@@ -8,9 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
+import static com.example.demo.config.BaseResponseStatus.GET_CART_NO;
 
 @Service
 @AllArgsConstructor
@@ -20,17 +22,14 @@ public class CartProvider {
     private final CartMapper cartMapper;
 
     public GetCartRes getCart(int userId) throws BaseException {
-        try{
-            int cartId = cartMapper.getCartId(userId);
-            GetCartRes getCartRes = cartMapper.getCart(userId);
-            List<GetSmallCartRes> smallCart = cartMapper.getSmallCart(cartId);
-            getCartRes.setSmallCart(smallCart);
-            return getCartRes;
-        } catch (Exception exception) {
-            System.out.println("exception = " + exception);
-            logger.warn(exception.getMessage());
-            throw new BaseException(DATABASE_ERROR);
+        if (cartMapper.checkCart(userId) == 0) {
+            return new GetCartRes(0,new ArrayList<>(),0,0);
         }
+        int cartId = cartMapper.getCartId(userId);
+        GetCartRes getCartRes = cartMapper.getCart(userId);
+        List<GetSmallCartRes> smallCart = cartMapper.getSmallCart(cartId);
+        getCartRes.setSmallCart(smallCart);
+        return getCartRes;
     }
 
 }

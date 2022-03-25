@@ -24,6 +24,7 @@ public class OrderProvider {
             List<GetOrderRes> getOrderRes = orderMapper.getOrders(userId);
             return getOrderRes;
         } catch(Exception exception){
+            System.out.println("exception = " + exception.getMessage());
             throw new BaseException(DATABASE_ERROR);
         }
     }

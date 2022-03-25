@@ -84,6 +84,7 @@ public enum BaseResponseStatus {
     UPDATE_FAIL_USER_RESENT(false, 4017, "유저 최근 작품 업데이트에 실패하였습니다."),
 
     //[POST] /carts
+    GET_CART_NO(false, 4020, "유효한 장바구니가 없습니다."),
     CREATE_FAIL_DELIVERY_TIP(false, 4022, "장바구니 배송비 업데이트에 실패하였습니다."),
     CREATE_FAIL_CART(false, 4020, "장바구니 생성에 실패하였습니다."),
     UPDATE_FAIL_PRICE(false, 4021, "장바구니 가격 업데이트에 실패하였습니다."),

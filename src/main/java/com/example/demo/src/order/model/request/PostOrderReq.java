@@ -7,6 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,7 +19,7 @@ public class PostOrderReq {
     @NotNull(message = "장바구니 식별자를 입력해주세요")
     private int cartId;
     @NotNull(message = "작은 장바구니 식별자를 입력해주세요")
-    private int smallCartId;
+    private List<Integer> smallCartId;
     private int couponId;
     @NotNull(message = "결제방법 식별자를 입력해주세요")
     private int paymentMethodId;
