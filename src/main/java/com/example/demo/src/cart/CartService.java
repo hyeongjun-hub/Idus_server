@@ -34,6 +34,7 @@ public class CartService {
         if (result == 0) {
             throw new BaseException(CREATE_FAIL_CART);
         }
+        System.out.println("postCreateCartReq.getCartId() = " + postCreateCartReq.getCartId());
         return postCreateCartReq.getCartId();
     }
 

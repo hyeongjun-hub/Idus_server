@@ -9,10 +9,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GetOrderRes {
     private int orderListId;
-    private String avatarUrl;
-    private String restaurantName;
-    private String menuName;
-    private int finalPrice;
     private String createdAt;
+    private int finalPrice;
+    private String thumbnailImageUrl;
+    private String productName;
+    private String makerName;
     private String status;
 }

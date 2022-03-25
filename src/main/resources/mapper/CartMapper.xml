@@ -12,13 +12,13 @@
 
     <insert id="createCart" parameterType="PostCreateCartReq">
         insert into Cart (userId, isDirectOrder) values (#{userId}, #{isDirectOrder})
-        <selectKey keyProperty="CartId" resultType="int" order="AFTER">
+        <selectKey keyProperty="cartId" resultType="int" order="AFTER">
             select LAST_INSERT_ID()
         </selectKey>
     </insert>
 
     <insert id="createSmallCart" parameterType="PostSmallCartReq">
-        insert into SmallCart (cartId, productId, count, price, deliveryTip) values (#{cartId}, #{productId}, #{count}, #{price}, #{deliveryTip});
+        insert into SmallCart (cartId, productId, count, price, deliveryTip, request) values (#{cartId}, #{productId}, #{count}, #{price}, #{deliveryTip}, '');
         <selectKey keyProperty="smallCartId" resultType="int" order="AFTER">
             select LAST_INSERT_ID()
         </selectKey>

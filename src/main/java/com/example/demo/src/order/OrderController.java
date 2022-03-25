@@ -39,7 +39,7 @@ public class OrderController {
     }
 
     /**
-     * 주문내역 조회 API
+     * 39. 유저 주문 조회 API
      *
      * @return BaseResponse<List < GetOrderRes>>
      */
