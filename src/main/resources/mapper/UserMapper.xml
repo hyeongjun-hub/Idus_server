@@ -46,7 +46,7 @@
                G.gradeName,
                IFNULL(profileImageUrl, '') as profileImageUrl,
                point,
-               IFNULL(birthday, '') birthday,
+               IFNULL(date_format(birthday, '%Y년 %m월 %d일'), '') birthday,
                gender,
                identityTest,
                fingerPrint,

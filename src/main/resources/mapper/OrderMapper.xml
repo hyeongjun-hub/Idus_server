@@ -40,11 +40,66 @@
         update User set point = point + #{point} where userId = #{userId}
     </update>
 
+    <select id="getUserId" parameterType="int" resultType="int">
+        select User.userId
+        from User
+                 inner join Cart C on User.userId = C.userId
+                 inner join OrderList OL on C.cartId = OL.cartId
+        where orderListId = #{orderListId}
+    </select>
+
     <select id="getOrders" parameterType="int" resultType="GetOrderRes">
-        select distinct OrderList.orderListId as orderListId, (IfNULL(M.price,0) + IFNULL(AM.price, 0)) as price, OD.amount, restaurantName, menuName, additionalMenuName, finalPrice, DATE_FORMAT(OrderList.createdAt, '%Y년 %m월 %d일 %p %l:%s')as createdAt, deliveryAddress, restaurantPhoneNumber, request, toRider, spoon, address, phoneNumber from OrderList inner join PaymentMethod PM on OrderList.paymentMethodId = PM.paymentMethodId inner join UserCart UC on OrderList.userCartID = UC.userCartId inner join OrderDetail OD on UC.userCartId = OD.userCartId left join Menu M on OD.menuId = M.menuId left join AdditionalMenu AM on OD.additionalMenuId = AM.additionalMenuId left join BigMenu BM on M.bigMenuId = BM.bigMenuId inner join Address A on OrderList.addressId = A.addressId left join Restaurant R on BM.restaurantId = R.restaurantId inner join User U on UC.userId = U.userId where OrderListId = #{orderListId}
+        select orderListId,
+               OD.smallCartId,
+               date_format(OrderList.createdAt, '%Y.%m.%d') createdAt,
+               finalPrice,
+               thumbnailImageUrl, productName, makerName,
+               OrderList.status
+        from OrderList
+                 inner join Cart C on OrderList.cartId = C.cartId
+                 inner join SmallCart SC on C.cartId = SC.cartId
+                 inner join OrderDetail OD on SC.smallCartId = OD.smallCartId
+                 inner join ProductOption PO on OD.productOptionId = PO.productOptionId
+                 inner join Product P on PO.productId = P.productId
+                 inner join Maker M on P.makerId = M.makerId
+        where userId = #{userId}
+          and C.status = 'N'
+          and SC.status = 'N'
+        group by orderListId
     </select>
 
     <select id="getOrder" parameterType="int" resultType="GetOrderDetailRes">
-        select distinct OrderList.orderListId as orderListId, (IfNULL(M.price,0) + IFNULL(AM.price, 0)) as price, OD.amount, restaurantName, menuName, additionalMenuName, finalPrice, DATE_FORMAT(OrderList.createdAt, '%Y년 %m월 %d일 %p %l:%s')as createdAt, deliveryAddress, restaurantPhoneNumber, request, toRider, spoon, address, phoneNumber from OrderList inner join PaymentMethod PM on OrderList.paymentMethodId = PM.paymentMethodId inner join UserCart UC on OrderList.userCartID = UC.userCartId inner join OrderDetail OD on UC.userCartId = OD.userCartId left join Menu M on OD.menuId = M.menuId left join AdditionalMenu AM on OD.additionalMenuId = AM.additionalMenuId left join BigMenu BM on M.bigMenuId = BM.bigMenuId inner join Address A on OrderList.addressId = A.addressId left join Restaurant R on BM.restaurantId = R.restaurantId inner join User U on UC.userId = U.userId where OrderListId = #{orderListId}
+        select orderListId,
+               taker,
+               phone,
+               address,
+               paymentMethodName,
+               priceSum,
+               finalPrice - OrderList.priceSum deliveryTipAll,
+               IF(isSupport='N', '안했어요.', '했어요.') as isSupport
+        from OrderList
+                 inner join PaymentMethod PM on OrderList.paymentMethodId = PM.paymentMethodId
+        where OrderList.orderListId = #{orderListId}
     </select>
+
+    <select id="getOrderDetailList" parameterType="int" resultType="OrderDetail">
+        select thumbnailImageUrl,
+               productName,
+               SmallCart.smallCartId,
+               (select group_concat(distinct ProductOption.content separator '\n')
+                from ProductOption
+                         inner join OrderDetail OD on ProductOption.productOptionId = OD.productOptionId
+                         inner join SmallCart SC on OD.smallCartId = SC.smallCartId
+                where SC.smallcartId = SmallCart.smallCartId) as productOption,
+               count,
+               request
+        from SmallCart
+                 inner join OrderDetail OD on SmallCart.smallCartId = OD.smallCartId
+                 inner join OrderList OL on SmallCart.cartId = OL.cartId
+                 inner join ProductOption PO on OD.productOptionId = PO.productOptionId
+                 inner join Product P on PO.productId = P.productId
+        where OL.orderListId = #{orderListId}
+    </select>
+
+
 </mapper>
