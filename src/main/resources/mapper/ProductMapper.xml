@@ -207,4 +207,12 @@
         from ProductOption
         where productId = #{productId}
     </select>
+
+    <insert id="addView" parameterType="int">
+        insert View (userId, productId) VALUES (#{userId}, #{productId});
+    </insert>
+
+    <update id="updateUserResent" parameterType="int">
+        update User set productId = #{productId} where userId = #{userId}
+    </update>
 </mapper>

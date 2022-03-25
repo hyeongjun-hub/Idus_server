@@ -12,7 +12,6 @@ public enum BaseResponseStatus {
      */
     SUCCESS(true, 1000, "요청에 성공하였습니다."),
 
-
     /**
      * 2000 : 클라이언트 Request 오류
      */
@@ -46,12 +45,12 @@ public enum BaseResponseStatus {
     POST_ADDRESS_EXISTS_ADDRESS(false,2041,"중복된 주소입니다."),
     POST_ADDRESS_EXISTS_ADDRESS_NAME(false,2042,"중복된 주소이름입니다."),
 
-    // cart
-
+    // [Post] /carts
+    POST_CART_STATUS_NOT_Y(false, 2050, "유효하지 않은 장바구니입니다."),
+    POST_SMALL_CART_STATUS_NOT_Y(false, 2051, "유효하지 않은 작은 장바구니입니다."),
 
     // Common
     VALIDATION_ERROR(false, 2500, "잘못된 형식입니다."),
-
 
     /**
      * 3000 : 클라이언트 Response 오류
@@ -65,7 +64,6 @@ public enum BaseResponseStatus {
     USERS_INAPP_EXISTS(false, 3015, "어플로 가입한 정보가 있습니다."),
     FAILED_TO_KAKAO_AUTH(false, 3019, "카카오 유저 정보 조회에 실패하였습니다."),
     FAILED_TO_KAKAO_EMAIL(false, 3020, "카카오 정보에 등록된 이메일이 없습니다. 이메일을 추가 입력해주세요."),
-
 
     /**
      * 4000 : Database, Server 오류
@@ -81,11 +79,19 @@ public enum BaseResponseStatus {
     MODIFY_FAIL_USERNAME(false,4014,"유저네임 수정에 실패하였습니다."),
     EDIT_FAIL_CONTENT(false, 4015, "유저정보 수정에 실패하였습니다."),
 
+    //[GET] /products
+    CREATE_FAIL_VIEW(false, 4016, "조회 테이블 추가에 실패하였습니다."),
+    UPDATE_FAIL_USER_RESENT(false, 4017, "유저 최근 작품 업데이트에 실패하였습니다."),
+
     //[POST] /carts
+    CREATE_FAIL_DELIVERY_TIP(false, 4022, "장바구니 배송비 업데이트에 실패하였습니다."),
     CREATE_FAIL_CART(false, 4020, "장바구니 생성에 실패하였습니다."),
     UPDATE_FAIL_PRICE(false, 4021, "장바구니 가격 업데이트에 실패하였습니다."),
-    CREATE_FAIL_DELIVERY_TIP(false, 4022, "장바구니 배송비 업데이트에 실패하였습니다.");
 
+    UPDATE_FAIL_CART_STATUS(false, 4030, "장바구니 상태 변경에 실패하였습니다."),
+    UPDATE_FAIL_SMALL_CART_STATUS(false, 4031, "작은 장바구니 상태 변경에 실패하였습니다."),
+    UPDATE_FAIL_COUPON_STATUS(false, 4032, "쿠폰 상태 변경에 실패하였습니다."),
+    UPDATE_FAIL_USER_POINT(false, 4033, "유저 적립금 업데이트에 실패하였습니다.");
 
     private final boolean isSuccess;
     private final int code;

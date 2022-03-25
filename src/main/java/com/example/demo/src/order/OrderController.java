@@ -2,6 +2,7 @@ package com.example.demo.src.order;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
+import com.example.demo.src.order.model.response.GetCreateOrderRes;
 import com.example.demo.src.order.model.response.GetOrderDetailRes;
 import com.example.demo.src.order.model.response.GetOrderRes;
 import com.example.demo.src.order.model.request.PostOrderReq;
@@ -24,16 +25,17 @@ public class OrderController {
     private final JwtService jwtService;
 
     /**
-     * 주문하기 API
+     * 37. 주문하기 API
      *
      * @param postOrderReq
      * @return BaseResponse<Integer>
      */
     @PostMapping("/new")
-    public BaseResponse<Integer> createOrder(@Valid @RequestBody PostOrderReq postOrderReq) throws BaseException {
+    public BaseResponse<GetCreateOrderRes> createOrder(@Valid @RequestBody PostOrderReq postOrderReq) throws BaseException {
         int userId = jwtService.getUserId();
-        int resultInt = orderService.createOrder(userId, postOrderReq);
-        return new BaseResponse<>(resultInt);
+        int result = orderService.createOrder(userId, postOrderReq);
+        GetCreateOrderRes createOrderRes = new GetCreateOrderRes(result);
+        return new BaseResponse<>(createOrderRes);
     }
 
     /**
