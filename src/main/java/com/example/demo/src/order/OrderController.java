@@ -51,15 +51,17 @@ public class OrderController {
     }
 
     /**
-     * 상세 주문내역 조회 API
+     * 40. 주문 상세 조회 API
      *
      * @param orderListId
-     * @return BaseResponse<List < GetOrderDetailRes>>
+     * @return BaseResponse<List < GetOrderDetailRes > >
      */
-    @GetMapping("/{orderListId}/detail")
-    public BaseResponse<List<GetOrderDetailRes>> getOrder(@PathVariable("orderListId") int orderListId) throws BaseException {
-        List<GetOrderDetailRes> getOrderDetailRes = orderProvider.getOrder(orderListId);
+    @GetMapping("/{orderListId}")
+    public BaseResponse<GetOrderDetailRes> getOrder(@PathVariable("orderListId") int orderListId) throws BaseException {
+        int userId = jwtService.getUserId();
+        // user 확인
+        orderService.checkUser(userId, orderListId);
+        GetOrderDetailRes getOrderDetailRes = orderProvider.getOrder(orderListId);
         return new BaseResponse<>(getOrderDetailRes);
     }
-
 }
