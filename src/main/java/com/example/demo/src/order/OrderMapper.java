@@ -1,5 +1,6 @@
 package com.example.demo.src.order;
 
+import com.example.demo.src.order.model.entity.OrderDetail;
 import com.example.demo.src.order.model.request.PostOrderReq;
 import com.example.demo.src.order.model.response.GetOrderDetailRes;
 import com.example.demo.src.order.model.response.GetOrderRes;
@@ -25,8 +26,12 @@ public interface OrderMapper {
     int updateCouponStatus(int couponId);
     int updatePoint(@Param("userId") int userId, @Param("point") int point);
 
+    int getUserId(int orderListId);
+
     List<GetOrderRes> getOrders(int userId);
 
-    List<GetOrderDetailRes> getOrder(int orderListId);
+    GetOrderDetailRes getOrder(int orderListId);
+
+    List<OrderDetail> getOrderDetailList(int orderListId);
 
 }

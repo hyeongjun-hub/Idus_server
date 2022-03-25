@@ -1,23 +1,23 @@
 package com.example.demo.src.order.model.response;
 
+import com.example.demo.src.order.model.entity.OrderDetail;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter @Setter @AllArgsConstructor
+@NoArgsConstructor
 public class GetOrderDetailRes {
     private int orderListId;
-    private int price;
-    private int amount;
-    private String restaurantName;
-    private String menuName;
-    private String additionalMenuName;
-    private int finalPrice;
-    private String createdAt;
-    private String restaurantPhoneNumber;
-    private String request;
-    private String toRider;
-    private String spoon;
+    private List<OrderDetail> orderDetailList;
+    private String taker;
+    private String phone;
     private String address;
-    private String phoneNumber;
+    private String paymentMethodName;
+    private int priceSum;
+    private int deliveryTipAll;
+    private String isSupport;
 }

@@ -63,7 +63,12 @@ public class OrderService {
             throw new BaseException(UPDATE_FAIL_USER_POINT);
         }
         return orderListId;
+    }
 
+    public void checkUser(int userId, int orderListId) throws BaseException {
+        if(orderMapper.getUserId(orderListId) != userId){
+            throw new BaseException(INVALID_USER_JWT);
+        }
     }
 
 }

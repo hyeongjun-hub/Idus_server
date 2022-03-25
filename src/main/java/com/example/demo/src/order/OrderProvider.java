@@ -29,12 +29,14 @@ public class OrderProvider {
         }
     }
 
-    public List<GetOrderDetailRes> getOrder(int orderListId) throws BaseException {
+    public GetOrderDetailRes getOrder(int orderListId) throws BaseException {
         try {
-            List<GetOrderDetailRes> getOrderDetailRes = orderMapper.getOrder(orderListId);
+            GetOrderDetailRes getOrderDetailRes = orderMapper.getOrder(orderListId);
+            getOrderDetailRes.setOrderDetailList(orderMapper.getOrderDetailList(orderListId));
             return getOrderDetailRes;
         }
         catch(Exception exception){
+            System.out.println("exception.getMessage() = " + exception.getMessage());
             throw new BaseException(DATABASE_ERROR);
         }
     }
