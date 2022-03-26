@@ -106,3 +106,6 @@
   * 구매후기 작성 api
 * issue: review를 한 번만 작성할 수 있다는 생각에 주문내역과 review 테이블을 연결하였는데 그러다보니 review에서 작성한 product 정보를 따로 가져올 수 가 없었다 
   * resolve: review 테이블을 smallCart와 연결하여 각 smallCart에 review를 달고 review를 달면 smallCart status 값을 'R'로 변경하도록 로직을 짰고, 가져올때는 'R'인 값만 가져올 수 있도록 하였다.
+* productOption result 값 수정
+  * front 분이 title별로 데이터 값을 나눠서 달라고 요청하였기 때문에 수정
+
