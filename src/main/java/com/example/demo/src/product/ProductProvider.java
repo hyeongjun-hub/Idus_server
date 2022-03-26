@@ -10,6 +10,7 @@ import com.example.demo.src.review.model.response.GetReviewRes;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.*;
@@ -19,24 +20,24 @@ import static com.example.demo.config.BaseResponseStatus.*;
 public class ProductProvider {
     private final ProductMapper productMapper;
 
-    public List<GetTodayRes> getTodayProducts() throws BaseException{
-        try{
+    public List<GetTodayRes> getTodayProducts() throws BaseException {
+        try {
             return productMapper.getTodayProducts();
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
-    public List<GetLiveRes> getLiveProducts() throws BaseException{
-        try{
+    public List<GetLiveRes> getLiveProducts() throws BaseException {
+        try {
             return productMapper.getLiveProducts();
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
-    public List<GetNewRes> getNewProducts() throws BaseException{
-        try{
+    public List<GetNewRes> getNewProducts() throws BaseException {
+        try {
             List<GetNewRes> getNewRes = productMapper.getNewProducts();
             return getNewRes;
         } catch (Exception exception) {
@@ -44,8 +45,8 @@ public class ProductProvider {
         }
     }
 
-    public List<GetProductRes> getTodayMore() throws BaseException{
-        try{
+    public List<GetProductRes> getTodayMore() throws BaseException {
+        try {
             List<GetProductRes> getTodayMore = productMapper.getTodayMore();
             return getTodayMore;
         } catch (Exception exception) {
@@ -53,8 +54,8 @@ public class ProductProvider {
         }
     }
 
-    public List<GetProductRes> getCategoryProducts(int categoryId) throws BaseException{
-        try{
+    public List<GetProductRes> getCategoryProducts(int categoryId) throws BaseException {
+        try {
             List<GetProductRes> categoryProducts = productMapper.getCategoryProducts(categoryId);
             return categoryProducts;
         } catch (Exception exception) {
@@ -62,8 +63,8 @@ public class ProductProvider {
         }
     }
 
-    public List<GetProductRes> getSearchProducts(String word) throws BaseException{
-        try{
+    public List<GetProductRes> getSearchProducts(String word) throws BaseException {
+        try {
             List<GetProductRes> searchProducts = productMapper.getSearchProducts(word);
             return searchProducts;
         } catch (Exception exception) {
@@ -71,8 +72,8 @@ public class ProductProvider {
         }
     }
 
-    public GetDetailRes getProductDetail(int productId) throws BaseException{
-        try{
+    public GetDetailRes getProductDetail(int productId) throws BaseException {
+        try {
             GetDetailRes getDetailRes = productMapper.getProductDetail(productId);
             return getDetailRes;
         } catch (Exception exception) {
@@ -80,8 +81,8 @@ public class ProductProvider {
         }
     }
 
-    public List<Review> getProductReviews(int productId) throws BaseException{
-        try{
+    public List<Review> getProductReviews(int productId) throws BaseException {
+        try {
             List<Review> getReviews = productMapper.getProductReviews(productId);
             return getReviews;
         } catch (Exception exception) {
@@ -89,8 +90,8 @@ public class ProductProvider {
         }
     }
 
-    public List<ProductKeyword> getProductKeywords(int productId) throws BaseException{
-        try{
+    public List<ProductKeyword> getProductKeywords(int productId) throws BaseException {
+        try {
             List<ProductKeyword> getKeyword = productMapper.getProductKeywords(productId);
             return getKeyword;
         } catch (Exception exception) {
@@ -98,8 +99,8 @@ public class ProductProvider {
         }
     }
 
-    public List<Comment> getProductComments(int productId) throws BaseException{
-        try{
+    public List<Comment> getProductComments(int productId) throws BaseException {
+        try {
             List<Comment> getComment = productMapper.getProductComments(productId);
             return getComment;
         } catch (Exception exception) {
@@ -107,8 +108,8 @@ public class ProductProvider {
         }
     }
 
-    public Maker getMakerInfo(int productId) throws BaseException{
-        try{
+    public Maker getMakerInfo(int productId) throws BaseException {
+        try {
             Maker getMakerInfo = productMapper.getMakerInfo(productId);
             return getMakerInfo;
         } catch (Exception exception) {
@@ -116,12 +117,12 @@ public class ProductProvider {
         }
     }
 
-    public List<GetOptionRes> getProductOptions(int productId) throws BaseException{
-        try{
-            List<GetOptionRes> getProductOptions = productMapper.getProductOptions(productId);
-            return getProductOptions;
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
+    public List<GetOptionRes> getProductOptions(int productId) throws BaseException {
+        List<GetOptionRes> getOptionRes = productMapper.getOptionInit(productId);
+        for(GetOptionRes a : getOptionRes){
+            System.out.println("a = " + a);
+            a.setOption(productMapper.getOptionInfo(a.getTitle()));
         }
+        return getOptionRes;
     }
 }

@@ -92,12 +92,17 @@
   * 따라서 IFNULL 문법을 통해 query문들을 수정했고 database의 dafault 값들을 null에서 ''으로 바꾸는 작업을 하였다.
 
 ## 2022-03-25 진행상황(7일차)
-* order domain의 우선순위 api 구축(30%)
+* order domain의 우선순위 api 구축(100%)
   * 주문하기 api
   * 유저 주문 조회 api
   * 주문 상세 조회 api
 * 장바구니가 없는 상태에서 장바구니를 조회할 때 결과값 수정
-  * 프론트와 상의해서 결과를 냄
+  * 프론트와 상의해서 결과를 냄 -> 빈 object를 return
 * 첫구매 할인 상품 데이터 삽입 (product)
 
 ## 2022-03-26 진행상황(8일차)
+* review domain의 우선순위 api 구축(50%)
+  * 유저 구매후기 조회 api
+  * 구매후기 작성 api
+* issue: review를 한 번만 작성할 수 있다는 생각에 주문내역과 review 테이블을 연결하였는데 그러다보니 review에서 작성한 product 정보를 따로 가져올 수 가 없었다 
+  * resolve: review 테이블을 smallCart와 연결하여 각 smallCart에 review를 달고 review를 달면 smallCart status 값을 'R'로 변경하도록 로직을 짰고, 가져올때는 'R'인 값만 가져올 수 있도록 하였다.

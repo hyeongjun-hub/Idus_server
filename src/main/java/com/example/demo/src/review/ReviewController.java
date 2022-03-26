@@ -34,18 +34,16 @@ public class ReviewController {
     }
 
     /**
-     * 리뷰 작성 API
+     * 42. 구매후기 작성 API
      *
-     * @param orderListId
-     * @param restaurantId
-     * @param postReviewReq
      * @return BaseResponse<PostReviewRes>
      */
-//    @PostMapping("/{orderListId}/{restaurantId}")
-//    public BaseResponse<PostReviewRes> createReview(@PathVariable("orderListId") int orderListId, @PathVariable("restaurantId") int restaurantId, @RequestBody PostReviewReq postReviewReq) throws BaseException {
-//        PostReviewRes postReviewRes = reviewService.createReview(orderListId, restaurantId, postReviewReq);
-//        return new BaseResponse<>(postReviewRes);
-//    }
+    @PostMapping("")
+    public BaseResponse<PostReviewRes> createReview(@RequestBody PostReviewReq postReviewReq) throws BaseException {
+        int userId = jwtService.getUserId();
+        PostReviewRes postReviewRes = reviewService.createReview(userId, postReviewReq);
+        return new BaseResponse<>(postReviewRes);
+    }
 
     /**
      * 리뷰 삭제 API

@@ -36,7 +36,10 @@ public interface ProductMapper {
 
     Maker getMakerInfo(int productId);
 
-    List<GetOptionRes> getProductOptions(int productId);
+    List<GetOptionRes> getOptionInit(int productId);
+    List<String> getOptionTitle(int productId);
+    List<GetOptionDetailRes> getOptionInfo(String title);
+//    List<GetOptionRes> getProductOptions(int productId);
 
     int addView(@Param("userId") int userId, @Param("productId") int productId);
     int updateUserResent(@Param("userId") int userId, @Param("productId") int productId);
