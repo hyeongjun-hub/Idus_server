@@ -22,8 +22,7 @@ public class ReviewController {
     private final JwtService jwtService;
 
     /**
-     * 회원 리뷰 조회 API
-     * 자신이 작성한 리뷰들을 조회
+     * 41. 유저 구매후기 조회 API
      *
      * @return BaseResponse<List < GetReviewRes>>
      */
