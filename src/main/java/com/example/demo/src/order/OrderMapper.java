@@ -25,7 +25,9 @@ public interface OrderMapper {
     int updateSmallCartStatus(int smallCartId);
     int updateCouponStatus(int couponId);
     int updatePoint(@Param("userId") int userId, @Param("point") int point);
+    int updateOrderCount(int productId);
 
+    int getProductId(int smallCartId);
     int getUserId(int orderListId);
 
     List<GetOrderRes> getOrders(int userId);
