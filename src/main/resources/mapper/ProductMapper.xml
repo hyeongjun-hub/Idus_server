@@ -147,7 +147,7 @@
         where R.productId = #{productId}
     </select>
 
-    <select id="getProductKeywords" parameterType="int" resultType="ProductKeyword">
+    <select id="getProductKeywords" parameterType="int" resultType="String">
         select IFNULL(productKeyword, '') as productKeyword
         from ProductKeyword
         where ProductKeyword.productId = #{productId} and status = 'Y'
