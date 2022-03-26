@@ -5,14 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetOptionRes {
-    private int productId;
-    private String title;
-    private List<GetOptionDetailRes> option;
+public class GetOptionDetailRes {
+    private int productOptionId;
+    private String content;
+    private int addPrice;
 }
