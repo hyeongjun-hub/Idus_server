@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
+import static com.example.demo.config.BaseResponseStatus.INVALID_USER_JWT;
 
 @Service
 @AllArgsConstructor
@@ -18,26 +19,17 @@ public class ReviewService {
     private final ReviewMapper reviewMapper;
 
     @Transactional(rollbackFor = {BaseException.class})
-    public PostReviewRes createReview(int orderListId, int restaurantId, PostReviewReq postReviewReq) throws BaseException {
-        try{
-            reviewMapper.createReview(orderListId, restaurantId, postReviewReq);
+    public PostReviewRes createReview(int userId, PostReviewReq postReviewReq) throws BaseException {
+            // userId와 postReviewReq의 smallCartId로 얻은 userId가 같은지 확인
+            if(userId != reviewMapper.getUserId(postReviewReq)){
+                throw new BaseException(INVALID_USER_JWT);
+            }
+            reviewMapper.createReview(userId, postReviewReq);
             int reviewId = postReviewReq.getReviewId();
             return new PostReviewRes(reviewId, postReviewReq.getContent());
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
-        }
+
     }
 
-    @Transactional(rollbackFor = {BaseException.class})
-    public PostReviewRes createOwnerReview(int reviewId, PostOwnerReviewReq postOwnerReviewReq) throws BaseException {
-        try {
-            reviewMapper.createOwnerReview(reviewId, postOwnerReviewReq.getContent());
-            int ownerReviewId = postOwnerReviewReq.getOwnerReviewId();
-            return new PostReviewRes(ownerReviewId, postOwnerReviewReq.getContent());
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
 
     @Transactional(rollbackFor = {BaseException.class})
     public void delReview(int reviewId) throws BaseException {

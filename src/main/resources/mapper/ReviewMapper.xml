@@ -2,7 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.src.review.ReviewMapper">
     <select id="getMyReviews" parameterType="int" resultType="GetReviewRes">
-        select Review.reviewId, restaurantName, Review.content myReview, Review.imageUrl imageUrl, Review.star star, Review.isOwner isOwner, Review.updatedAt myUpdatedAt, PR.content ownerReview, PR.updatedAt ownerUpdatedAt from Review inner join OrderList OL on Review.orderListId = OL.orderListId inner join UserCart UC on OL.userCartID = UC.userCartId left join Restaurant R on Review.restaurantId = R.restaurantId left join Review PR on Review.reviewId = PR.postReviewId where userId = #{userId} and Review.status = 'Y'
+        select Review.reviewId, thumbnailImageUrl, P.productName, profileImageUrl, userName, Review.updatedAt, star, imageUrl, content
+        from Review
+                 inner join SmallCart SC on Review.smallCartId = SC.smallCartId
+                 inner join Cart C on SC.cartId = C.cartId
+                 inner join User U on C.userId = U.userId
+                 inner join Product P on Review.productId = P.productId
+        where C.userId = #{userId} and SC.status = 'R'
     </select>
 
     <insert id="createReview" parameterType="Object">

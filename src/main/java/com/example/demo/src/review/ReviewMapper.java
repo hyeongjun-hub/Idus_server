@@ -14,9 +14,9 @@ import java.util.List;
 public interface ReviewMapper {
     List<GetReviewRes> getMyReviews(int userId);
 
-    int createReview(int orderListId, int restaurantId, PostReviewReq postReviewReq);
+    int getUserId(PostReviewReq postReviewReq);
 
-    int createOwnerReview(int reviewId, String content);
+    int createReview(int userId, PostReviewReq postReviewReq);
 
     void delReview(int reviewId);
 

@@ -6,12 +6,12 @@ import lombok.*;
 @AllArgsConstructor
 public class GetReviewRes {
     private int reviewId;
-    private String restaurantName;
-    private String myReview;
-    private String imageUrl;
+    private String thumbnailImageUrl;
+    private String productName;
+    private String profileImageUrl;
+    private String userName;
+    private String updatedAt;
     private int star;
-    private String isOwner;
-    private String myUpdatedAt;
-    private String ownerReview;
-    private String ownerUpdatedAt;
+    private String imageUrl;
+    private String content;
 }
