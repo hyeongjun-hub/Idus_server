@@ -9,8 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
-import static com.example.demo.config.BaseResponseStatus.INVALID_USER_JWT;
+import static com.example.demo.config.BaseResponseStatus.*;
 
 @Service
 @AllArgsConstructor
@@ -20,13 +19,24 @@ public class ReviewService {
 
     @Transactional(rollbackFor = {BaseException.class})
     public PostReviewRes createReview(int userId, PostReviewReq postReviewReq) throws BaseException {
-            // userId와 postReviewReq의 smallCartId로 얻은 userId가 같은지 확인
-            if(userId != reviewMapper.getUserId(postReviewReq)){
-                throw new BaseException(INVALID_USER_JWT);
-            }
-            reviewMapper.createReview(userId, postReviewReq);
-            int reviewId = postReviewReq.getReviewId();
-            return new PostReviewRes(reviewId, postReviewReq.getContent());
+        // userId와 postReviewReq의 smallCartId로 얻은 userId가 같은지 확인
+        if (userId != reviewMapper.getUserId(postReviewReq.getSmallCartId())) {
+            throw new BaseException(INVALID_USER_JWT);
+        }
+        int orderListId = reviewMapper.getOrderListId(postReviewReq.getSmallCartId());
+        int productId = reviewMapper.getProductId(postReviewReq.getSmallCartId());
+        postReviewReq.setOrderListId(orderListId);
+        postReviewReq.setProductId(productId);
+        int result = reviewMapper.createReview(postReviewReq);
+        if (result == 0) {
+            throw new BaseException(CREATE_FAIL_REVIEW);
+        }
+        result = reviewMapper.updateSmallCartStatus(postReviewReq.getSmallCartId());
+        if (result == 0){
+            throw new BaseException(UPDATE_FAIL_CART_STATUS);
+        }
+        int reviewId = postReviewReq.getReviewId();
+        return new PostReviewRes(reviewId, postReviewReq.getContent());
 
     }
 
