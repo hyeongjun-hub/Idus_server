@@ -9,5 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PostReviewRes {
     private int reviewId;
+    private String imageUrl;
     private String content;
 }

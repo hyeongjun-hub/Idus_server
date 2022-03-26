@@ -9,6 +9,13 @@
         select status from SmallCart where smallCartId = #{smallCartId}
     </select>
 
+    <select id="getProductId" parameterType="int" resultType="int">
+        select Product.productId
+        from Product
+                 inner join SmallCart SC on Product.productId = SC.productId
+        where smallCartId = #{smallCartId}
+    </select>
+
     <insert id="createOrder" parameterType="PostOrderReq">
         insert into OrderList (cartId, paymentMethodId, taker, phone, address, usePoint, isSupport, priceSum, finalPrice, isProtectNum, rewardPoint)
         values
@@ -38,6 +45,10 @@
 
     <update id="updatePoint" parameterType="int">
         update User set point = point + #{point} where userId = #{userId}
+    </update>
+
+    <update id="updateOrderCount" parameterType="int">
+        update Product set orderCount = orderCount + 1 where productId = #{productId}
     </update>
 
     <select id="getUserId" parameterType="int" resultType="int">
@@ -76,7 +87,7 @@
                paymentMethodName,
                priceSum,
                finalPrice - OrderList.priceSum deliveryTipAll,
-               IF(isSupport='N', '안했어요.', '했어요.') as isSupport
+               IF(isSupport='N', '안했어요', '했어요') as isSupport
         from OrderList
                  inner join PaymentMethod PM on OrderList.paymentMethodId = PM.paymentMethodId
         where OrderList.orderListId = #{orderListId}
@@ -100,6 +111,4 @@
                  inner join Product P on PO.productId = P.productId
         where OL.orderListId = #{orderListId}
     </select>
-
-
 </mapper>

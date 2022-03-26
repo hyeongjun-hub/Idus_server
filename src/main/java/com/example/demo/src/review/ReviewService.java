@@ -17,27 +17,17 @@ public class ReviewService {
 
     private final ReviewMapper reviewMapper;
 
-    @Transactional(rollbackFor = {BaseException.class})
-    public PostReviewRes createReview(int orderListId, int restaurantId, PostReviewReq postReviewReq) throws BaseException {
-        try{
-            reviewMapper.createReview(orderListId, restaurantId, postReviewReq);
-            int reviewId = postReviewReq.getReviewId();
-            return new PostReviewRes(reviewId, postReviewReq.getContent());
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
+//    @Transactional(rollbackFor = {BaseException.class})
+//    public PostReviewRes createReview(int orderListId, int restaurantId, PostReviewReq postReviewReq) throws BaseException {
+//        try{
+//            reviewMapper.createReview(orderListId, restaurantId, postReviewReq);
+//            int reviewId = postReviewReq.getReviewId();
+//            return new PostReviewRes(reviewId, postReviewReq.getContent());
+//        } catch (Exception exception) {
+//            throw new BaseException(DATABASE_ERROR);
+//        }
+//    }
 
-    @Transactional(rollbackFor = {BaseException.class})
-    public PostReviewRes createOwnerReview(int reviewId, PostOwnerReviewReq postOwnerReviewReq) throws BaseException {
-        try {
-            reviewMapper.createOwnerReview(reviewId, postOwnerReviewReq.getContent());
-            int ownerReviewId = postOwnerReviewReq.getOwnerReviewId();
-            return new PostReviewRes(ownerReviewId, postOwnerReviewReq.getContent());
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
 
     @Transactional(rollbackFor = {BaseException.class})
     public void delReview(int reviewId) throws BaseException {

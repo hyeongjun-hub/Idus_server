@@ -16,8 +16,6 @@ public interface ReviewMapper {
 
     int createReview(int orderListId, int restaurantId, PostReviewReq postReviewReq);
 
-    int createOwnerReview(int reviewId, String content);
-
     void delReview(int reviewId);
 
     void editReview(int reviewId, PatchReviewReq patchReviewReq);

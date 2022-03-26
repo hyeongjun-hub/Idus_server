@@ -34,7 +34,6 @@ public class OrderService {
                 throw new BaseException(POST_SMALL_CART_STATUS_NOT_Y);
             }
         }
-
         // 주문내역 생성
         orderMapper.createOrder(postOrderReq);
         int orderListId = postOrderReq.getOrderListId();
@@ -61,6 +60,15 @@ public class OrderService {
         result = orderMapper.updatePoint(userId, postOrderReq.getUsePoint());
         if (result == 0) {
             throw new BaseException(UPDATE_FAIL_USER_POINT);
+        }
+        // Product의 orderCount +1
+        List<Integer> smallCartList = postOrderReq.getSmallCartId();
+        for (int smallCart : smallCartList) {
+            int productId = orderMapper.getProductId(smallCart);
+            result = orderMapper.updateOrderCount(productId);
+            if (result == 0) {
+                throw new BaseException(UPDATE_FAIL_USER_POINT);
+            }
         }
         return orderListId;
     }

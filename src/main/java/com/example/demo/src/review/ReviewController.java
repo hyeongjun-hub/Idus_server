@@ -22,8 +22,7 @@ public class ReviewController {
     private final JwtService jwtService;
 
     /**
-     * 회원 리뷰 조회 API
-     * 자신이 작성한 리뷰들을 조회
+     * 41. 유저 구매후기 조회 API
      *
      * @return BaseResponse<List < GetReviewRes>>
      */
@@ -42,24 +41,11 @@ public class ReviewController {
      * @param postReviewReq
      * @return BaseResponse<PostReviewRes>
      */
-    @PostMapping("/{orderListId}/{restaurantId}")
-    public BaseResponse<PostReviewRes> createReview(@PathVariable("orderListId") int orderListId, @PathVariable("restaurantId") int restaurantId, @RequestBody PostReviewReq postReviewReq) throws BaseException {
-        PostReviewRes postReviewRes = reviewService.createReview(orderListId, restaurantId, postReviewReq);
-        return new BaseResponse<>(postReviewRes);
-    }
-
-    /**
-     * 사장님 리뷰 작성 API
-     *
-     * @param reviewId
-     * @param postOwnerReviewReq
-     * @return BaseResponse<PostReviewRes>
-     */
-    @PostMapping("/{reviewId}/owner")
-    public BaseResponse<PostReviewRes> createOwnerReview(@PathVariable("reviewId") int reviewId, @RequestBody PostOwnerReviewReq postOwnerReviewReq) throws BaseException {
-        PostReviewRes ownerReview = reviewService.createOwnerReview(reviewId, postOwnerReviewReq);
-        return new BaseResponse<>(ownerReview);
-    }
+//    @PostMapping("/{orderListId}/{restaurantId}")
+//    public BaseResponse<PostReviewRes> createReview(@PathVariable("orderListId") int orderListId, @PathVariable("restaurantId") int restaurantId, @RequestBody PostReviewReq postReviewReq) throws BaseException {
+//        PostReviewRes postReviewRes = reviewService.createReview(orderListId, restaurantId, postReviewReq);
+//        return new BaseResponse<>(postReviewRes);
+//    }
 
     /**
      * 리뷰 삭제 API
