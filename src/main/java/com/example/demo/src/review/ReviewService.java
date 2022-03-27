@@ -2,7 +2,6 @@ package com.example.demo.src.review;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.src.review.model.request.PatchReviewReq;
-import com.example.demo.src.review.model.request.PostOwnerReviewReq;
 import com.example.demo.src.review.model.request.PostReviewReq;
 import com.example.demo.src.review.model.response.PostReviewRes;
 import lombok.AllArgsConstructor;
@@ -20,8 +19,12 @@ public class ReviewService {
     @Transactional(rollbackFor = {BaseException.class})
     public PostReviewRes createReview(int userId, PostReviewReq postReviewReq) throws BaseException {
         // userId와 postReviewReq의 smallCartId로 얻은 userId가 같은지 확인
-        if (userId != reviewMapper.getUserId(postReviewReq.getSmallCartId())) {
+        if (userId != reviewMapper.getId(postReviewReq.getSmallCartId())) {
             throw new BaseException(INVALID_USER_JWT);
+        }
+        // smallCart 의 status 확인
+        if (!reviewMapper.getSmallCartStatus(postReviewReq.getSmallCartId()).equals('N')) {
+            throw new BaseException(INVALID_SMALL_CART);
         }
         int orderListId = reviewMapper.getOrderListId(postReviewReq.getSmallCartId());
         int productId = reviewMapper.getProductId(postReviewReq.getSmallCartId());
@@ -37,7 +40,6 @@ public class ReviewService {
         }
         int reviewId = postReviewReq.getReviewId();
         return new PostReviewRes(reviewId, postReviewReq.getContent());
-
     }
 
 

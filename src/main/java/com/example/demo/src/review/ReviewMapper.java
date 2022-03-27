@@ -15,9 +15,13 @@ import java.util.List;
 public interface ReviewMapper {
     List<GetReviewRes> getMyReviews(int userId);
 
-    int getUserId(int smallCartId);
+    int getId(int smallCartId);
+
     int getOrderListId(int smallCartId);
+
     int getProductId(int smallCartId);
+
+    String getSmallCartStatus(int smallCartId);
 
     int createReview(PostReviewReq postReviewReq);
 

@@ -11,18 +11,30 @@
         where C.userId = #{userId} and SC.status = 'R'
     </select>
 
-    <select id="getUserId" parameterType="int" resultType="int">
-        select userId
+    <select id="getId" parameterType="int" resultType="int">
+        select distinct userId
         from SmallCart
                  inner join Cart C on SmallCart.cartId = C.cartId
         where smallCartId = #{smallCartId}
     </select>
 
     <select id="getOrderListId" parameterType="int" resultType="int">
-        select orderListId
+        select distinct orderListId
         from SmallCart
                  inner join Cart C on SmallCart.cartId = C.cartId
                  inner join OrderList OL on C.cartId = OL.cartId
+        where smallCartId = #{smallCartId}
+    </select>
+
+    <select id="getProductId" parameterType="int" resultType="int">
+        select distinct productId
+        from SmallCart
+        where smallCartId = #{smallCartId}
+    </select>
+
+    <select id="getSmallCartStatus" parameterType="int" resultType="String">
+        select status
+        from SmallCart
         where smallCartId = #{smallCartId}
     </select>
 
@@ -34,7 +46,7 @@
     </insert>
 
     <update id="updateSmallCartStatus" parameterType="int">
-        Update SmallCart set statud = 'R' where smallCartId = #{smallCartId}
+        Update SmallCart set status = 'R' where smallCartId = #{smallCartId}
     </update>
 
     <update id="delReview" parameterType="int">
@@ -42,6 +54,6 @@
     </update>
 
     <update id="editReview" parameterType="Object">
-        UPDATE Review t SET t.content = #{param2.content}, t.isPrivate = #{param2.isPrivate}, t.imageUrl = #{param2.imageUrl}, t.star = #{param2.star} WHERE t.reviewId = #{param1}
+        UPDATE Review t SET t.content = #{param2.content}, t.imageUrl = #{param2.imageUrl}, t.star = #{param2.star} WHERE t.reviewId = #{param1}
     </update>
 </mapper>
