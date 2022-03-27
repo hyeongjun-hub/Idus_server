@@ -1,5 +1,6 @@
 package com.example.demo.src.user;
 
+import com.example.demo.src.user.model.entity.Address;
 import com.example.demo.src.user.model.entity.KaKaoUser;
 import com.example.demo.src.user.model.entity.User;
 import com.example.demo.src.user.model.request.*;
@@ -129,6 +130,17 @@ public class UserController {
     }
 
     /**
+     * 8. 유저 주소 조회 API (배송지 관리)
+     * @return BaseResponse<List<Address>>
+     */
+    @GetMapping("/address")
+    public BaseResponse<List<Address>> getAddress() throws BaseException {
+        int userId = jwtService.getUserId();
+        List<Address> getAddressRes = userProvider.getAddress(userId);
+        return new BaseResponse<>(getAddressRes);
+    }
+
+    /**
      * 15. 유저 삭제 API
      * @return BaseResponse<PostUserDelRes>
      */
@@ -189,16 +201,6 @@ public class UserController {
         return new BaseResponse<>(getPresentRes);
     }
 
-    /**
-     * 회원 주소 조회 API
-     * @return BaseResponse<List<GetAddressRes>>
-     */
-    @GetMapping("/address")
-    public BaseResponse<List<GetAddressRes>> getAddress() throws BaseException {
-        int userId = jwtService.getUserId();
-        List<GetAddressRes> getAddressRes = userProvider.getAddress(userId);
-        return new BaseResponse<>(getAddressRes);
-    }
 
     /**
      * 회원 주소 수정 API

@@ -1,5 +1,6 @@
 package com.example.demo.src.user;
 
+import com.example.demo.src.user.model.entity.Address;
 import com.example.demo.src.user.model.entity.User;
 import com.example.demo.src.user.model.request.*;
 import com.example.demo.src.user.model.response.*;
@@ -50,7 +51,7 @@ public interface UserMapper {
 
     List<GetPresentRes> getPresents(int userId);
 
-    List<GetAddressRes> getAddress(int userId);
+    List<Address> getAddress(int userId);
 
     int createAddress(int userId);
 

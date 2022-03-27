@@ -18,7 +18,11 @@
                email,
                password,
                gradeId,
-               IFNULL(phone, '') phone,
+               CASE LENGTH(phone)
+                   WHEN 11 THEN CONCAT(LEFT(phone, 3), '-', MID(phone, 4, 4), '-', RIGHT(phone, 4))
+                   WHEN 10 THEN CONCAT(LEFT(phone, 3), '-', MID(phone, 4, 3), '-', RIGHT(phone, 4))
+                   WHEN 0 THEN ''
+                END phone,
                IFNULL(profileImageUrl, '') profileImageUrl,
                point,
                IFNULL(birthday, '') birthday,
@@ -39,7 +43,11 @@
         select User.userId,
                userName,
                email,
-               IFNULL(phone, '') phone,
+               CASE LENGTH(phone)
+                   WHEN 11 THEN CONCAT(LEFT(phone, 3), '-', MID(phone, 4, 4), '-', RIGHT(phone, 4))
+                   WHEN 10 THEN CONCAT(LEFT(phone, 3), '-', MID(phone, 4, 3), '-', RIGHT(phone, 4))
+                   WHEN 0 THEN ''
+                   END phone,
                (select count(userId) from Coupon where userId = #{userId} and status = 'Y') as couponCount,
                User.gradeId,
                IFNULL(G.iconUrl, '') iconUrl,
@@ -67,7 +75,11 @@
                email,
                password,
                gradeId,
-               IFNULL(phone, '')           phone,
+               CASE LENGTH(phone)
+                   WHEN 11 THEN CONCAT(LEFT(phone, 3), '-', MID(phone, 4, 4), '-', RIGHT(phone, 4))
+                   WHEN 10 THEN CONCAT(LEFT(phone, 3), '-', MID(phone, 4, 3), '-', RIGHT(phone, 4))
+                   WHEN 0 THEN ''
+                   END phone,
                IFNULL(profileImageUrl, '') profileImageUrl,
                point,
                IFNULL(birthday, '')        birthday,
@@ -103,8 +115,20 @@
     <select id="getPresents" parameterType="int" resultType="GetPresentRes">
     </select>
 
-    <select id="getAddress" parameterType="int" resultType="GetAddressRes">
-        select Address.addressId, addressName, address, Address.status from Address inner join User U on Address.userId = U.userId where U.userId = #{userId} and Address.status = 'Y'
+    <select id="getAddress" parameterType="int" resultType="Address">
+        select Address.addressId
+             , taker
+             , CASE LENGTH(Address.phone)
+                   WHEN 11
+                       THEN CONCAT(LEFT(Address.phone, 3), '-', MID(Address.phone, 4, 4), '-', RIGHT(Address.phone, 4))
+                   WHEN 10
+                       THEN CONCAT(LEFT(Address.phone, 3), '-', MID(Address.phone, 4, 3), '-', RIGHT(Address.phone, 4))
+                   WHEN 0 THEN ''
+            END phone
+             , address
+        from Address
+                 inner join User U on Address.userId = U.userId
+        where U.userId = #{userId}
     </select>
 
     <select id="getAddressStatus" parameterType="int" resultType="string">
