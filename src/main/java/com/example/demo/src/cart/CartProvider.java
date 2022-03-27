@@ -11,9 +11,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
-import static com.example.demo.config.BaseResponseStatus.GET_CART_NO;
-
 @Service
 @AllArgsConstructor
 public class CartProvider {
@@ -21,7 +18,7 @@ public class CartProvider {
 
     private final CartMapper cartMapper;
 
-    public GetCartRes getCart(int userId) throws BaseException {
+    public GetCartRes getCart(int userId) {
         if (cartMapper.checkCart(userId) == 0) {
             return new GetCartRes(0,new ArrayList<>(),0,0);
         }

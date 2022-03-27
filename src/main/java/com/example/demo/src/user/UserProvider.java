@@ -2,6 +2,7 @@ package com.example.demo.src.user;
 
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.user.model.entity.Address;
 import com.example.demo.src.user.model.entity.User;
 import com.example.demo.src.user.model.response.*;
 import lombok.AllArgsConstructor;
@@ -80,12 +81,13 @@ public class UserProvider {
         }
     }
 
-    public List<GetAddressRes> getAddress(int userId) throws BaseException{
+    public List<Address> getAddress(int userId) throws BaseException{
         try{
-            List<GetAddressRes> getAddressRes = userMapper.getAddress(userId);
+            List<Address> getAddressRes = userMapper.getAddress(userId);
             return getAddressRes;
         }
         catch (Exception exception) {
+            System.out.println("exception.getMessage() = " + exception.getMessage());
             throw new BaseException(DATABASE_ERROR);
         }
     }
