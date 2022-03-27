@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface OrderMapper {
 
-    // check
+    // cart status check
     String getCartStatus(int cartId);
     String getSmallCartStatus(int smallCartId);
 
@@ -27,8 +27,12 @@ public interface OrderMapper {
     int updatePoint(@Param("userId") int userId, @Param("point") int point);
     int updateOrderCount(int productId);
 
+    // 후원 내역 추가
+    int addSupport(@Param("userId") int userId, @Param("makerId") int makerId);
+
     int getProductId(int smallCartId);
     int getUserId(int orderListId);
+    int getMakerId(int smallCartId);
 
     List<GetOrderRes> getOrders(int userId);
 

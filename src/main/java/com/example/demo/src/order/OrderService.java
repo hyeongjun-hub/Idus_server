@@ -62,12 +62,21 @@ public class OrderService {
             throw new BaseException(UPDATE_FAIL_USER_POINT);
         }
         // Product의 orderCount +1
-        List<Integer> smallCartList = postOrderReq.getSmallCartId();
-        for (int smallCart : smallCartList) {
+        for (int smallCart : smallCartIdList) {
             int productId = orderMapper.getProductId(smallCart);
             result = orderMapper.updateOrderCount(productId);
             if (result == 0) {
-                throw new BaseException(UPDATE_FAIL_USER_POINT);
+                throw new BaseException(UPDATE_FAIL_PRODUCT_ORDER_COUNT);
+            }
+        }
+        // Support 테이블 컬럼 추가
+        if(postOrderReq.getIsSupport().equals("Y")){
+            for (int smallCart : smallCartIdList){
+                int makerId = orderMapper.getMakerId(smallCart);
+                result = orderMapper.addSupport(userId, makerId);
+                if (result == 0) {
+                  throw new BaseException(CREATE_FAIL_SUPPORT);
+                }
             }
         }
         return orderListId;
@@ -78,5 +87,4 @@ public class OrderService {
             throw new BaseException(INVALID_USER_JWT);
         }
     }
-
 }

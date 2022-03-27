@@ -13,6 +13,7 @@ import java.util.List;
 @Mapper
 @Repository
 public interface CartMapper {
+    // 해당 user의 status Y 인 cart 있는지 확인
     int checkCart(int userId);
 
     int getCartId(int userId);

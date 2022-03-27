@@ -89,10 +89,13 @@ public enum BaseResponseStatus {
     CREATE_FAIL_CART(false, 4020, "장바구니 생성에 실패하였습니다."),
     UPDATE_FAIL_PRICE(false, 4021, "장바구니 가격 업데이트에 실패하였습니다."),
 
+    //[POST] /orders
     UPDATE_FAIL_CART_STATUS(false, 4030, "장바구니 상태 변경에 실패하였습니다."),
     UPDATE_FAIL_SMALL_CART_STATUS(false, 4031, "작은 장바구니 상태 변경에 실패하였습니다."),
     UPDATE_FAIL_COUPON_STATUS(false, 4032, "쿠폰 상태 변경에 실패하였습니다."),
     UPDATE_FAIL_USER_POINT(false, 4033, "유저 적립금 업데이트에 실패하였습니다."),
+    UPDATE_FAIL_PRODUCT_ORDER_COUNT(false, 4034, "작품 주문 횟수 업데이트에 실패하였습니다."),
+    CREATE_FAIL_SUPPORT(false, 4035, "후원 내역 생성에 실패하였습니다."),
 
     //[POST] /reviews
     CREATE_FAIL_REVIEW(false, 4040, "구매후기 생성에 실패하였습니다."),

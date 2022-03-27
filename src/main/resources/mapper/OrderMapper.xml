@@ -16,6 +16,17 @@
         where smallCartId = #{smallCartId}
     </select>
 
+    <select id="getMakerId" parameterType="int" resultType="int">
+        select makerId
+        from SmallCart
+                 inner join Product P on SmallCart.productId = P.productId
+        where smallCartId = #{smallCartId}
+    </select>
+
+    <insert id="addSupport" parameterType="int">
+        insert into Support (userId, makerId) values (#{userId}, #{makerId});
+    </insert>
+
     <insert id="createOrder" parameterType="PostOrderReq">
         insert into OrderList (cartId, paymentMethodId, taker, phone, address, usePoint, isSupport, priceSum, finalPrice, isProtectNum, rewardPoint)
         values
