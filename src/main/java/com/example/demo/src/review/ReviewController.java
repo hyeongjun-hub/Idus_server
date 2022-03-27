@@ -3,7 +3,6 @@ package com.example.demo.src.review;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.review.model.request.PatchReviewReq;
-import com.example.demo.src.review.model.request.PostOwnerReviewReq;
 import com.example.demo.src.review.model.request.PostReviewReq;
 import com.example.demo.src.review.model.response.GetReviewRes;
 import com.example.demo.src.review.model.response.PostReviewRes;
@@ -41,6 +40,7 @@ public class ReviewController {
     @PostMapping("")
     public BaseResponse<PostReviewRes> createReview(@RequestBody PostReviewReq postReviewReq) throws BaseException {
         int userId = jwtService.getUserId();
+        System.out.println("userId = " + userId);
         PostReviewRes postReviewRes = reviewService.createReview(userId, postReviewReq);
         return new BaseResponse<>(postReviewRes);
     }

@@ -2,15 +2,13 @@ package com.example.demo.src.review;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.src.review.model.request.PatchReviewReq;
-import com.example.demo.src.review.model.request.PostOwnerReviewReq;
 import com.example.demo.src.review.model.request.PostReviewReq;
 import com.example.demo.src.review.model.response.PostReviewRes;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
-import static com.example.demo.config.BaseResponseStatus.INVALID_USER_JWT;
+import static com.example.demo.config.BaseResponseStatus.*;
 
 @Service
 @AllArgsConstructor
@@ -20,14 +18,28 @@ public class ReviewService {
 
     @Transactional(rollbackFor = {BaseException.class})
     public PostReviewRes createReview(int userId, PostReviewReq postReviewReq) throws BaseException {
-            // userId와 postReviewReq의 smallCartId로 얻은 userId가 같은지 확인
-            if(userId != reviewMapper.getUserId(postReviewReq)){
-                throw new BaseException(INVALID_USER_JWT);
-            }
-            reviewMapper.createReview(userId, postReviewReq);
-            int reviewId = postReviewReq.getReviewId();
-            return new PostReviewRes(reviewId, postReviewReq.getContent());
-
+        // userId와 postReviewReq의 smallCartId로 얻은 userId가 같은지 확인
+        if (userId != reviewMapper.getId(postReviewReq.getSmallCartId())) {
+            throw new BaseException(INVALID_USER_JWT);
+        }
+        // smallCart 의 status 확인
+        if (!reviewMapper.getSmallCartStatus(postReviewReq.getSmallCartId()).equals('N')) {
+            throw new BaseException(INVALID_SMALL_CART);
+        }
+        int orderListId = reviewMapper.getOrderListId(postReviewReq.getSmallCartId());
+        int productId = reviewMapper.getProductId(postReviewReq.getSmallCartId());
+        postReviewReq.setOrderListId(orderListId);
+        postReviewReq.setProductId(productId);
+        int result = reviewMapper.createReview(postReviewReq);
+        if (result == 0) {
+            throw new BaseException(CREATE_FAIL_REVIEW);
+        }
+        result = reviewMapper.updateSmallCartStatus(postReviewReq.getSmallCartId());
+        if (result == 0){
+            throw new BaseException(UPDATE_FAIL_CART_STATUS);
+        }
+        int reviewId = postReviewReq.getReviewId();
+        return new PostReviewRes(reviewId, postReviewReq.getContent());
     }
 
 

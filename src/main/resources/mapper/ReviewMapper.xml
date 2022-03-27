@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.src.review.ReviewMapper">
     <select id="getMyReviews" parameterType="int" resultType="GetReviewRes">
-        select Review.reviewId, thumbnailImageUrl, P.productName, profileImageUrl, userName, Review.updatedAt, star, imageUrl, content
+        select Review.reviewId, thumbnailImageUrl, P.productName, profileImageUrl, userName, DATE_FORMAT(Review.updatedAt, '%Y년 %c월 %d일') as updatedAt, star, imageUrl, content
         from Review
                  inner join SmallCart SC on Review.smallCartId = SC.smallCartId
                  inner join Cart C on SC.cartId = C.cartId
@@ -11,25 +11,49 @@
         where C.userId = #{userId} and SC.status = 'R'
     </select>
 
-    <insert id="createReview" parameterType="Object">
-        INSERT INTO Review (content, isPrivate, imageUrl, star, orderListId, restaurantId) VALUES (#{param3.content}, #{param3.isPrivate}, #{param3.imageUrl}, #{param3.star}, #{param1}, #{param2})
+    <select id="getId" parameterType="int" resultType="int">
+        select distinct userId
+        from SmallCart
+                 inner join Cart C on SmallCart.cartId = C.cartId
+        where smallCartId = #{smallCartId}
+    </select>
+
+    <select id="getOrderListId" parameterType="int" resultType="int">
+        select distinct orderListId
+        from SmallCart
+                 inner join Cart C on SmallCart.cartId = C.cartId
+                 inner join OrderList OL on C.cartId = OL.cartId
+        where smallCartId = #{smallCartId}
+    </select>
+
+    <select id="getProductId" parameterType="int" resultType="int">
+        select distinct productId
+        from SmallCart
+        where smallCartId = #{smallCartId}
+    </select>
+
+    <select id="getSmallCartStatus" parameterType="int" resultType="String">
+        select status
+        from SmallCart
+        where smallCartId = #{smallCartId}
+    </select>
+
+    <insert id="createReview" parameterType="PostReviewReq">
+        INSERT INTO Review (productId, orderListId, smallCartId, star, imageUrl, content) VALUES (#{productId}, #{orderListId}, #{smallCartId}, #{star}, #{imageUrl}, #{content})
         <selectKey keyProperty="reviewId" resultType="int" order="AFTER">
             select LAST_INSERT_ID()
         </selectKey>
     </insert>
 
-    <insert id="createOwnerReview" parameterType="Object">
-        insert into Review (content, isOwner, postReviewId) values(#{param2}, 'Y', #{param1})
-        <selectKey keyProperty="ownerReviewId" resultType="int" order="AFTER">
-            select LAST_INSERT_ID()
-        </selectKey>
-    </insert>
+    <update id="updateSmallCartStatus" parameterType="int">
+        Update SmallCart set status = 'R' where smallCartId = #{smallCartId}
+    </update>
 
     <update id="delReview" parameterType="int">
         Update Review set status = 'D' where reviewId = #{reviewId}
     </update>
 
     <update id="editReview" parameterType="Object">
-        UPDATE Review t SET t.content = #{param2.content}, t.isPrivate = #{param2.isPrivate}, t.imageUrl = #{param2.imageUrl}, t.star = #{param2.star} WHERE t.reviewId = #{param1}
+        UPDATE Review t SET t.content = #{param2.content}, t.imageUrl = #{param2.imageUrl}, t.star = #{param2.star} WHERE t.reviewId = #{param1}
     </update>
 </mapper>

@@ -92,7 +92,11 @@ public enum BaseResponseStatus {
     UPDATE_FAIL_CART_STATUS(false, 4030, "장바구니 상태 변경에 실패하였습니다."),
     UPDATE_FAIL_SMALL_CART_STATUS(false, 4031, "작은 장바구니 상태 변경에 실패하였습니다."),
     UPDATE_FAIL_COUPON_STATUS(false, 4032, "쿠폰 상태 변경에 실패하였습니다."),
-    UPDATE_FAIL_USER_POINT(false, 4033, "유저 적립금 업데이트에 실패하였습니다.");
+    UPDATE_FAIL_USER_POINT(false, 4033, "유저 적립금 업데이트에 실패하였습니다."),
+
+    //[POST] /reviews
+    CREATE_FAIL_REVIEW(false, 4040, "구매후기 생성에 실패하였습니다."),
+    INVALID_SMALL_CART(false, 4041, "구매한 유저만 후기 작성가능합니다.");
 
     private final boolean isSuccess;
     private final int code;
