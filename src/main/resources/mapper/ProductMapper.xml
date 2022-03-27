@@ -214,12 +214,12 @@
         where productId = #{productId}
     </select>
 
-    <select id="getOptionInfo" parameterType="String" resultType="GetOptionDetailRes">
+    <select id="getOptionInfo" parameterType="GetOptionReq" resultType="GetOptionDetailRes">
         select productOptionId,
                IFNULL(content, '') content,
                addPrice
         from ProductOption
-        where title = #{title}
+        where title = #{title} and productId = #{productId}
     </select>
 
     <insert id="addView" parameterType="int">

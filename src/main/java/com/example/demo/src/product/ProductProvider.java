@@ -5,6 +5,7 @@ import com.example.demo.src.product.model.entity.Comment;
 import com.example.demo.src.product.model.entity.Maker;
 import com.example.demo.src.product.model.entity.ProductKeyword;
 import com.example.demo.src.product.model.entity.Review;
+import com.example.demo.src.product.model.request.GetOptionReq;
 import com.example.demo.src.product.model.response.*;
 import com.example.demo.src.review.model.response.GetReviewRes;
 import lombok.AllArgsConstructor;
@@ -120,8 +121,7 @@ public class ProductProvider {
     public List<GetOptionRes> getProductOptions(int productId) throws BaseException {
         List<GetOptionRes> getOptionRes = productMapper.getOptionInit(productId);
         for(GetOptionRes a : getOptionRes){
-            System.out.println("a = " + a);
-            a.setOption(productMapper.getOptionInfo(a.getTitle()));
+            a.setOption(productMapper.getOptionInfo(new GetOptionReq(a.getTitle(), productId)));
         }
         return getOptionRes;
     }
