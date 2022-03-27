@@ -55,7 +55,7 @@
     </update>
 
     <update id="updatePoint" parameterType="int">
-        update User set point = point + #{point} where userId = #{userId}
+        update User set point = point + ${point} where userId = #{userId}
     </update>
 
     <update id="updateOrderCount" parameterType="int">
@@ -74,7 +74,7 @@
         select orderListId,
                OD.smallCartId,
                date_format(OrderList.createdAt, '%Y.%m.%d') createdAt,
-               FORMAT(finalPrice, 0) finalPrice,
+               finalPrice,
                thumbnailImageUrl, productName, makerName,
                OrderList.status
         from OrderList
@@ -97,7 +97,7 @@
                address,
                paymentMethodName,
                priceSum,
-               finalPrice - OrderList.priceSum deliveryTipAll,
+               finalPrice - OrderList.priceSum as deliveryTipAll,
                IF(isSupport='N', '안했어요', '했어요') as isSupport
         from OrderList
                  inner join PaymentMethod PM on OrderList.paymentMethodId = PM.paymentMethodId

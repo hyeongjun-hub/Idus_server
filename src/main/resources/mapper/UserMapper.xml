@@ -94,15 +94,13 @@
     </select>
 
     <select id="getPoint" parameterType="int" resultType="int">
-        select point from User where userId = #{userId}
+        select point as point from User where userId = #{userId}
     </select>
 
     <select id="getCoupons" parameterType="int" resultType="GetCouponRes">
-        select Coupon.couponId couponId, amount, priceMin, IFNULL(startDate, '') startDate, IFNULL(Coupon.deadline, '') deadLine, orderMethod, Coupon.status status from Coupon inner join RestaurantCoupon RC on Coupon.restaurantCouponId = RC.restaurantCouponId inner join User U on Coupon.userId = U.userId where U.userId = #{userId} and Coupon.status = 'Y'
     </select>
 
     <select id="getPresents" parameterType="int" resultType="GetPresentRes">
-        select presentId, price, deadline, Present.status as status from Present inner join User U on Present.userId = U.userId where Present.userId = #{userId}
     </select>
 
     <select id="getAddress" parameterType="int" resultType="GetAddressRes">

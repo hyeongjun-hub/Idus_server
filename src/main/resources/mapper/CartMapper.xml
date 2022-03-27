@@ -54,7 +54,7 @@
                          inner join OrderDetail OD on ProductOption.productOptionId = OD.productOptionId
                          inner join SmallCart SC on OD.smallCartId = SC.smallCartId
                 where SC.smallcartId = SmallCart.smallCartId), '') as productOption,
-               FORMAT(SmallCart.price, 0) price,
+               SmallCart.price,
                count,
                SmallCart.deliveryTip,
                tipFreeMin,

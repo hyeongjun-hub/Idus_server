@@ -57,6 +57,7 @@ public class OrderService {
             }
         }
         // User의 point를 적립
+        System.out.println("postOrderReq = " + postOrderReq.getUsePoint());
         result = orderMapper.updatePoint(userId, postOrderReq.getUsePoint());
         if (result == 0) {
             throw new BaseException(UPDATE_FAIL_USER_POINT);
