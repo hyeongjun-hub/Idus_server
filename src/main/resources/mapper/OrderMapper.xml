@@ -74,7 +74,7 @@
         select orderListId,
                OD.smallCartId,
                date_format(OrderList.createdAt, '%Y.%m.%d') createdAt,
-               finalPrice,
+               FORMAT(finalPrice, 0) finalPrice,
                thumbnailImageUrl, productName, makerName,
                OrderList.status
         from OrderList

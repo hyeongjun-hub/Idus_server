@@ -35,6 +35,22 @@ public class UserProvider {
         }
     }
 
+    public GetGradeRes getGrade(int userId) throws BaseException {
+        if (!userMapper.getUserStatus(userId).equals("Y")) {
+            throw new BaseException(USERS_STATUS_NOT_Y);
+        }
+        try {
+            GetGradeRes getGradeRes =  userMapper.getGrade(userId);
+            // 금손 일시
+            if(getGradeRes.getGradeId() == 4){
+                getGradeRes.setCurrentMonthLast("다음 등급이 없습니다.");
+            }
+            return getGradeRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
     public int getPoint(int userId) throws BaseException {
         try{
             int point = userMapper.getPoint(userId);
