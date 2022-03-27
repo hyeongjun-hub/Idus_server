@@ -17,6 +17,7 @@ import java.net.URL;
 
 import static com.example.demo.config.BaseResponseStatus.FAILED_TO_SEND_PHONE_AUTH;
 import static com.example.demo.config.Constant.*;
+import static com.example.demo.config.secret.Secret.*;
 
 @Service
 public class SmsAuthService {

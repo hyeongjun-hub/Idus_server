@@ -4,6 +4,7 @@ import com.example.demo.src.product.model.entity.Comment;
 import com.example.demo.src.product.model.entity.Maker;
 import com.example.demo.src.product.model.entity.ProductKeyword;
 import com.example.demo.src.product.model.entity.Review;
+import com.example.demo.src.product.model.request.GetOptionReq;
 import com.example.demo.src.product.model.response.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -37,9 +38,7 @@ public interface ProductMapper {
     Maker getMakerInfo(int productId);
 
     List<GetOptionRes> getOptionInit(int productId);
-    List<String> getOptionTitle(int productId);
-    List<GetOptionDetailRes> getOptionInfo(String title);
-//    List<GetOptionRes> getProductOptions(int productId);
+    List<GetOptionDetailRes> getOptionInfo(GetOptionReq getOptionReq);
 
     int addView(@Param("userId") int userId, @Param("productId") int productId);
     int updateUserResent(@Param("userId") int userId, @Param("productId") int productId);
