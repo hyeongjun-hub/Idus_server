@@ -2,10 +2,7 @@ package com.example.demo.src.user;
 
 import com.example.demo.src.user.model.entity.User;
 import com.example.demo.src.user.model.request.*;
-import com.example.demo.src.user.model.response.GetAddressRes;
-import com.example.demo.src.user.model.response.GetCouponRes;
-import com.example.demo.src.user.model.response.GetPresentRes;
-import com.example.demo.src.user.model.response.GetUserRes;
+import com.example.demo.src.user.model.response.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +14,7 @@ public interface UserMapper {
     List<User> getUsers();
 
     GetUserRes getUser(int userId);
+    GetGradeRes getGrade(int userId);
 
     int createUser(PostUserReq postUserReq);
 

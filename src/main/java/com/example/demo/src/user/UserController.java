@@ -31,7 +31,7 @@ public class UserController {
     private final SmsAuthService smsAuthService;
 
     /**
-     * 1. 전체 유저 조회 API
+     * 0. 전체 유저 조회 API
      * 회원 번호 및 이메일 검색 조회 API
      * @return BaseResponse<List < GetUserRes>>
      */
@@ -42,7 +42,7 @@ public class UserController {
     }
 
     /**
-     * 2. inApp 유저 생성 API (회원가입)
+     * 1. inApp 유저 생성 API (회원가입)
      * @param postUserReq
      * @return BaseResponse<PostUserRes>
      */
@@ -53,7 +53,7 @@ public class UserController {
     }
 
     /**
-     * 3. 휴대폰 인증번호 발송 API
+     * 2. 휴대폰 인증번호 발송 API
      * @param postPhoneAuthReq
      * @return
      */
@@ -65,7 +65,7 @@ public class UserController {
     }
 
     /**
-     * 4. 이메일 로그인 API
+     * 3. 이메일 로그인 API
      * @param postLoginReq
      * @return BaseResponse<PostLoginRes>
      */
@@ -76,7 +76,7 @@ public class UserController {
     }
 
     /**
-     * 5. 카카오 로그인, 회원가입 API
+     * 4. 카카오 로그인, 회원가입 API
      * @param postKaKaoLogin
      * @return BaseResponse<String>>
      */
@@ -93,7 +93,7 @@ public class UserController {
     }
 
     /**
-     * 6. 유저 정보 조회 API
+     * 5. 유저 정보 조회 API
      * @return BaseResponse<GetUserRes>
      */
     @GetMapping("") // (GET) 127.0.0.1:9000/users
@@ -104,7 +104,18 @@ public class UserController {
     }
 
     /**
-     * 8. 유저 정보 수정 API
+     * 6. 등급 조회 API
+     * @return BaseResponse<GetGradeRes>
+     */
+    @GetMapping("/grade") // (GET) 127.0.0.1:9000/users
+    public BaseResponse<GetGradeRes> getUserGrade() throws BaseException {
+        int userId = jwtService.getUserId();
+        GetGradeRes getGradeRes = userProvider.getGrade(userId);
+        return new BaseResponse<>(getGradeRes);
+    }
+
+    /**
+     * 7. 유저 정보 수정 API
      * [PATCH] /users/detail
      * @return BaseResponse<PostUserRes>
      */
@@ -118,7 +129,7 @@ public class UserController {
     }
 
     /**
-     * 16. 회원 삭제 API
+     * 15. 유저 삭제 API
      * @return BaseResponse<PostUserDelRes>
      */
     @PatchMapping("/delete")
@@ -133,7 +144,7 @@ public class UserController {
     }
 
     /**
-     * 17. 로그아웃 API
+     * 16. 로그아웃 API
      * @return
      * @throws BaseException
      */

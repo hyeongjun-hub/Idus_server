@@ -61,6 +61,75 @@
         select platform from User where email = #{email}
     </select>
 
+    <select id="getLoginUser" parameterType="PostLoginReq" resultType="User">
+        select userId,
+               userName,
+               email,
+               password,
+               gradeId,
+               IFNULL(phone, '')           phone,
+               IFNULL(profileImageUrl, '') profileImageUrl,
+               point,
+               IFNULL(birthday, '')        birthday,
+               gender,
+               identityTest,
+               isLogin,
+               platform,
+               fingerPrint,
+               IFNULL(productId, 1)        productId,
+               alarm,
+               createdAt,
+               updatedAt,
+               status
+        from User
+        where email = #{email}
+    </select>
+
+    <select id="getUserId" parameterType="int" resultType="int">
+        select userId from Address where addressId = #{addressId}
+    </select>
+
+    <select id="getUserIdByEmail" parameterType="string" resultType="int">
+        select userId from User where email = #{email}
+    </select>
+
+    <select id="getPoint" parameterType="int" resultType="int">
+        select point as point from User where userId = #{userId}
+    </select>
+
+    <select id="getCoupons" parameterType="int" resultType="GetCouponRes">
+    </select>
+
+    <select id="getPresents" parameterType="int" resultType="GetPresentRes">
+    </select>
+
+    <select id="getAddress" parameterType="int" resultType="GetAddressRes">
+        select Address.addressId, addressName, address, Address.status from Address inner join User U on Address.userId = U.userId where U.userId = #{userId} and Address.status = 'Y'
+    </select>
+
+    <select id="getAddressStatus" parameterType="int" resultType="string">
+        SELECT status FROM Address WHERE addressId = #{addressId}
+    </select>
+
+    <select id="getUserStatus" parameterType="int" resultType="string">
+        SELECT status FROM User WHERE userId = #{userId}
+    </select>
+
+    <select id="getGrade" parameterType="int" resultType="GetGradeRes">
+        select @gradeId := Grade.gradeId as gradeId,
+       gradeName,
+       rewardRate,
+       CONCAT(DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL 1 MONTH), '%c'),'월 예상 등급' ) as nextMonth,
+       @required := FORMAT(required - useMoney, 0) as toBuy,
+       @nextGrade := (select gradeName as nextGrade
+        from Grade where Grade.gradeId = @gradeId + 1
+        ) as nextGrade,
+       CONCAT(DATE_FORMAT(LAST_DAY(NOW()), '%c월 %d일'), '까지 ', @required, '원 이상 더 사면, \n', @nextGrade, ' 등급!') as currentMonthLast
+        from Grade
+            inner join User U on Grade.gradeId = U.gradeId
+        where userId = #{userId}
+    </select>
+
     <select id="checkEmail" parameterType="String" resultType="int">
         select exists(select email from User where email = #{email})
     </select>
@@ -113,54 +182,6 @@
         update User set status = 'D' where userId = #{userId}
     </update>
 
-    <select id="getLoginUser" parameterType="PostLoginReq" resultType="User">
-        select userId,
-               userName,
-               email,
-               password,
-               gradeId,
-               IFNULL(phone, '')           phone,
-               IFNULL(profileImageUrl, '') profileImageUrl,
-               point,
-               IFNULL(birthday, '')        birthday,
-               gender,
-               identityTest,
-               isLogin,
-               platform,
-               fingerPrint,
-               IFNULL(productId, 1)        productId,
-               alarm,
-               createdAt,
-               updatedAt,
-               status
-        from User
-        where email = #{email}
-    </select>
-
-    <select id="getUserId" parameterType="int" resultType="int">
-        select userId from Address where addressId = #{addressId}
-    </select>
-
-    <select id="getUserIdByEmail" parameterType="string" resultType="int">
-        select userId from User where email = #{email}
-    </select>
-
-    <select id="getPoint" parameterType="int" resultType="int">
-        select point from User where userId = #{userId}
-    </select>
-
-    <select id="getCoupons" parameterType="int" resultType="GetCouponRes">
-        select Coupon.couponId couponId, amount, priceMin, IFNULL(startDate, '') startDate, IFNULL(Coupon.deadline, '') deadLine, orderMethod, Coupon.status status from Coupon inner join RestaurantCoupon RC on Coupon.restaurantCouponId = RC.restaurantCouponId inner join User U on Coupon.userId = U.userId where U.userId = #{userId} and Coupon.status = 'Y'
-    </select>
-
-    <select id="getPresents" parameterType="int" resultType="GetPresentRes">
-        select presentId, price, deadline, Present.status as status from Present inner join User U on Present.userId = U.userId where Present.userId = #{userId}
-    </select>
-
-    <select id="getAddress" parameterType="int" resultType="GetAddressRes">
-        select Address.addressId, addressName, address, Address.status from Address inner join User U on Address.userId = U.userId where U.userId = #{userId} and Address.status = 'Y'
-    </select>
-
     <insert id="createAddress" parameterType="int">
         INSERT INTO Address (userId) VALUES (#{userId})
     </insert>
@@ -172,14 +193,6 @@
     <update id="delAddress" parameterType="int">
         Update Address SET status = 'D' WHERE addressId = #{addressId}
     </update>
-
-    <select id="getAddressStatus" parameterType="int" resultType="string">
-        SELECT status FROM Address WHERE addressId = #{addressId}
-    </select>
-
-    <select id="getUserStatus" parameterType="int" resultType="string">
-        SELECT status FROM User WHERE userId = #{userId}
-    </select>
 
     <update id="logout" parameterType="int">
         UPDATE User SET isLogin = 'N' WHERE userId = #{userId}
