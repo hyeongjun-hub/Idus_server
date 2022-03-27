@@ -23,7 +23,7 @@ public class ReviewService {
             throw new BaseException(INVALID_USER_JWT);
         }
         // smallCart 의 status 확인
-        if (!reviewMapper.getSmallCartStatus(postReviewReq.getSmallCartId()).equals('N')) {
+        if (!reviewMapper.getSmallCartStatus(postReviewReq.getSmallCartId()).equals("N")) {
             throw new BaseException(INVALID_SMALL_CART);
         }
         int orderListId = reviewMapper.getOrderListId(postReviewReq.getSmallCartId());
