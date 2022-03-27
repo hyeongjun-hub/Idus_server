@@ -210,9 +210,6 @@ public class UserController {
      */
     @PatchMapping("/{addressId}/address")
     public BaseResponse<String> editAddress(@PathVariable("addressId") int addressId, @RequestBody PatchAddressReq patchAddressReq) throws BaseException {
-        if (jwtService.getUserId() != userService.getUserId(addressId)) {
-            return new BaseResponse<>(INVALID_USER_JWT);
-        }
         userService.editAddress(addressId, patchAddressReq);
         return new BaseResponse<>("");
     }

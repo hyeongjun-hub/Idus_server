@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -47,9 +48,13 @@ public class UserService {
             userMapper.createUser(postUserReq);
             int userId = postUserReq.getUserId();
             // 빈 주소 3개 생성
+            int addressId = 0;
             for (int i = 0; i < 3; i++) {
-                this.createAddress(userId);
+                PostAddressReq postAddressReq = new PostAddressReq(userId, 0);
+                if(i == 0) {addressId = this.createAddress(postAddressReq);}
+                else {this.createAddress(postAddressReq);}
             }
+            userMapper.setAddressInfo(addressId, postUserReq);
             //jwt 발급.
             String jwt = jwtService.createJwt(userId);
             return new PostUserRes(userId, jwt);
@@ -205,22 +210,6 @@ public class UserService {
         }
     }
 
-    public int checkAddress(String address) throws BaseException {
-        try {
-            return userMapper.checkAddress(address);
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
-
-    public int checkAddressName(String addressName) throws BaseException {
-        try {
-            return userMapper.checkAddressName(addressName);
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
-
     @Transactional(rollbackFor = {BaseException.class, MethodArgumentNotValidException.class})
     public PostUserRes login(PostLoginReq postLoginReq) throws BaseException {
         User user = userMapper.getLoginUser(postLoginReq);
@@ -254,8 +243,8 @@ public class UserService {
     public PostLoginRes kaKaoLogin(KaKaoUser kaKaoUser) throws BaseException {
         int userId;
         String jwt;
-        System.out.println("kaKaoUser = " + kaKaoUser.getEmail());
-//        // 카카오에서 받아온 사용자 정보의 이메일을 가지고 User테이블에 있는지 확인한다.
+//        System.out.println("kaKaoUser = " + kaKaoUser.getEmail());
+//        카카오에서 받아온 사용자 정보의 이메일을 가지고 User 테이블에 있는지 확인한다.
         if (userMapper.checkEmail(kaKaoUser.getEmail()) == 1) {
 //            // 해당 이메일이 카카오 가입으로 가입된 계정이 맞는지 확인한다.
             if (userMapper.getPlatform(kaKaoUser.getEmail()).equals("kaKao")) {
@@ -266,13 +255,17 @@ public class UserService {
                 throw new BaseException(USERS_INAPP_EXISTS); // 해당 이메일로 자체 이메일가입한 상태라면 카카오로그인, 가입 X, 자체로그인으로.
             }
         } else { // 가입이 되어 있지 않다면 가입 진행
-            PostUserReq kaKaoSignUp = new PostUserReq(kaKaoUser.getUserName(), kaKaoUser.getEmail(), "socialLogin", "kaKao", 0);
+            PostUserReq kaKaoSignUp = new PostUserReq(kaKaoUser.getUserName(), kaKaoUser.getEmail(),  "socialLogin", "", "kaKao", 0);
             userMapper.createUser(kaKaoSignUp); // + KaKao
             userId = kaKaoSignUp.getUserId();
+            int addressId = 0;
             // 빈 주소 3개 생성
             for (int i = 0; i < 3; i++) {
-                this.createAddress(userId);
+                PostAddressReq postAddressReq = new PostAddressReq(userId, 0);
+                if(i == 0) {addressId = this.createAddress(postAddressReq);}
+                else {this.createAddress(postAddressReq);}
             }
+            userMapper.setAddressInfo(addressId, kaKaoSignUp);
             // jwt 발급
             jwt = jwtService.createJwt(userId);
         }
@@ -280,18 +273,13 @@ public class UserService {
     }
 
     @Transactional(rollbackFor = {BaseException.class, MethodArgumentNotValidException.class})
-    public void createAddress(int userId) throws BaseException {
+    public int createAddress(PostAddressReq postAddressReq) throws BaseException {
         try {
-            userMapper.createAddress(userId);
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
-
-    public int getUserId(int addressId) throws BaseException {
-        try {
-            int userId = userMapper.getUserId(addressId);
-            return userId;
+            int result =  userMapper.createAddress(postAddressReq);
+            if (result == 0){
+                throw new BaseException(CREATE_FAIL_ADDRESS);
+            }
+            return postAddressReq.getAddressId();
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
@@ -303,14 +291,6 @@ public class UserService {
         //address status 값 확인
         if (!addressStatus.equals("Y")) {
             throw new BaseException(POST_ADDRESS_STATUS_NOT_Y);
-        }
-        //address 중복 확인
-        if (this.checkAddress(patchAddressReq.getAddress()) == 1) {
-            throw new BaseException(POST_ADDRESS_EXISTS_ADDRESS);
-        }
-        // 주소이름 중복 확인
-        if (this.checkAddressName(patchAddressReq.getAddressName()) == 1) {
-            throw new BaseException(POST_ADDRESS_EXISTS_ADDRESS_NAME);
         }
         try {
             userMapper.editAddress(addressId, patchAddressReq);

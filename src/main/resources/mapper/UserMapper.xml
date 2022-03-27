@@ -66,7 +66,7 @@
     </select>
 
     <select id="getPlatform" parameterType="String" resultType="string">
-        select platform from User where email = #{email}
+        select platform from User where email = #{email} and User.status = 'Y'
     </select>
 
     <select id="getLoginUser" parameterType="PostLoginReq" resultType="User">
@@ -94,11 +94,7 @@
                updatedAt,
                status
         from User
-        where email = #{email}
-    </select>
-
-    <select id="getUserId" parameterType="int" resultType="int">
-        select userId from Address where addressId = #{addressId}
+        where email = #{email} and User.status = 'Y'
     </select>
 
     <select id="getUserIdByEmail" parameterType="string" resultType="int">
@@ -110,9 +106,6 @@
     </select>
 
     <select id="getCoupons" parameterType="int" resultType="GetCouponRes">
-    </select>
-
-    <select id="getPresents" parameterType="int" resultType="GetPresentRes">
     </select>
 
     <select id="getAddress" parameterType="int" resultType="Address">
@@ -155,19 +148,11 @@
     </select>
 
     <select id="checkEmail" parameterType="String" resultType="int">
-        select exists(select email from User where email = #{email})
+        select exists(select email from User where email = #{email} and User.status = 'Y')
     </select>
 
     <select id="checkPhone" parameterType="String" resultType="int">
-        select exists(select phone from User where phone = #{phone})
-    </select>
-
-    <select id="checkAddress" parameterType="String" resultType="int">
-        select exists(select address from Address where address = #{address})
-    </select>
-
-    <select id="checkAddressName" parameterType="String" resultType="int">
-        select exists(select addressName from Address where addressName = #{addressName})
+        select exists(select phone from User where phone = #{phone} and User.status = 'Y')
     </select>
 
     <update id="editUserName" parameterType="Object">
@@ -208,7 +193,14 @@
 
     <insert id="createAddress" parameterType="int">
         INSERT INTO Address (userId) VALUES (#{userId})
+        <selectKey keyProperty="addressId" resultType="int" order="AFTER">
+            select LAST_INSERT_ID()
+        </selectKey>
     </insert>
+
+    <update id="setAddressInfo" parameterType="Object">
+        Update Address SET taker = #{param2.userName}, phone = #{param2.phone} WHERE addressId = #{param1}
+    </update>
 
     <update id="editAddress" parameterType="Object">
         Update Address SET addressName = #{param2.addressName}, address = #{param2.address} WHERE addressId = #{param1}
