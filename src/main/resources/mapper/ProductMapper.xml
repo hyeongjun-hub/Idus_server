@@ -119,7 +119,8 @@
                deliveryTip,
                tipFreeMin,
                amount,
-               IFNULL(productInfo, '') productInfo
+               IFNULL(productInfo, '') productInfo,
+               (select count(likeListId) from LikeList inner join Product P on LikeList.productId = P.productId where P.productId = #{productId}) as likeCount
         from Product
                  inner join Maker M on Product.makerId = M.makerId
         where Product.productId = #{productId}

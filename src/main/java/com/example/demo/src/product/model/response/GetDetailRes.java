@@ -27,4 +27,5 @@ public class GetDetailRes {
     private int tipFreeMin;
     private int amount;
     private String productInfo;
+    private int likeCount;
 }
