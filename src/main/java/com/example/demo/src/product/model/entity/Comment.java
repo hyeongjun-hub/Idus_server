@@ -10,6 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Comment {
-    private String content;
-
+    private int commentId;
+    private String commentUserProfileImageUrl;
+    private String commentUserName;
+    private String commentContent;
 }
