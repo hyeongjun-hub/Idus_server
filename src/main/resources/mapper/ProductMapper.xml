@@ -155,9 +155,14 @@
     </select>
 
     <select id="getProductComments" parameterType="int" resultType="com.example.demo.src.product.model.entity.Comment">
-        select IFNULL(content, '') as content
+        select Comment.commentId,
+               IFNULL(profileImageUrl, '') as commentUserProfileImageUrl,
+               userName as commentUserName,
+               IFNULL(content, '') as commentContent
         from Comment
-        where productId = #{productId} and status = 'Y'
+                 inner join User U on Comment.userId = U.userId
+        where Comment.productId = #{productId}
+          and Comment.status = 'Y'
     </select>
 
     <select id="getMakerInfo" parameterType="int" resultType="com.example.demo.src.product.model.entity.Maker">
