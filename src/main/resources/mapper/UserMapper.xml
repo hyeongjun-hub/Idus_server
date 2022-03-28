@@ -180,6 +180,18 @@
         where Product.status = 'Y' and LL.userId = #{userId}
     </select>
 
+    <select id="getFollowMakers" parameterType="int" resultType="GetFollowRes">
+        select distinct followId,
+                        thumbnailImageUrl,
+                        makerProfileImageUrl,
+                        makerName,
+                        profileDetail
+        from Maker
+                 inner join Follow F on Maker.makerId = F.makerId
+                 inner join Product P on Maker.makerId = P.makerId
+        where userId = #{userId}
+    </select>
+
     <select id="checkEmail" parameterType="String" resultType="int">
         select exists(select email from User where email = #{email} and User.status = 'Y')
     </select>

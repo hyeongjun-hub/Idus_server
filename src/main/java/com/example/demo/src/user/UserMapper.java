@@ -45,8 +45,8 @@ public interface UserMapper {
     int getPoint(int userId);
 
     List<GetCouponRes> getCoupons(int userId);
-
     List<GetProductRes> getLikeProducts(int userId);
+    List<GetFollowRes> getFollowMakers(int userId);
 
     List<GetPresentRes> getPresents(int userId);
 

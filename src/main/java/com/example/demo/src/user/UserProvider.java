@@ -79,6 +79,15 @@ public class UserProvider {
         }
     }
 
+    public List<GetFollowRes> getFollowMakers(int userId) throws BaseException{
+        try{
+            List<GetFollowRes> getFollowRes = userMapper.getFollowMakers(userId);
+            return getFollowRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
     public List<GetPresentRes> getPresents(int userId) throws BaseException{
         try{
             List<GetPresentRes> getPresentRes = userMapper.getPresents(userId);
