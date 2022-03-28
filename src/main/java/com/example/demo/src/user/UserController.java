@@ -173,6 +173,16 @@ public class UserController {
     }
 
     /**
+     * 13. 유저 팔로우 작가 목록 조회 API
+     * @return BaseResponse<List<GetCouponRes>>
+     */
+    @GetMapping("/follow")
+    public BaseResponse<List<GetFollowRes>> getFollowMakers() throws BaseException {
+        int userId = jwtService.getUserId();
+        return new BaseResponse<>(userProvider.getFollowMakers(userId));
+    }
+
+    /**
      * 15. 유저 삭제 API
      * @return BaseResponse<PostUserDelRes>
      */

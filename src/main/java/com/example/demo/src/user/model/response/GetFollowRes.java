@@ -11,5 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class GetFollowRes {
     private int followId;
-
+    private String thumbnailImageUrl;
+    private String makerProfileImageUrl;
+    private String makerName;
+    private String profileDetail;
 }
