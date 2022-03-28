@@ -106,6 +106,19 @@
     </select>
 
     <select id="getCoupons" parameterType="int" resultType="GetCouponRes">
+        select couponId,
+               couponName,
+               rate,
+               amount,
+               priceMin,
+               DATE_FORMAT(startDate, '%Y.%m.%d')     as startDate,
+               DATE_FORMAT(endDate, '%Y.%m.%d')       as endDate,
+               TIMESTAMPDIFF(DAY, CURDATE(), endDate) as remainingDay,
+               Coupon.status
+        from Coupon
+                 inner join User U on Coupon.userId = U.userId
+                 inner join ProductCoupon PC on Coupon.productCouponId = PC.productCouponId
+        where U.userId = #{userId}
     </select>
 
     <select id="getAddress" parameterType="int" resultType="Address">
@@ -145,6 +158,26 @@
         from Grade
             inner join User U on Grade.gradeId = U.gradeId
         where userId = #{userId}
+    </select>
+
+    <select id="getLikeProducts" parameterType="int" resultType="GetProductRes">
+        select Product.productId,
+               Product.categoryId,
+               productName,
+               makerName,
+               IFNULL(thumbnailImageUrl, '') as thumbnailImageUrl,
+               price,
+               discountRate,
+               tag,
+               (select AVG(star) from Review where Product.productId = Review.productId) as star,
+               (select COUNT(star) from Review where Product.productId = Review.productId) as reviewCount,
+               IFNULL((select content from Review R where R.productId=Product.productId limit 1), '') as review,
+               vip
+        from Product
+                 inner join Maker M on Product.makerId = M.makerId
+                 inner join LikeList LL on Product.productId = LL.productId
+                 inner join User U on LL.userId = U.userId
+        where Product.status = 'Y' and LL.userId = #{userId}
     </select>
 
     <select id="checkEmail" parameterType="String" resultType="int">
@@ -202,12 +235,16 @@
         Update Address SET taker = #{param2.userName}, phone = #{param2.phone} WHERE addressId = #{param1}
     </update>
 
-    <update id="editAddress" parameterType="Object">
-        Update Address SET addressName = #{param2.addressName}, address = #{param2.address} WHERE addressId = #{param1}
+    <update id="editAddress" parameterType="PatchAddressReq">
+        Update Address SET address=#{address} WHERE addressId = #{addressId}
     </update>
 
-    <update id="delAddress" parameterType="int">
-        Update Address SET status = 'D' WHERE addressId = #{addressId}
+    <update id="editTaker" parameterType="PatchAddressReq">
+        UPDATE Address SET taker=#{taker} WHERE addressId = #{addressId}
+    </update>
+
+    <update id="editAddressPhone" parameterType="PatchAddressReq">
+        UPDATE Address SET phone=#{phone} WHERE addressId = #{addressId}
     </update>
 
     <update id="logout" parameterType="int">

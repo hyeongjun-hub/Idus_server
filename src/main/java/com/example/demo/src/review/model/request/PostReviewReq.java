@@ -20,6 +20,7 @@ public class PostReviewReq {
     @NotBlank(message = "리뷰 내용을 입력하세요.")
     private String content;
     private String imageUrl;
+    @NotNull(message = "평점을 입력하세요.")
     private int star;
     private int reviewId;
 }
