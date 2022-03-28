@@ -5,6 +5,7 @@ import com.example.demo.config.BaseException;
 import com.example.demo.src.user.model.entity.KaKaoUser;
 import com.example.demo.src.user.model.entity.User;
 import com.example.demo.src.user.model.request.*;
+import com.example.demo.src.user.model.response.PatchAddressRes;
 import com.example.demo.src.user.model.response.PostLoginRes;
 import com.example.demo.src.user.model.response.PostUserDelRes;
 import com.example.demo.src.user.model.response.PostUserRes;
@@ -286,28 +287,28 @@ public class UserService {
     }
 
     @Transactional(rollbackFor = {BaseException.class, MethodArgumentNotValidException.class})
-    public void editAddress(int addressId, PatchAddressReq patchAddressReq) throws BaseException {
-        String addressStatus = userMapper.getAddressStatus(addressId);
-        //address status 값 확인
-        if (!addressStatus.equals("Y")) {
-            throw new BaseException(POST_ADDRESS_STATUS_NOT_Y);
-        }
+    public PatchAddressRes editAddress(PatchAddressReq patchAddressReq) throws BaseException {
         try {
-            userMapper.editAddress(addressId, patchAddressReq);
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
-
-    @Transactional(rollbackFor = {BaseException.class, MethodArgumentNotValidException.class})
-    public void delAddress(int addressId) throws BaseException {
-        String addressStatus = userMapper.getAddressStatus(addressId);
-        //address status 값 확인
-        if (!addressStatus.equals("Y")) {
-            throw new BaseException(POST_ADDRESS_STATUS_NOT_Y);
-        }
-        try {
-            userMapper.delAddress(addressId);
+            int result = 0;
+            if (patchAddressReq.getAddress() != null) {
+                result = userMapper.editAddress(patchAddressReq);
+                if(result == 0){
+                    throw new BaseException(EDIT_FAIL_CONTENT);
+                }
+            }
+            if (patchAddressReq.getPhone() != null) {
+                result = userMapper.editAddressPhone(patchAddressReq);
+                if(result == 0){
+                    throw new BaseException(EDIT_FAIL_CONTENT);
+                }
+            }
+            if (patchAddressReq.getTaker() != null) {
+                result = userMapper.editTaker(patchAddressReq);
+                if(result == 0){
+                    throw new BaseException(EDIT_FAIL_CONTENT);
+                }
+            }
+            return new PatchAddressRes(patchAddressReq.getAddressId());
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

@@ -11,12 +11,12 @@ import lombok.Setter;
 @NoArgsConstructor
 public class GetCouponRes {
     private int couponId;
-    private int couponName;
+    private String couponName;
     private double rate;
     private int amount;
     private int priceMin;
+    private int remainingDay;
     private String startDate;
     private String endDate;
-    private String orderMethod;
     private String status;
 }

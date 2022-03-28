@@ -1,5 +1,6 @@
 package com.example.demo.src.user;
 
+import com.example.demo.src.product.model.response.GetProductRes;
 import com.example.demo.src.user.model.entity.Address;
 import com.example.demo.src.user.model.entity.User;
 import com.example.demo.src.user.model.request.*;
@@ -45,6 +46,8 @@ public interface UserMapper {
 
     List<GetCouponRes> getCoupons(int userId);
 
+    List<GetProductRes> getLikeProducts(int userId);
+
     List<GetPresentRes> getPresents(int userId);
 
     List<Address> getAddress(int userId);
@@ -52,13 +55,12 @@ public interface UserMapper {
     int createAddress(PostAddressReq postAddressReq);
 
     // address set
-    int setAddressInfo(int addressId, PostUserReq postUserReq);
+    void setAddressInfo(int addressId, PostUserReq postUserReq);
 
-    void editAddress(int addressId, PatchAddressReq patchAddressReq);
-
-    void delAddress(int addressId);
-
-    String getAddressStatus(int addressId);
+    // edit Address
+    int editAddress(PatchAddressReq patchAddressReq);
+    int editAddressPhone(PatchAddressReq patchAddressReq);
+    int editTaker(PatchAddressReq patchAddressReq);
 
     String getUserStatus(int userId);
 

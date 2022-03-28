@@ -1,5 +1,6 @@
 package com.example.demo.src.user;
 
+import com.example.demo.src.product.model.response.GetProductRes;
 import com.example.demo.src.user.model.entity.Address;
 import com.example.demo.src.user.model.entity.KaKaoUser;
 import com.example.demo.src.user.model.entity.User;
@@ -124,13 +125,12 @@ public class UserController {
     @PatchMapping("/detail")
     public BaseResponse<PostUserDelRes> editUser(@Valid @RequestBody PatchUserReq user) throws BaseException {
         int userId = jwtService.getUserId();
-
         PostUserDelRes patchUserRes = userService.editUser(userId, user);
         return new BaseResponse<>(patchUserRes);
     }
 
     /**
-     * 8. 유저 주소 조회 API (배송지 관리)
+     * 8. 유저 주소 조회 API
      * @return BaseResponse<List<Address>>
      */
     @GetMapping("/address")
@@ -138,6 +138,38 @@ public class UserController {
         int userId = jwtService.getUserId();
         List<Address> getAddressRes = userProvider.getAddress(userId);
         return new BaseResponse<>(getAddressRes);
+    }
+
+    /**
+     * 9. 유저 주소 수정 API
+     * @return BaseResponse<String>
+     */
+    @PatchMapping("/address")
+    public BaseResponse<PatchAddressRes> editAddress(@RequestBody PatchAddressReq patchAddressReq) throws BaseException {
+        PatchAddressRes patchAddressRes = userService.editAddress(patchAddressReq);
+        return new BaseResponse<>(patchAddressRes);
+    }
+
+    /**
+     * 11. 유저 쿠폰 조회 API
+     * @return BaseResponse<List<GetCouponRes>>
+     */
+    @GetMapping("/coupon")
+    public BaseResponse<List<GetCouponRes>> getCoupons() throws BaseException {
+        int userId = jwtService.getUserId();
+        List<GetCouponRes> getCouponRes = userProvider.getCoupons(userId);
+        return new BaseResponse<>(getCouponRes);
+    }
+
+    /**
+     * 12. 유저 찜 작품 목록 조회 API
+     * @return BaseResponse<List<GetCouponRes>>
+     */
+    @GetMapping("/like")
+    public BaseResponse<List<GetProductRes>> getLikeProducts() throws BaseException {
+        int userId = jwtService.getUserId();
+        List<GetProductRes> getProductRes = userProvider.getLikeProducts(userId);
+        return new BaseResponse<>(getProductRes);
     }
 
     /**
@@ -180,17 +212,6 @@ public class UserController {
     }
 
     /**
-     * 회원 쿠폰조회 API
-     * @return BaseResponse<List < GetCouponRes>>
-     */
-    @GetMapping("/coupon")
-    public BaseResponse<List<GetCouponRes>> getCoupons() throws BaseException {
-        int userId = jwtService.getUserId();
-        List<GetCouponRes> getCouponRes = userProvider.getCoupons(userId);
-        return new BaseResponse<>(getCouponRes);
-    }
-
-    /**
      * 회원 선물조회 API
      * @return BaseResponse<List < GetPresentRes>>
      */
@@ -201,16 +222,4 @@ public class UserController {
         return new BaseResponse<>(getPresentRes);
     }
 
-
-    /**
-     * 회원 주소 수정 API
-     * @param addressId
-     * @param patchAddressReq
-     * @return BaseResponse<String>
-     */
-    @PatchMapping("/{addressId}/address")
-    public BaseResponse<String> editAddress(@PathVariable("addressId") int addressId, @RequestBody PatchAddressReq patchAddressReq) throws BaseException {
-        userService.editAddress(addressId, patchAddressReq);
-        return new BaseResponse<>("");
-    }
 }

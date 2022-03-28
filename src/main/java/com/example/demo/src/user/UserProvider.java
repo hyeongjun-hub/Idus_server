@@ -2,6 +2,7 @@ package com.example.demo.src.user;
 
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.product.model.response.GetProductRes;
 import com.example.demo.src.user.model.entity.Address;
 import com.example.demo.src.user.model.entity.User;
 import com.example.demo.src.user.model.response.*;
@@ -65,8 +66,15 @@ public class UserProvider {
         try{
             List<GetCouponRes> getCouponRes = userMapper.getCoupons(userId);
             return getCouponRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
         }
-        catch (Exception exception) {
+    }
+
+    public List<GetProductRes> getLikeProducts(int userId) throws BaseException{
+        try{
+            return userMapper.getLikeProducts(userId);
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
