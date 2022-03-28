@@ -10,8 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetFollowRes {
-    private int presentId;
-    private int price;
-    private String deadLine;
-    private String status;
+    private int followId;
+
 }
