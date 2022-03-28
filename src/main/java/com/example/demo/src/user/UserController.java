@@ -1,5 +1,7 @@
 package com.example.demo.src.user;
 
+import com.example.demo.src.product.model.response.GetProductRes;
+import com.example.demo.src.user.model.entity.Address;
 import com.example.demo.src.user.model.entity.KaKaoUser;
 import com.example.demo.src.user.model.entity.User;
 import com.example.demo.src.user.model.request.*;
@@ -31,7 +33,7 @@ public class UserController {
     private final SmsAuthService smsAuthService;
 
     /**
-     * 1. 전체 유저 조회 API
+     * 0. 전체 유저 조회 API
      * 회원 번호 및 이메일 검색 조회 API
      * @return BaseResponse<List < GetUserRes>>
      */
@@ -42,7 +44,7 @@ public class UserController {
     }
 
     /**
-     * 2. inApp 유저 생성 API (회원가입)
+     * 1. inApp 유저 생성 API (회원가입)
      * @param postUserReq
      * @return BaseResponse<PostUserRes>
      */
@@ -53,7 +55,7 @@ public class UserController {
     }
 
     /**
-     * 3. 휴대폰 인증번호 발송 API
+     * 2. 휴대폰 인증번호 발송 API
      * @param postPhoneAuthReq
      * @return
      */
@@ -65,7 +67,7 @@ public class UserController {
     }
 
     /**
-     * 4. 이메일 로그인 API
+     * 3. 이메일 로그인 API
      * @param postLoginReq
      * @return BaseResponse<PostLoginRes>
      */
@@ -76,7 +78,7 @@ public class UserController {
     }
 
     /**
-     * 5. 카카오 로그인, 회원가입 API
+     * 4. 카카오 로그인, 회원가입 API
      * @param postKaKaoLogin
      * @return BaseResponse<String>>
      */
@@ -93,7 +95,7 @@ public class UserController {
     }
 
     /**
-     * 6. 유저 정보 조회 API
+     * 5. 유저 정보 조회 API
      * @return BaseResponse<GetUserRes>
      */
     @GetMapping("") // (GET) 127.0.0.1:9000/users
@@ -104,7 +106,18 @@ public class UserController {
     }
 
     /**
-     * 8. 유저 정보 수정 API
+     * 6. 등급 조회 API
+     * @return BaseResponse<GetGradeRes>
+     */
+    @GetMapping("/grade") // (GET) 127.0.0.1:9000/users
+    public BaseResponse<GetGradeRes> getUserGrade() throws BaseException {
+        int userId = jwtService.getUserId();
+        GetGradeRes getGradeRes = userProvider.getGrade(userId);
+        return new BaseResponse<>(getGradeRes);
+    }
+
+    /**
+     * 7. 유저 정보 수정 API
      * [PATCH] /users/detail
      * @return BaseResponse<PostUserRes>
      */
@@ -112,13 +125,65 @@ public class UserController {
     @PatchMapping("/detail")
     public BaseResponse<PostUserDelRes> editUser(@Valid @RequestBody PatchUserReq user) throws BaseException {
         int userId = jwtService.getUserId();
-
         PostUserDelRes patchUserRes = userService.editUser(userId, user);
         return new BaseResponse<>(patchUserRes);
     }
 
     /**
-     * 16. 회원 삭제 API
+     * 8. 유저 주소 조회 API
+     * @return BaseResponse<List<Address>>
+     */
+    @GetMapping("/address")
+    public BaseResponse<List<Address>> getAddress() throws BaseException {
+        int userId = jwtService.getUserId();
+        List<Address> getAddressRes = userProvider.getAddress(userId);
+        return new BaseResponse<>(getAddressRes);
+    }
+
+    /**
+     * 9. 유저 주소 수정 API
+     * @return BaseResponse<String>
+     */
+    @PatchMapping("/address")
+    public BaseResponse<PatchAddressRes> editAddress(@RequestBody PatchAddressReq patchAddressReq) throws BaseException {
+        PatchAddressRes patchAddressRes = userService.editAddress(patchAddressReq);
+        return new BaseResponse<>(patchAddressRes);
+    }
+
+    /**
+     * 11. 유저 쿠폰 조회 API
+     * @return BaseResponse<List<GetCouponRes>>
+     */
+    @GetMapping("/coupon")
+    public BaseResponse<List<GetCouponRes>> getCoupons() throws BaseException {
+        int userId = jwtService.getUserId();
+        List<GetCouponRes> getCouponRes = userProvider.getCoupons(userId);
+        return new BaseResponse<>(getCouponRes);
+    }
+
+    /**
+     * 12. 유저 찜 작품 목록 조회 API
+     * @return BaseResponse<List<GetCouponRes>>
+     */
+    @GetMapping("/like")
+    public BaseResponse<List<GetProductRes>> getLikeProducts() throws BaseException {
+        int userId = jwtService.getUserId();
+        List<GetProductRes> getProductRes = userProvider.getLikeProducts(userId);
+        return new BaseResponse<>(getProductRes);
+    }
+
+    /**
+     * 13. 유저 팔로우 작가 목록 조회 API
+     * @return BaseResponse<List<GetCouponRes>>
+     */
+    @GetMapping("/follow")
+    public BaseResponse<List<GetFollowRes>> getFollowMakers() throws BaseException {
+        int userId = jwtService.getUserId();
+        return new BaseResponse<>(userProvider.getFollowMakers(userId));
+    }
+
+    /**
+     * 15. 유저 삭제 API
      * @return BaseResponse<PostUserDelRes>
      */
     @PatchMapping("/delete")
@@ -133,7 +198,7 @@ public class UserController {
     }
 
     /**
-     * 17. 로그아웃 API
+     * 16. 로그아웃 API
      * @return
      * @throws BaseException
      */
@@ -157,17 +222,6 @@ public class UserController {
     }
 
     /**
-     * 회원 쿠폰조회 API
-     * @return BaseResponse<List < GetCouponRes>>
-     */
-    @GetMapping("/coupon")
-    public BaseResponse<List<GetCouponRes>> getCoupons() throws BaseException {
-        int userId = jwtService.getUserId();
-        List<GetCouponRes> getCouponRes = userProvider.getCoupons(userId);
-        return new BaseResponse<>(getCouponRes);
-    }
-
-    /**
      * 회원 선물조회 API
      * @return BaseResponse<List < GetPresentRes>>
      */
@@ -178,29 +232,4 @@ public class UserController {
         return new BaseResponse<>(getPresentRes);
     }
 
-    /**
-     * 회원 주소 조회 API
-     * @return BaseResponse<List<GetAddressRes>>
-     */
-    @GetMapping("/address")
-    public BaseResponse<List<GetAddressRes>> getAddress() throws BaseException {
-        int userId = jwtService.getUserId();
-        List<GetAddressRes> getAddressRes = userProvider.getAddress(userId);
-        return new BaseResponse<>(getAddressRes);
-    }
-
-    /**
-     * 회원 주소 수정 API
-     * @param addressId
-     * @param patchAddressReq
-     * @return BaseResponse<String>
-     */
-    @PatchMapping("/{addressId}/address")
-    public BaseResponse<String> editAddress(@PathVariable("addressId") int addressId, @RequestBody PatchAddressReq patchAddressReq) throws BaseException {
-        if (jwtService.getUserId() != userService.getUserId(addressId)) {
-            return new BaseResponse<>(INVALID_USER_JWT);
-        }
-        userService.editAddress(addressId, patchAddressReq);
-        return new BaseResponse<>("");
-    }
 }

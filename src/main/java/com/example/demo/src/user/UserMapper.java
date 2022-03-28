@@ -1,11 +1,10 @@
 package com.example.demo.src.user;
 
+import com.example.demo.src.product.model.response.GetProductRes;
+import com.example.demo.src.user.model.entity.Address;
 import com.example.demo.src.user.model.entity.User;
 import com.example.demo.src.user.model.request.*;
-import com.example.demo.src.user.model.response.GetAddressRes;
-import com.example.demo.src.user.model.response.GetCouponRes;
-import com.example.demo.src.user.model.response.GetPresentRes;
-import com.example.demo.src.user.model.response.GetUserRes;
+import com.example.demo.src.user.model.response.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +16,7 @@ public interface UserMapper {
     List<User> getUsers();
 
     GetUserRes getUser(int userId);
+    GetGradeRes getGrade(int userId);
 
     int createUser(PostUserReq postUserReq);
 
@@ -25,8 +25,6 @@ public interface UserMapper {
     // 중복 check
     int checkPhone(String phone);
     int checkEmail(String email);
-    int checkAddress(String address);
-    int checkAddressName(String address);
 
     // edit User
     int editEmail(int userId, PatchUserReq user);
@@ -42,25 +40,27 @@ public interface UserMapper {
 
     User getLoginUser(PostLoginReq postLoginReq);
 
-    int getUserId(int addressId);
-
     int getUserIdByEmail(String userEmail);
 
     int getPoint(int userId);
 
     List<GetCouponRes> getCoupons(int userId);
+    List<GetProductRes> getLikeProducts(int userId);
+    List<GetFollowRes> getFollowMakers(int userId);
 
     List<GetPresentRes> getPresents(int userId);
 
-    List<GetAddressRes> getAddress(int userId);
+    List<Address> getAddress(int userId);
 
-    int createAddress(int userId);
+    int createAddress(PostAddressReq postAddressReq);
 
-    void editAddress(int addressId, PatchAddressReq patchAddressReq);
+    // address set
+    void setAddressInfo(int addressId, PostUserReq postUserReq);
 
-    void delAddress(int addressId);
-
-    String getAddressStatus(int addressId);
+    // edit Address
+    int editAddress(PatchAddressReq patchAddressReq);
+    int editAddressPhone(PatchAddressReq patchAddressReq);
+    int editTaker(PatchAddressReq patchAddressReq);
 
     String getUserStatus(int userId);
 

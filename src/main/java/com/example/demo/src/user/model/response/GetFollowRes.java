@@ -9,9 +9,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetAddressRes {
-    private int addressId;
-    private String addressName;
-    private String address;
-    private String status;
+public class GetFollowRes {
+    private int followId;
+    private String thumbnailImageUrl;
+    private String makerProfileImageUrl;
+    private String makerName;
+    private String profileDetail;
 }

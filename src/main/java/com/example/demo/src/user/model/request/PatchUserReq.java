@@ -7,12 +7,14 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class PatchUserReq {
+    @NotNull(message = "유저 식별자를 입력하세요.")
     private int userId;
     private String userName;
     @Email(message = "이메일 형식을 확인해주세요.")

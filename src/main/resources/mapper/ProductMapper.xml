@@ -3,7 +3,7 @@
 <mapper namespace="com.example.demo.src.product.ProductMapper">
     <select id="getTodayProducts" resultType="GetTodayRes">
         select Product.productId,
-               IFNULL(productName, "") productName,
+               productName,
                thumbnailImageUrl,
                IFNULL((select AVG(star) from Review where Product.productId = Review.productId), 0) as star,
                (select COUNT(star) from Review where Product.productId = Review.productId) as reviewCount,
@@ -15,8 +15,8 @@
 
     <select id="getLiveProducts" resultType="GetLiveRes">
         select Product.productId,
-               IFNULL(productName, "") as productName,
-               IFNULL(makerName, "") as makerName,
+               productName,
+               makerName,
                IFNULL(thumbnailImageUrl, "") as thumbnailImageUrl,
                (select AVG(star) from Review where Product.productId = Review.productId) as star,
                (select COUNT(star) from Review where Product.productId = Review.productId) as reviewCount,

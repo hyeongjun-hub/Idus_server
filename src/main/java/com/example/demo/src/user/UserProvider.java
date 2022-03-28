@@ -2,6 +2,8 @@ package com.example.demo.src.user;
 
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.product.model.response.GetProductRes;
+import com.example.demo.src.user.model.entity.Address;
 import com.example.demo.src.user.model.entity.User;
 import com.example.demo.src.user.model.response.*;
 import lombok.AllArgsConstructor;
@@ -35,6 +37,22 @@ public class UserProvider {
         }
     }
 
+    public GetGradeRes getGrade(int userId) throws BaseException {
+        if (!userMapper.getUserStatus(userId).equals("Y")) {
+            throw new BaseException(USERS_STATUS_NOT_Y);
+        }
+        try {
+            GetGradeRes getGradeRes =  userMapper.getGrade(userId);
+            // 금손 일시
+            if(getGradeRes.getGradeId() == 4){
+                getGradeRes.setCurrentMonthLast("다음 등급이 없습니다.");
+            }
+            return getGradeRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
     public int getPoint(int userId) throws BaseException {
         try{
             int point = userMapper.getPoint(userId);
@@ -48,8 +66,24 @@ public class UserProvider {
         try{
             List<GetCouponRes> getCouponRes = userMapper.getCoupons(userId);
             return getCouponRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
         }
-        catch (Exception exception) {
+    }
+
+    public List<GetProductRes> getLikeProducts(int userId) throws BaseException{
+        try{
+            return userMapper.getLikeProducts(userId);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetFollowRes> getFollowMakers(int userId) throws BaseException{
+        try{
+            List<GetFollowRes> getFollowRes = userMapper.getFollowMakers(userId);
+            return getFollowRes;
+        } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
@@ -64,12 +98,13 @@ public class UserProvider {
         }
     }
 
-    public List<GetAddressRes> getAddress(int userId) throws BaseException{
+    public List<Address> getAddress(int userId) throws BaseException{
         try{
-            List<GetAddressRes> getAddressRes = userMapper.getAddress(userId);
+            List<Address> getAddressRes = userMapper.getAddress(userId);
             return getAddressRes;
         }
         catch (Exception exception) {
+            System.out.println("exception.getMessage() = " + exception.getMessage());
             throw new BaseException(DATABASE_ERROR);
         }
     }
