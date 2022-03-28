@@ -15,7 +15,7 @@ public class Maker {
     private String makerName;
     private double star;
     private int reviewCount;
-    private int likeCount;
+    private int makerProductLikeCount;
     private int followerCount;
     private int supportCount;
     private String profileDetail;

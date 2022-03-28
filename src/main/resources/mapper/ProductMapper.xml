@@ -190,7 +190,7 @@
                 from LikeList
                          inner join Product P on LikeList.productId = P.productId
                          inner join Maker M on P.makerId = M.makerId
-                where M.makerId = Product.makerId) as likeCount,
+                where M.makerId = Product.makerId) as makerProductLikeCount,
                (select Count(followId)
                 from Follow
                 where makerId = Product.makerId)   as followCount,
