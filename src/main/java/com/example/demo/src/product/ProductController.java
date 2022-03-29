@@ -100,7 +100,7 @@ public class ProductController {
     }
 
     /**
-     * 26. 카테고리 작품 조회 API
+     * 25. 카테고리 작품 조회 API
      * @return BaseException<List<GetProductRes>>
      */
     @GetMapping("/categories")
@@ -110,7 +110,7 @@ public class ProductController {
     }
 
     /**
-     * 27. 검색 작품 조회 API
+     * 26. 검색 작품 조회 API
      * @return BaseException<List<GetProductRes>>
      */
     @GetMapping("/search")
@@ -120,7 +120,7 @@ public class ProductController {
     }
 
     /**
-     * 28. 작품 상세 조회 API
+     * 27. 작품 상세 조회 API
      * @return BaseException<GetDetailTotalRes>>
      */
     @GetMapping("/{productId}")
@@ -140,12 +140,23 @@ public class ProductController {
     }
 
     /**
-     * 29. 작품 옵션 조회 API
+     * 28. 작품 옵션 조회 API
      * @return BaseException
      */
     @GetMapping("/{productId}/option")
     public BaseResponse<List<GetOptionRes>> getProductOptions(@PathVariable("productId") int productId) throws BaseException {
         List<GetOptionRes> getProductOptions = productProvider.getProductOptions(productId);
         return new BaseResponse<>(getProductOptions);
+    }
+
+    /**
+     * 29. 작품 찜 API
+     * @throws BaseException
+     */
+    @PostMapping("/{productId}/like")
+    public BaseResponse<String> likeProduct(@PathVariable("productId") int productId) throws BaseException {
+        int userId = jwtService.getUserId();
+        String likeResult = productService.likeProduct(userId, productId);
+        return new BaseResponse<>(likeResult);
     }
 }
