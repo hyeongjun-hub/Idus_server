@@ -195,7 +195,7 @@
                tipFreeMin,
                amount,
                IFNULL(productInfo, '') productInfo,
-               (select count(likeListId) from LikeList inner join Product P on LikeList.productId = P.productId where P.productId = #{productId}) as likeCount
+               (select count(likeListId) from LikeList inner join Product P on LikeList.productId = P.productId where P.productId = #{productId} and LikeList.status = 'Y') as likeCount
         from Product
                  inner join Maker M on Product.makerId = M.makerId
         where Product.productId = #{productId}
@@ -270,7 +270,7 @@
                 from LikeList
                          inner join Product P on LikeList.productId = P.productId
                          inner join Maker M on P.makerId = M.makerId
-                where M.makerId = Product.makerId) as makerProductLikeCount,
+                where M.makerId = Product.makerId  and LikeList.status = 'Y') as makerProductLikeCount,
                (select Count(followId)
                 from Follow
                 where makerId = Product.makerId)   as followCount,
@@ -286,7 +286,7 @@
     <select id="getOptionInit" parameterType="int" resultType="GetOptionRes">
         select distinct title, productId
         from ProductOption
-        where productId = #{productId}
+        where productId = #{productId} and status = 'Y'
     </select>
 
     <select id="getOptionTitle" parameterType="int" resultType="String">
@@ -300,7 +300,7 @@
                IFNULL(content, '') content,
                addPrice
         from ProductOption
-        where title = #{title} and productId = #{productId}
+        where title = #{title} and productId = #{productId} and ProductOption.status = 'Y'
     </select>
 
     <insert id="addView" parameterType="int">
@@ -309,5 +309,21 @@
 
     <update id="updateUserResent" parameterType="int">
         update User set productId = #{productId} where userId = #{userId}
+    </update>
+
+    <insert id="likeProduct" parameterType="int">
+        insert LikeList (userId, productId) VALUES (#{userId}, #{productId});
+    </insert>
+    
+    <select id="checkLike" parameterType="int" resultType="int">
+        select exists(select likeListId from LikeList where userId = #{userId} and productId = #{productId})
+    </select>
+
+    <select id="getLikeStatus" parameterType="int" resultType="String">
+        select status from LikeList where productId = #{productId} and userId = #{userId}
+    </select>
+
+    <update id="setLikeStatus" parameterType="PostLikeProductReq">
+        Update LikeList set status = #{status} where userId = #{userId} and productId = #{productId}
     </update>
 </mapper>

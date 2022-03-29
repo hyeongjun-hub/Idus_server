@@ -85,6 +85,9 @@ public enum BaseResponseStatus {
     CREATE_FAIL_VIEW(false, 4017, "조회 테이블 추가에 실패하였습니다."),
     UPDATE_FAIL_USER_RESENT(false, 4018, "유저 최근 작품 업데이트에 실패하였습니다."),
 
+    //[POST] /products
+    CREATE_FAIL_LIKE_LIST(false, 4019, "작품 찜 테이블 추가에 실패하였습니다."),
+
     //[POST] /carts
     GET_CART_NO(false, 4020, "유효한 장바구니가 없습니다."),
     CREATE_FAIL_DELIVERY_TIP(false, 4022, "장바구니 배송비 업데이트에 실패하였습니다."),
