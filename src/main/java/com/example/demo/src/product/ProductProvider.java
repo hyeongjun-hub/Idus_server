@@ -46,6 +46,34 @@ public class ProductProvider {
         }
     }
 
+    public List<GetProductRes> getFirstBuy() throws BaseException {
+        try {
+            List<GetProductRes> getFirstBuy = productMapper.getFirstBuy();
+            return getFirstBuy;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetProductRes> getRelate(int userId) throws BaseException {
+        try {
+            List<GetProductRes> getRelate = productMapper.getRelateProducts(userId);
+            return getRelate;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetProductRes> getMaybe(int userId) throws BaseException {
+        try {
+            int productId = productMapper.getProductId(userId);
+            List<GetProductRes> getMaybe = productMapper.getMaybeProducts(productId);
+            return getMaybe;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
     public List<GetProductRes> getTodayMore() throws BaseException {
         try {
             List<GetProductRes> getTodayMore = productMapper.getTodayMore();

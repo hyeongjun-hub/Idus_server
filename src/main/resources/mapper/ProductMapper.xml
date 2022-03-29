@@ -61,6 +61,81 @@
         ORDER BY RAND()
     </select>
 
+    <select id="getFirstBuy" resultType="GetProductRes">
+        select Product.productId,
+               Product.categoryId,
+               productName,
+               makerName,
+               IFNULL(thumbnailImageUrl, "") as thumbnailImageUrl,
+               price,
+               discountRate,
+               tag,
+               (select AVG(star) from Review where Product.productId = Review.productId) as star,
+               (select COUNT(star) from Review where Product.productId = Review.productId) as reviewCount,
+               IFNULL((select content from Review R where R.productId=Product.productId limit 1), '') as review,
+               vip
+        from Product
+                 inner join Maker M on Product.makerId = M.makerId
+        where Product.status = 'F'
+    </select>
+
+    <select id="getRelateProducts" parameterType="int" resultType="GetProductRes">
+        select Product.productId,
+               Product.categoryId,
+               productName,
+               makerName,
+               IFNULL(thumbnailImageUrl, '')                                                            as thumbnailImageUrl,
+               price,
+               discountRate,
+               tag,
+               (select AVG(star) from Review where Product.productId = Review.productId)                as star,
+               (select COUNT(star) from Review where Product.productId = Review.productId)              as reviewCount,
+               IFNULL((select content from Review R where R.productId = Product.productId limit 1), '') as review,
+               vip
+        from Product
+                 inner join Maker M on Product.makerId = M.makerId
+                 inner join (select categoryId as userCategoryId
+                             from Product
+                                      inner join User U on Product.productId = U.productId
+                             where U.userId = #{userId}) as userCategory
+        where Product.status = 'Y'
+        ORDER BY Product.categoryId = userCategory.userCategoryId desc
+    </select>
+
+    <select id="getProductId" parameterType="int" resultType="int">
+        select productId from User where userId = #{userId}
+    </select>
+
+    <select id="getMaybeProducts" parameterType="int" resultType="GetProductRes">
+        select *
+        from (select distinct Product.productId,
+                              Product.categoryId,
+                              productName,
+                              P.productKeyword,
+                              makerName,
+                              IFNULL(thumbnailImageUrl, '')                                                            as thumbnailImageUrl,
+                              price,
+                              discountRate,
+                              tag,
+                              (select AVG(star) from Review where Product.productId = Review.productId)                as star,
+                              (select COUNT(star)
+                               from Review
+                               where Product.productId = Review.productId)                                             as reviewCount,
+                              IFNULL((select content from Review R where R.productId = Product.productId limit 1),
+                             '')                                                                               as review,
+                              vip
+              from Product
+                       inner join Maker M on Product.makerId = M.makerId
+                       inner join ProductKeyword P on Product.productId = P.productId
+                       inner join (select PK.productKeyword
+                                   from Product
+                                            inner join ProductKeyword PK on Product.productId = PK.productId
+                                   where Product.productId = #{productId}) as userMaybe
+              where Product.status = 'Y'
+              ORDER BY P.productKeyword = userMaybe.productKeyword desc) as collection
+        group by collection.productId
+    </select>
+
     <select id="getCategoryProducts" parameterType="int" resultType="GetProductRes">
         select Product.productId,
                Product.categoryId,
