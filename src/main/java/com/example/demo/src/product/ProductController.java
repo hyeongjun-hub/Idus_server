@@ -24,7 +24,7 @@ public class ProductController {
     private final JwtService jwtService;
 
     /**
-     * 19. 투데이 탭 조회 API
+     * 18. 투데이 탭 조회 API
      * @return BaseException<List<GetTodayRes>>
      */
     @GetMapping("/today")
@@ -34,7 +34,7 @@ public class ProductController {
     }
 
     /**
-     * 20. 실시간 탭 조회 API
+     * 19. 실시간 탭 조회 API
      * @return BaseException<List<GetLiveRes>>
      */
     @GetMapping("/live")
@@ -44,7 +44,7 @@ public class ProductController {
     }
 
     /**
-     * 21. NEW 탭 조회 API
+     * 20. NEW 탭 조회 API
      * @return BaseException<List<GetLiveRes>>
      */
     @GetMapping("/new")
@@ -54,7 +54,43 @@ public class ProductController {
     }
 
     /**
-     * 25. 오늘의 작품 더보기 조회 API
+     * 21. 첫 구매 작품 조회 API
+     * @return BaseException<List<GetProductRes>>
+     */
+    @GetMapping("/first-buy")
+    public BaseResponse<List<GetProductRes>> getFirstBuy() throws BaseException {
+        List<GetProductRes> getFirstBuy = productProvider.getFirstBuy();
+        return new BaseResponse<>(getFirstBuy);
+    }
+
+    /**
+     * 22. 내가 본 작품의 연관 작품 조회 API
+     * @return BaseException<List<GetProductRes>>
+     */
+    @GetMapping("/relate")
+    public BaseResponse<List<GetProductRes>> getRelate() throws BaseException {
+        int userId = jwtService.getUserId();
+        List<GetProductRes> getFirstBuy = productProvider.getRelate(userId);
+        return new BaseResponse<>(getFirstBuy);
+    }
+
+    /**
+     * 23. 유저가 좋아할만한 작품 조회 API
+     * @return BaseException<List<GetProductRes>>
+     */
+    @GetMapping("/maybe")
+    public BaseResponse<List<GetProductRes>> getMaybe() throws BaseException {
+        if(jwtService.getJwt() == null){
+            List<GetProductRes> getTodayMore = productProvider.getTodayMore();
+            return new BaseResponse<>(getTodayMore);
+        }
+        int userId = jwtService.getUserId();
+        List<GetProductRes> getFirstBuy = productProvider.getMaybe(userId);
+        return new BaseResponse<>(getFirstBuy);
+    }
+
+    /**
+     * 24. 오늘의 작품 더보기 조회 API
      * @return BaseException<List<GetProductRes>>
      */
     @GetMapping("/today/more")

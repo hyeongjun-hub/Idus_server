@@ -20,7 +20,7 @@ public class CategoryController {
     private final CategoryProvider categoryProvider;
 
     /**
-     * 18. 카테고리 조회 API
+     * 17. 카테고리 조회 API
      *
      * @return BaseResponse<List<GetCategoryRes>>
      */

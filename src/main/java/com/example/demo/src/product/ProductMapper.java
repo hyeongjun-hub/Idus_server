@@ -21,6 +21,14 @@ public interface ProductMapper {
 
     List<GetNewRes> getNewProducts();
 
+    List<GetProductRes> getFirstBuy();
+
+    List<GetProductRes> getRelateProducts(int userId);
+
+    int getProductId(int userId);
+
+    List<GetProductRes> getMaybeProducts(int productId);
+
     List<GetProductRes> getTodayMore();
 
     List<GetProductRes> getCategoryProducts(int categoryId);
