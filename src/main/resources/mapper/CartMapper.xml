@@ -73,16 +73,22 @@
         select Cart.status from Cart where cartId = #{cartId}
     </select>
 
-    <select id="getSmallCartStatus" parameterType="PatchCartReq" resultType="String">
+    <select id="getSmallCartStatus" parameterType="int" resultType="String">
         select SmallCart.status from SmallCart where smallCartId = #{smallCartId}
     </select>
 
     <update id="editCount" parameterType="PatchCartReq">
-        update SmallCart set count = #{count} where smallCartId = #{smallCartId}
+        update SmallCart set count = #{count}, price = #{price} where smallCartId = #{smallCartId}
     </update>
 
-    <select id="getPriceByCount" parameterType="PatchCartReq" resultType="int">
-        select P.price * SmallCart.count as price
+    <select id="getOnePrice" parameterType="int" resultType="int">
+        select ROUND(price / SmallCart.count, -1) as price
+        from SmallCart
+        where smallCartId = #{smallCartId}
+    </select>
+
+    <select id="getPriceByCount" parameterType="int" resultType="int">
+        select #{onePrice} * SmallCart.count as price
         from SmallCart
                  inner join Product P on SmallCart.productId = P.productId
         where smallCartId = #{smallCartId}
@@ -104,8 +110,28 @@
         where SmallCart.smallCartId = #{smallCartId}
     </select>
 
+    <select id="getPrice" parameterType="int" resultType="int">
+        select price from SmallCart where smallCartId = #{smallCartId}
+    </select>
+
+
+    <select id="getDeliveryTip" parameterType="int" resultType="int">
+        select deliveryTip from SmallCart where smallCartId = #{smallCartId}
+    </select>
+
     <update id="delCart" parameterType="int">
         Update SmallCart set status = 'D' where SmallCartId = #{smallCartId}
     </update>
 
+    <update id="updateCartDeliveryTip" parameterType="int">
+        Update Cart set deliveryTipAll = deliveryTipAll + #{deliveryTip} where cartId = #{cartId}
+    </update>
+
+    <select id="checkSmallCart" parameterType="int" resultType="int">
+        select exists(select smallCartId from SmallCart where cartId = #{cartId} and SmallCart.status = 'Y')
+    </select>
+
+    <update id="cleanCart" parameterType="int">
+        Update Cart set priceAll=0 , deliveryTipAll=0 where cartId = #{cartId}
+    </update>
 </mapper>

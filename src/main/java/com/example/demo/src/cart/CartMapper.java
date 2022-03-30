@@ -37,11 +37,13 @@ public interface CartMapper {
     int getUserId(PatchCartReq patchCartReq);
 
     String getCartStatus(PatchCartReq patchCartReq);
-    String getSmallCartStatus(PatchCartReq patchCartReq);
+    String getSmallCartStatus(int smallCartId);
 
     int editCount(PatchCartReq patchCartReq);
 
-    int getPriceByCount(PatchCartReq patchCartReq);
+    int getOnePrice(int smallCartId);
+
+    int getPriceByCount(@Param("smallCartId") int smallCartId,@Param("onePrice") int onePrice);
 
     int updateCartPriceByCount(@Param("cartId") int cartId, @Param("originalPrice") int originalPrice,  @Param("price") int price);
 
@@ -49,7 +51,15 @@ public interface CartMapper {
 
     int getUserIdBySmallCartId(int smallCartId);
 
-    int delCart(int smallCartId);
+    int getPrice(int smallCartId);
 
+    int getDeliveryTip(int smallCartId);
 
+    int delCart(@Param("smallCartId") int smallCartId);
+
+    int updateCartDeliveryTip(@Param("cartId") int cartId, @Param("deliveryTip") int deliveryTip);
+
+    int checkSmallCart(int cartId);
+
+    int cleanCart(int cartId);
 }
