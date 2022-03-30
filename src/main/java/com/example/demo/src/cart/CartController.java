@@ -2,6 +2,7 @@ package com.example.demo.src.cart;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
+import com.example.demo.src.cart.model.request.PatchCartReq;
 import com.example.demo.src.cart.model.request.PostCartReq;
 import com.example.demo.src.cart.model.request.PostOrderDetailReq;
 import com.example.demo.src.cart.model.request.PostSmallCartReq;
@@ -62,7 +63,19 @@ public class CartController {
     }
 
     /**
-     * 장바구니 삭제 API
+     * 34. 장바구니 조회 API
+     *
+     * @return BaseResponse<List<GetCartRes>>
+     */
+    @PatchMapping("edit")
+    public BaseResponse<PostCartRes> editCart(@RequestBody PatchCartReq patchCartReq) throws BaseException {
+        int userId = jwtService.getUserId();
+        PostCartRes editCartRes = cartService.editCart(userId, patchCartReq);
+        return new BaseResponse<>(editCartRes);
+    }
+
+    /**
+     * 장바구니 작품 삭제 API
      *
      * @param userCartId
      * @return BaseResponse<String>
