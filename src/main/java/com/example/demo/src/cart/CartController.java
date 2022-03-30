@@ -60,7 +60,7 @@ public class CartController {
     }
 
     /**
-     * 34. 장바구니 조회 API
+     * 35. 장바구니 작품 수정 API
      *
      * @return BaseResponse<List<PostCartRes>>
      */
@@ -72,7 +72,7 @@ public class CartController {
     }
 
     /**
-     * 장바구니 작품 삭제 API
+     * 36. 장바구니 작품 삭제 API
      *
      * @return BaseResponse<String>
      */

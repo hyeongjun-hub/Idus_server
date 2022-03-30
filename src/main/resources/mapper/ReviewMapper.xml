@@ -2,13 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.src.review.ReviewMapper">
     <select id="getMyReviews" parameterType="int" resultType="GetReviewRes">
-        select Review.reviewId, thumbnailImageUrl, P.productName, profileImageUrl, userName, DATE_FORMAT(Review.updatedAt, '%Y년 %c월 %d일') as updatedAt, star, imageUrl, content
+        select Review.reviewId,
+               thumbnailImageUrl,
+               P.productName,
+               profileImageUrl,
+               userName,
+               DATE_FORMAT(Review.updatedAt, '%Y년 %c월 %d일') as updatedAt,
+               star,
+               imageUrl,
+               content
         from Review
                  inner join SmallCart SC on Review.smallCartId = SC.smallCartId
                  inner join Cart C on SC.cartId = C.cartId
                  inner join User U on C.userId = U.userId
                  inner join Product P on Review.productId = P.productId
-        where C.userId = #{userId} and SC.status = 'R'
+        where C.userId = #{userId}
+          and SC.status = 'R'
+          and Review.status = 'Y'
     </select>
 
     <select id="getId" parameterType="int" resultType="int">
@@ -39,21 +49,40 @@
     </select>
 
     <insert id="createReview" parameterType="PostReviewReq">
-        INSERT INTO Review (productId, orderListId, smallCartId, star, imageUrl, content) VALUES (#{productId}, #{orderListId}, #{smallCartId}, #{star}, #{imageUrl}, #{content})
+        INSERT INTO Review (productId, orderListId, smallCartId, star, imageUrl, content) VALUES (#{productId},
+        #{orderListId}, #{smallCartId}, #{star}, #{imageUrl}, #{content})
         <selectKey keyProperty="reviewId" resultType="int" order="AFTER">
             select LAST_INSERT_ID()
         </selectKey>
     </insert>
 
     <update id="updateSmallCartStatus" parameterType="int">
-        Update SmallCart set status = 'R' where smallCartId = #{smallCartId}
+        Update SmallCart
+        set status = 'R'
+        where smallCartId = #{smallCartId}
+    </update>
+
+    <select id="getUserId" parameterType="int" resultType="int">
+        select U.userId
+        from Review
+                 inner join SmallCart SC on Review.smallCartId = SC.smallCartId
+                 inner join Cart C on SC.cartId = C.cartId
+                 inner join User U on C.userId = U.userId
+        where reviewId = #{reviewId}
+    </select>
+
+    <update id="editReview" parameterType="PatchReviewReq">
+        Update Review
+        set content  = #{content},
+            imageUrl = #{imageUrl},
+            star     = #{star}
+        where reviewId = #{reviewId}
     </update>
 
     <update id="delReview" parameterType="int">
-        Update Review set status = 'D' where reviewId = #{reviewId}
+        Update Review
+        set status = 'D'
+        where reviewId = #{reviewId}
     </update>
 
-    <update id="editReview" parameterType="Object">
-        UPDATE Review t SET t.content = #{param2.content}, t.imageUrl = #{param2.imageUrl}, t.star = #{param2.star} WHERE t.reviewId = #{param1}
-    </update>
 </mapper>
