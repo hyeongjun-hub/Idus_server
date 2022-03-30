@@ -65,6 +65,37 @@
         where cartId = #{cartId} and SmallCart.status = 'Y'
     </select>
 
+    <select id="getUserId" parameterType="PatchCartReq" resultType="int">
+        select userId from Cart where cartId = #{cartId}
+    </select>
+
+    <select id="getCartStatus" parameterType="PatchCartReq" resultType="String">
+        select Cart.status from Cart where cartId = #{cartId}
+    </select>
+
+    <select id="getSmallCartStatus" parameterType="PatchCartReq" resultType="String">
+        select SmallCart.status from SmallCart where smallCartId = #{smallCartId}
+    </select>
+
+    <update id="editCount" parameterType="PatchCartReq">
+        update SmallCart set count = #{count} where smallCartId = #{smallCartId}
+    </update>
+
+    <select id="getPriceByCount" parameterType="PatchCartReq" resultType="int">
+        select P.price * SmallCart.count as price
+        from SmallCart
+                 inner join Product P on SmallCart.productId = P.productId
+        where smallCartId = #{smallCartId}
+    </select>
+
+    <update id="updateCartPriceByCount" parameterType="int">
+        update Cart set priceAll = priceAll - #{originalPrice} + #{price} where cartId = #{cartId}
+    </update>
+
+    <update id="editRequest" parameterType="PatchCartReq">
+        update SmallCart set request = #{request} where smallCartId = #{smallCartId}
+    </update>
+
     <update id="delCart" parameterType="int">
         Update Cart set status = 'D' where CartId = #{CartId}
     </update>
