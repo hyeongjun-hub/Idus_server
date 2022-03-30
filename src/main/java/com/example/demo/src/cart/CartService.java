@@ -11,6 +11,8 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static com.example.demo.config.BaseResponseStatus.*;
 
 @Service
@@ -115,11 +117,16 @@ public class CartService {
         }
     }
 
-    public void delCart(int userCartId) throws BaseException {
-        try {
-            cartMapper.delCart(userCartId);
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
+    public void delCart(int userId, PostSmallCartDelReq postSmallCartDelReq) throws BaseException {
+        List<Integer> smallCartList = postSmallCartDelReq.getSmallCartId();
+        for (int smallCartId : smallCartList) {
+            if(userId != cartMapper.getUserIdBySmallCartId(smallCartId)){
+                throw new BaseException(INVALID_USER_JWT);
+            }
+            int result = cartMapper.delCart(smallCartId);
+            if (result == 0) {
+                throw new BaseException(UPDATE_FAIL_SMALL_CART_STATUS);
+            }
         }
     }
 }

@@ -96,8 +96,16 @@
         update SmallCart set request = #{request} where smallCartId = #{smallCartId}
     </update>
 
+    <select id="getUserIdBySmallCartId" parameterType="int" resultType="int">
+        select U.userId
+        from SmallCart
+                 inner join Cart C on SmallCart.cartId = C.cartId
+                 inner join User U on C.userId = U.userId
+        where SmallCart.smallCartId = #{smallCartId}
+    </select>
+
     <update id="delCart" parameterType="int">
-        Update Cart set status = 'D' where CartId = #{CartId}
+        Update SmallCart set status = 'D' where SmallCartId = #{smallCartId}
     </update>
 
 </mapper>

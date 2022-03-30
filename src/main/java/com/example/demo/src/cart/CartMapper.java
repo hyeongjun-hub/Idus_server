@@ -47,6 +47,9 @@ public interface CartMapper {
 
     int editRequest(PatchCartReq patchCartReq);
 
-    void delCart(int userCartId);
+    int getUserIdBySmallCartId(int smallCartId);
+
+    int delCart(int smallCartId);
+
 
 }
