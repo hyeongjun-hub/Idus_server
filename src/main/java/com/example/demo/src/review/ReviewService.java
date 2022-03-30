@@ -47,6 +47,9 @@ public class ReviewService {
         if (userId != reviewMapper.getUserId(patchReviewReq.getReviewId())) {
             throw new BaseException(INVALID_USER_JWT);
         }
+        if (!reviewMapper.getReviewStatus(patchReviewReq.getReviewId()).equals("Y")){
+            throw new BaseException(INVALID_REVIEW_STATUS);
+        }
         int result = reviewMapper.editReview(patchReviewReq);
         if (result == 0) {
             throw new BaseException(UPDATE_FAIL_REVIEW);

@@ -18,4 +18,5 @@ public class PatchCartReq {
     private int smallCartId;
     private int count;
     private String request;
+    private int price;
 }
