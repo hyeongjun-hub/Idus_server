@@ -1,11 +1,13 @@
 package com.example.demo.src.cart;
 
+import com.example.demo.src.cart.model.request.PatchCartReq;
 import com.example.demo.src.cart.model.request.PostCreateCartReq;
 import com.example.demo.src.cart.model.request.PostSmallCartReq;
 import com.example.demo.src.cart.model.response.GetCartRes;
 import com.example.demo.src.cart.model.response.GetSmallCartRes;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -32,6 +34,22 @@ public interface CartMapper {
 
     List<GetSmallCartRes> getSmallCart(int cartId);
 
-    void delCart(int userCartId);
+    int getUserId(PatchCartReq patchCartReq);
+
+    String getCartStatus(PatchCartReq patchCartReq);
+    String getSmallCartStatus(PatchCartReq patchCartReq);
+
+    int editCount(PatchCartReq patchCartReq);
+
+    int getPriceByCount(PatchCartReq patchCartReq);
+
+    int updateCartPriceByCount(@Param("cartId") int cartId, @Param("originalPrice") int originalPrice,  @Param("price") int price);
+
+    int editRequest(PatchCartReq patchCartReq);
+
+    int getUserIdBySmallCartId(int smallCartId);
+
+    int delCart(int smallCartId);
+
 
 }

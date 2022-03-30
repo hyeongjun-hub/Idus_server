@@ -2,9 +2,7 @@ package com.example.demo.src.cart;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.cart.model.request.PostCartReq;
-import com.example.demo.src.cart.model.request.PostOrderDetailReq;
-import com.example.demo.src.cart.model.request.PostSmallCartReq;
+import com.example.demo.src.cart.model.request.*;
 import com.example.demo.src.cart.model.response.GetCartRes;
 import com.example.demo.src.cart.model.response.PostCartRes;
 import com.example.demo.utils.JwtService;
@@ -62,15 +60,27 @@ public class CartController {
     }
 
     /**
-     * 장바구니 삭제 API
+     * 34. 장바구니 조회 API
      *
-     * @param userCartId
+     * @return BaseResponse<List<PostCartRes>>
+     */
+    @PatchMapping("/edit")
+    public BaseResponse<PostCartRes> editCart(@RequestBody PatchCartReq patchCartReq) throws BaseException {
+        int userId = jwtService.getUserId();
+        PostCartRes editCartRes = cartService.editCart(userId, patchCartReq);
+        return new BaseResponse<>(editCartRes);
+    }
+
+    /**
+     * 장바구니 작품 삭제 API
+     *
      * @return BaseResponse<String>
      */
-    @PatchMapping("{userCartId}/delete")
-    public BaseResponse<String> delCart(@PathVariable int userCartId) throws BaseException {
-        cartService.delCart(userCartId);
-        String result = "";
+    @PatchMapping("/delete")
+    public BaseResponse<String> delCart(@RequestBody PostSmallCartDelReq postSmallCartDelReq) throws BaseException {
+        int userId = jwtService.getUserId();
+        cartService.delCart(userId, postSmallCartDelReq);
+        String result = "선택한 장바구니가 삭제되었습니다.";
         return new BaseResponse<>(result);
     }
 
