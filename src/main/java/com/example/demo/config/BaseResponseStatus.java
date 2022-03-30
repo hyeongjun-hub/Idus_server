@@ -39,6 +39,7 @@ public enum BaseResponseStatus {
 
     // [POST] /reviews
     POST_REVIEWS_EMPTY_CONTENT(false, 2030, "리뷰 내용을 입력해주세요."),
+    INVALID_REVIEW_STATUS(false, 2031, "유효하지 않은 구매후기입니다. 구매후기 수정은 한 번만 가능합니다."),
 
     // address
     POST_ADDRESS_STATUS_NOT_Y(false, 2040, "삭제된 주소입니다."),
