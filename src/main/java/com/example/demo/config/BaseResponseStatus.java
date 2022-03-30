@@ -96,7 +96,7 @@ public enum BaseResponseStatus {
 
     //[PATCH] /carts
     EDIT_FAIL_CART_COUNT(false, 4025, "장바구니 수량 변경에 실패하였습니다."),
-    EDIT_FAIL_CART_PRICE(false, 4026, "장바구니 수량 변경에 실패하였습니다."),
+    EDIT_FAIL_CART_PRICE(false, 4026, "장바구니 가격 변경에 실패하였습니다."),
     EDIT_FAIL_CART_REQUEST(false, 4027, "장바구니 요청사항 변경에 실패하였습니다."),
 
     //[POST] /orders
