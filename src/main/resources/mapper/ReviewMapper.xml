@@ -71,11 +71,16 @@
         where reviewId = #{reviewId}
     </select>
 
+    <select id="getReviewStatus" parameterType="int" resultType="String">
+        select status from Review where reviewId = #{reviewId}
+    </select>
+
     <update id="editReview" parameterType="PatchReviewReq">
         Update Review
         set content  = #{content},
             imageUrl = #{imageUrl},
-            star     = #{star}
+            star     = #{star},
+            status = 'E'
         where reviewId = #{reviewId}
     </update>
 

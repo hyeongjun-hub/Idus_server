@@ -27,6 +27,8 @@ public interface ReviewMapper {
 
     int getUserId(int userId);
 
+    String getReviewStatus(int reviewId);
+
     int editReview(PatchReviewReq patchReviewReq);
 
     int delReview(int reviewId);

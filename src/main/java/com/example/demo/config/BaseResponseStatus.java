@@ -39,6 +39,7 @@ public enum BaseResponseStatus {
 
     // [POST] /reviews
     POST_REVIEWS_EMPTY_CONTENT(false, 2030, "리뷰 내용을 입력해주세요."),
+    INVALID_REVIEW_STATUS(false, 2031, "유효하지 않은 구매후기입니다. 구매후기 수정은 한 번만 가능합니다."),
 
     // address
     POST_ADDRESS_STATUS_NOT_Y(false, 2040, "삭제된 주소입니다."),
@@ -93,6 +94,8 @@ public enum BaseResponseStatus {
     CREATE_FAIL_DELIVERY_TIP(false, 4022, "장바구니 배송비 업데이트에 실패하였습니다."),
     CREATE_FAIL_CART(false, 4020, "장바구니 생성에 실패하였습니다."),
     UPDATE_FAIL_PRICE(false, 4021, "장바구니 가격 업데이트에 실패하였습니다."),
+    UPDATE_FAIL_CART_CLEAN(false, 4022, "장바구니 삭제에 실패하였습니다."),
+    UPDATE_FAIL_CART_DELIVERY_TIP(false, 4023, "장바구니 배송비 업데이트에 실패하였습니다."),
 
     //[PATCH] /carts
     EDIT_FAIL_CART_COUNT(false, 4025, "장바구니 수량 변경에 실패하였습니다."),

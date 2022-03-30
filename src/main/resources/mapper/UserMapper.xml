@@ -177,7 +177,7 @@
                  inner join Maker M on Product.makerId = M.makerId
                  inner join LikeList LL on Product.productId = LL.productId
                  inner join User U on LL.userId = U.userId
-        where Product.status = 'Y' and LL.userId = #{userId}
+        where Product.status = 'Y' and LL.userId = #{userId} and LL.status = 'Y'
     </select>
 
     <select id="getFollowMakers" parameterType="int" resultType="GetFollowRes">

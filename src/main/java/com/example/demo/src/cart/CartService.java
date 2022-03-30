@@ -2,6 +2,7 @@ package com.example.demo.src.cart;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.src.cart.model.request.*;
+import com.example.demo.src.cart.model.response.GetSmallCartRes;
 import com.example.demo.src.cart.model.response.PostCartRes;
 import com.example.demo.src.user.model.response.PostUserDelRes;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.List;
 
@@ -76,10 +78,10 @@ public class CartService {
         }
         // status 값 확인
         if (!cartMapper.getCartStatus(patchCartReq).equals("Y")) {
-            throw new BaseException(POST_SMALL_CART_STATUS_NOT_Y);
-        }
-        if (!cartMapper.getSmallCartStatus(patchCartReq).equals("Y")) {
             throw new BaseException(POST_CART_STATUS_NOT_Y);
+        }
+        if (!cartMapper.getSmallCartStatus(patchCartReq.getSmallCartId()).equals("Y")) {
+            throw new BaseException(POST_SMALL_CART_STATUS_NOT_Y);
         }
         // 수량 변경일 때
         if (patchCartReq.getCartId() > 0) {
@@ -96,15 +98,23 @@ public class CartService {
         }
     }
 
+    // 하나의 가격을 구하고 이전 count와 곱한 값을 original price
+    // 하나의 가격과 지금 count를 곱한 값을 price
+    // smallCart -> price로 대체
     @Transactional(rollbackFor = {BaseException.class})
     public void editCount(PatchCartReq patchCartReq) throws BaseException {
-        int originalPrice = cartMapper.getPriceByCount(patchCartReq);
+        int smallCartId = patchCartReq.getSmallCartId();
+        int onePrice = cartMapper.getOnePrice(smallCartId);
+        int originalPrice = cartMapper.getPrice(smallCartId);
+        int changePrice = onePrice * patchCartReq.getCount();
+        // count와 price 업데이트
+        patchCartReq.setPrice(changePrice);
         int result = cartMapper.editCount(patchCartReq);
         if(result == 0){
             throw new BaseException(EDIT_FAIL_CART_COUNT);
         }
         // cart의 priceAll 업데이트
-        int price = cartMapper.getPriceByCount(patchCartReq);
+        int price = cartMapper.getPriceByCount(smallCartId, onePrice);
         result = cartMapper.updateCartPriceByCount(patchCartReq.getCartId(), originalPrice, price);
         if(result == 0){
             throw new BaseException(EDIT_FAIL_CART_PRICE);
@@ -119,16 +129,36 @@ public class CartService {
         }
     }
 
-    @Transactional(rollbackFor = {BaseException.class})
+    @Transactional(rollbackFor = {BaseException.class, MethodArgumentNotValidException.class})
     public void delCart(int userId, PostSmallCartDelReq postSmallCartDelReq) throws BaseException {
+        int cartId = cartMapper.getCartId(userId);
         List<Integer> smallCartList = postSmallCartDelReq.getSmallCartId();
         for (int smallCartId : smallCartList) {
             if(userId != cartMapper.getUserIdBySmallCartId(smallCartId)){
                 throw new BaseException(INVALID_USER_JWT);
             }
+            if(!cartMapper.getSmallCartStatus(smallCartId).equals("Y")){
+                throw new BaseException(POST_SMALL_CART_STATUS_NOT_Y);
+            }
+            int price = -cartMapper.getPrice(smallCartId);
+            int deliveryTip = -cartMapper.getDeliveryTip(smallCartId);
             int result = cartMapper.delCart(smallCartId);
             if (result == 0) {
                 throw new BaseException(UPDATE_FAIL_SMALL_CART_STATUS);
+            }
+            result = cartMapper.updateCartPrice(cartId, price);
+            if (result == 0) {
+                throw new BaseException(UPDATE_FAIL_PRICE);
+            }
+            result = cartMapper.updateCartDeliveryTip(cartId, deliveryTip);
+            if (result == 0) {
+                throw new BaseException(UPDATE_FAIL_CART_DELIVERY_TIP);
+            }
+        }
+        if(cartMapper.checkSmallCart(cartId) == 0){
+            int result = cartMapper.cleanCart(cartId);
+            if (result == 0) {
+                throw new BaseException(UPDATE_FAIL_CART_CLEAN);
             }
         }
     }
