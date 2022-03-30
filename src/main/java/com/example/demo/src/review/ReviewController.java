@@ -46,27 +46,26 @@ public class ReviewController {
     }
 
     /**
-     * 리뷰 삭제 API
+     * 43. 구매후기 수정 API
      *
-     * @param reviewId
+     * @return BaseResponse<String>
+     */
+    @PatchMapping("/edit")
+    public BaseResponse<String> editReview(@RequestBody PatchReviewReq patchReviewReq) throws BaseException {
+        int userId = jwtService.getUserId();
+        reviewService.editReview(userId, patchReviewReq);
+        return new BaseResponse<>("구매후기 수정이 완료되었습니다.");
+    }
+
+    /**
+     * 44. 구매후기 삭제 API
+     *
      * @return BaseResponse<String>
      */
     @PatchMapping("/{reviewId}/delete")
     public BaseResponse<String> delReview(@PathVariable("reviewId") int reviewId) throws BaseException {
-        reviewService.delReview(reviewId);
-        return new BaseResponse<>("");
-    }
-
-    /**
-     * 리뷰 수정 API
-     *
-     * @param reviewId
-     * @param patchReviewReq
-     * @return BaseResponse<String>
-     */
-    @PatchMapping("/{reviewId}")
-    public BaseResponse<String> editReview(@PathVariable("reviewId") int reviewId, @RequestBody PatchReviewReq patchReviewReq) throws BaseException {
-        reviewService.editReview(reviewId, patchReviewReq);
-        return new BaseResponse<>("");
+        int userId = jwtService.getUserId();
+        reviewService.delReview(userId, reviewId);
+        return new BaseResponse<>("구매후기가 삭제되었습니다.");
     }
 }
