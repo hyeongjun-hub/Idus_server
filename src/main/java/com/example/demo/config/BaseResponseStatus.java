@@ -109,7 +109,11 @@ public enum BaseResponseStatus {
 
     //[POST] /reviews
     CREATE_FAIL_REVIEW(false, 4040, "구매후기 생성에 실패하였습니다."),
-    INVALID_SMALL_CART(false, 4041, "구매한 유저만 후기 작성가능합니다.");
+    INVALID_SMALL_CART(false, 4041, "구매한 유저만 후기 작성가능합니다."),
+
+    //[PATCH] /reviews
+    UPDATE_FAIL_REVIEW(false, 4050, "구매후기 수정에 실패하였습니다."),
+    DELETE_FAIL_REVIEW(false, 4051, "구매후기 삭제에 실패하였습니다.");
 
     private final boolean isSuccess;
     private final int code;

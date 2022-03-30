@@ -1,7 +1,5 @@
 package com.example.demo.src.product.model.response;
 
-import com.example.demo.src.product.model.entity.ProductKeyword;
-import com.example.demo.src.product.model.entity.Review;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

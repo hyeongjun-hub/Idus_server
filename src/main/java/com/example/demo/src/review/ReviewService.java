@@ -35,28 +35,32 @@ public class ReviewService {
             throw new BaseException(CREATE_FAIL_REVIEW);
         }
         result = reviewMapper.updateSmallCartStatus(postReviewReq.getSmallCartId());
-        if (result == 0){
+        if (result == 0) {
             throw new BaseException(UPDATE_FAIL_CART_STATUS);
         }
         int reviewId = postReviewReq.getReviewId();
         return new PostReviewRes(reviewId, postReviewReq.getContent());
     }
 
-
     @Transactional(rollbackFor = {BaseException.class})
-    public void delReview(int reviewId) throws BaseException {
-        try{
-            reviewMapper.delReview(reviewId);
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
+    public void editReview(int userId, PatchReviewReq patchReviewReq) throws BaseException {
+        if (userId != reviewMapper.getUserId(patchReviewReq.getReviewId())) {
+            throw new BaseException(INVALID_USER_JWT);
+        }
+        int result = reviewMapper.editReview(patchReviewReq);
+        if (result == 0) {
+            throw new BaseException(UPDATE_FAIL_REVIEW);
         }
     }
 
-    public void editReview(int reviewId, PatchReviewReq patchReviewReq) throws BaseException {
-        try{
-            reviewMapper.editReview(reviewId, patchReviewReq);
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
+    @Transactional(rollbackFor = {BaseException.class})
+    public void delReview(int userId, int reviewId) throws BaseException {
+        if (userId != reviewMapper.getUserId(reviewId)) {
+            throw new BaseException(INVALID_USER_JWT);
+        }
+        int result = reviewMapper.delReview(reviewId);
+        if (result == 0) {
+            throw new BaseException(DELETE_FAIL_REVIEW);
         }
     }
 

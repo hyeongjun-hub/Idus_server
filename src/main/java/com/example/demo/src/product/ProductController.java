@@ -5,13 +5,11 @@ import com.example.demo.config.BaseResponse;
 import com.example.demo.src.product.model.entity.Comment;
 import com.example.demo.src.product.model.entity.Maker;
 import com.example.demo.src.product.model.entity.ProductKeyword;
-import com.example.demo.src.product.model.entity.Review;
+import com.example.demo.src.review.model.entity.Review;
 import com.example.demo.src.product.model.response.*;
 import com.example.demo.utils.JwtService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.List;
 

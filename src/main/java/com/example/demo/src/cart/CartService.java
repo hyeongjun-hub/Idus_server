@@ -96,6 +96,7 @@ public class CartService {
         }
     }
 
+    @Transactional(rollbackFor = {BaseException.class})
     public void editCount(PatchCartReq patchCartReq) throws BaseException {
         int originalPrice = cartMapper.getPriceByCount(patchCartReq);
         int result = cartMapper.editCount(patchCartReq);
@@ -110,6 +111,7 @@ public class CartService {
         }
     }
 
+    @Transactional(rollbackFor = {BaseException.class})
     public void editRequest(PatchCartReq patchCartReq) throws BaseException {
         int result = cartMapper.editRequest(patchCartReq);
         if(result == 0){
@@ -117,6 +119,7 @@ public class CartService {
         }
     }
 
+    @Transactional(rollbackFor = {BaseException.class})
     public void delCart(int userId, PostSmallCartDelReq postSmallCartDelReq) throws BaseException {
         List<Integer> smallCartList = postSmallCartDelReq.getSmallCartId();
         for (int smallCartId : smallCartList) {

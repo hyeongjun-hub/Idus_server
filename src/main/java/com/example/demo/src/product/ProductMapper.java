@@ -3,7 +3,7 @@ package com.example.demo.src.product;
 import com.example.demo.src.product.model.entity.Comment;
 import com.example.demo.src.product.model.entity.Maker;
 import com.example.demo.src.product.model.entity.ProductKeyword;
-import com.example.demo.src.product.model.entity.Review;
+import com.example.demo.src.review.model.entity.Review;
 import com.example.demo.src.product.model.request.GetOptionReq;
 import com.example.demo.src.product.model.request.PostLikeProductReq;
 import com.example.demo.src.product.model.response.*;
