@@ -3,6 +3,7 @@ package com.example.demo.src.product;
 import com.example.demo.config.BaseException;
 import com.example.demo.src.product.model.request.PostLikeProductReq;
 import com.example.demo.src.product.model.response.GetTodayRes;
+import com.example.demo.src.user.UserMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import static com.example.demo.config.BaseResponseStatus.*;
 @AllArgsConstructor
 public class ProductService {
     private final ProductMapper productMapper;
+    private final UserMapper userMapper;
 
     public void addView(int userId, int productId) throws BaseException {
         int result = productMapper.addView(userId, productId);
@@ -48,6 +50,20 @@ public class ProductService {
             likeResult = "작품을 찜했습니다.";
         }
         return likeResult;
+    }
+
+    public String takeCoupon(int userId, int productCouponId) throws BaseException {
+        //userCoupon에서 중복 검사
+        if(productMapper.checkCoupon(userId, productCouponId) == 1){
+            return "이미 받은 쿠폰입니다.";
+        }
+        // 유저 쿠폰 add
+        int result = productMapper.takeCoupon(userId, productCouponId);
+        if(result == 0){
+            throw new BaseException(ADD_FAIL_USER_COUPON);
+        }
+        // 작가 팔로우 add
+        return "쿠폰 지급이 완료되었습니다.";
     }
 
 }

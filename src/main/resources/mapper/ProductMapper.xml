@@ -30,6 +30,24 @@
         group by Product.productId ORDER BY date DESC
     </select>
 
+    <select id="getLiveProductsWithPage" resultType="GetLiveRes">
+        select Product.productId,
+               productName,
+               makerName,
+               IFNULL(thumbnailImageUrl, "") as thumbnailImageUrl,
+               (select AVG(star) from Review where Product.productId = Review.productId) as star,
+               (select COUNT(star) from Review where Product.productId = Review.productId) as reviewCount,
+               IFNULL((select content from Review R where R.productId=Product.productId limit 1), '') as review,
+            TIMESTAMP(OL.updatedAt) date
+        from Product
+            left join Review R on Product.productId = R.productId
+            inner join Maker M on Product.makerId = M.makerId
+            left join OrderList OL on R.orderListId = OL.orderListId
+        where Product.status = 'Y'
+        group by Product.productId ORDER BY date DESC
+        limit #{offset}, 10
+    </select>
+
     <select id="getNewProducts" resultType="GetNewRes">
         select Product.productId,
                productName,
@@ -40,6 +58,19 @@
             inner join Maker M on Product.makerId = M.makerId
         where Product.status = 'Y'
         ORDER BY date DESC
+    </select>
+
+    <select id="getNewProductsWithPage" resultType="GetNewRes">
+        select Product.productId,
+               productName,
+               makerName,
+               IFNULL(thumbnailImageUrl, "") as thumbnailImageUrl,
+            TIMESTAMP (Product.createdAt) as date
+        from Product
+            inner join Maker M on Product.makerId = M.makerId
+        where Product.status = 'Y'
+        ORDER BY date DESC
+        limit #{offset}, 10
     </select>
 
     <select id="getTodayMore" resultType="GetProductRes">
@@ -61,7 +92,7 @@
         ORDER BY RAND()
     </select>
 
-    <select id="getFirstBuy" resultType="GetProductRes">
+    <select id="getTodayMoreWithPage" resultType="GetProductRes">
         select Product.productId,
                Product.categoryId,
                productName,
@@ -76,7 +107,46 @@
                vip
         from Product
                  inner join Maker M on Product.makerId = M.makerId
+        where Product.status = 'Y'
+        ORDER BY RAND()
+        limit #{offset}, 10
+    </select>
+
+    <select id="getFirstBuy" resultType="GetProductRes">
+        select Product.productId,
+               Product.categoryId,
+               productName,
+               makerName,
+               IFNULL(thumbnailImageUrl, '') as thumbnailImageUrl,
+               price,
+               discountRate,
+               tag,
+               (select AVG(star) from Review where Product.productId = Review.productId) as star,
+               (select COUNT(star) from Review where Product.productId = Review.productId) as reviewCount,
+               IFNULL((select content from Review R where R.productId=Product.productId limit 1), '') as review,
+               vip
+        from Product
+                 inner join Maker M on Product.makerId = M.makerId
         where Product.status = 'F'
+    </select>
+
+    <select id="getFirstBuyWithPage" parameterType="int" resultType="GetProductRes">
+        select Product.productId,
+               Product.categoryId,
+               productName,
+               makerName,
+               IFNULL(thumbnailImageUrl, '') as thumbnailImageUrl,
+               price,
+               discountRate,
+               tag,
+               (select AVG(star) from Review where Product.productId = Review.productId) as star,
+               (select COUNT(star) from Review where Product.productId = Review.productId) as reviewCount,
+               IFNULL((select content from Review R where R.productId=Product.productId limit 1), '') as review,
+               vip
+        from Product
+                 inner join Maker M on Product.makerId = M.makerId
+        where Product.status = 'F'
+        limit #{offset}, 10
     </select>
 
     <select id="getRelateProducts" parameterType="int" resultType="GetProductRes">
@@ -100,6 +170,30 @@
                              where U.userId = #{userId}) as userCategory
         where Product.status = 'Y'
         ORDER BY Product.categoryId = userCategory.userCategoryId desc
+    </select>
+
+    <select id="getRelateProductsWithPage" parameterType="int" resultType="GetProductRes">
+        select Product.productId,
+               Product.categoryId,
+               productName,
+               makerName,
+               IFNULL(thumbnailImageUrl, '')                                                            as thumbnailImageUrl,
+               price,
+               discountRate,
+               tag,
+               (select AVG(star) from Review where Product.productId = Review.productId)                as star,
+               (select COUNT(star) from Review where Product.productId = Review.productId)              as reviewCount,
+               IFNULL((select content from Review R where R.productId = Product.productId limit 1), '') as review,
+               vip
+        from Product
+                 inner join Maker M on Product.makerId = M.makerId
+                 inner join (select categoryId as userCategoryId
+                             from Product
+                                      inner join User U on Product.productId = U.productId
+                             where U.userId = #{userId}) as userCategory
+        where Product.status = 'Y'
+        ORDER BY Product.categoryId = userCategory.userCategoryId desc
+        limit #{offset}, 10
     </select>
 
     <select id="getProductId" parameterType="int" resultType="int">
@@ -136,6 +230,37 @@
         group by collection.productId
     </select>
 
+    <select id="getMaybeProductsWithPage" parameterType="int" resultType="GetProductRes">
+        select *
+        from (select distinct Product.productId,
+                              Product.categoryId,
+                              productName,
+                              P.productKeyword,
+                              makerName,
+                              IFNULL(thumbnailImageUrl, '')                                                            as thumbnailImageUrl,
+                              price,
+                              discountRate,
+                              tag,
+                              (select AVG(star) from Review where Product.productId = Review.productId)                as star,
+                              (select COUNT(star)
+                               from Review
+                               where Product.productId = Review.productId)                                             as reviewCount,
+                              IFNULL((select content from Review R where R.productId = Product.productId limit 1),
+                             '')                                                                               as review,
+                              vip
+              from Product
+                       inner join Maker M on Product.makerId = M.makerId
+                       inner join ProductKeyword P on Product.productId = P.productId
+                       inner join (select PK.productKeyword
+                                   from Product
+                                            inner join ProductKeyword PK on Product.productId = PK.productId
+                                   where Product.productId = #{productId}) as userMaybe
+              where Product.status = 'Y'
+              ORDER BY P.productKeyword = userMaybe.productKeyword desc) as collection
+        group by collection.productId
+        limit #{offset}, 10
+    </select>
+
     <select id="getCategoryProducts" parameterType="int" resultType="GetProductRes">
         select Product.productId,
                Product.categoryId,
@@ -154,6 +279,25 @@
         where categoryId = #{categoryId} and Product.status = 'Y'
     </select>
 
+    <select id="getCategoryProductsWithPage" parameterType="int" resultType="GetProductRes">
+        select Product.productId,
+               Product.categoryId,
+               productName,
+               makerName,
+               IFNULL(thumbnailImageUrl, "") as thumbnailImageUrl,
+               price,
+               discountRate,
+               tag,
+               (select AVG(star) from Review where Product.productId = Review.productId) as star,
+               (select COUNT(star) from Review where Product.productId = Review.productId) as reviewCount,
+               IFNULL((select content from Review R where R.productId=Product.productId limit 1), '') as review,
+               vip
+        from Product
+                 inner join Maker M on Product.makerId = M.makerId
+        where categoryId = #{categoryId} and Product.status = 'Y'
+        limit #{offset}, 10
+    </select>
+
     <select id="getSearchProducts" parameterType="String" resultType="GetProductRes">
         select Product.productId,
                Product.categoryId,
@@ -170,6 +314,25 @@
         from Product
             inner join Maker M on Product.makerId = M.makerId
         where productName like '%${word}%' or makerName like '%${word}%' and Product.status = 'Y'
+    </select>
+
+    <select id="getSearchProductsWithPage" parameterType="String" resultType="GetProductRes">
+        select Product.productId,
+               Product.categoryId,
+               productName,
+               makerName,
+               IFNULL(thumbnailImageUrl, '') as thumbnailImageUrl,
+               price,
+               discountRate,
+               tag,
+               (select AVG(star) from Review where Product.productId = Review.productId) as star,
+               (select COUNT(star) from Review where Product.productId = Review.productId) as reviewCount,
+               IFNULL((select content from Review R where R.productId=Product.productId limit 1), '') as review,
+               vip
+        from Product
+                 inner join Maker M on Product.makerId = M.makerId
+        where productName like '%${word}%' or makerName like '%${word}%' and Product.status = 'Y'
+        limit #{offset}, 10
     </select>
 
     <select id="getProductDetail" parameterType="int" resultType="GetDetailRes">
@@ -223,6 +386,29 @@
         where R.productId = #{productId}
     </select>
 
+    <select id="getProductReviewsWithPage" parameterType="int" resultType="Review">
+        select R.reviewId,
+               U.userId,
+               userName,
+               R.updatedAt updateDate,
+               IFNULL(profileImageUrl, "") profileImageUrl,
+               star,
+               IFNULL(imageUrl, "") imageUrl,
+               IFNULL(R.content, "") content,
+               IFNULL((select group_concat(distinct ProductOption.content separator ' ')
+                       from ProductOption
+                                inner join OrderDetail OD on ProductOption.productOptionId = OD.productOptionId
+                                inner join Product P on ProductOption.productId = P.productId
+                                inner join Review R on P.productId = R.productId
+                       where R.productId = 1), '') as productOption
+        from Review R
+                 inner join OrderList OL on R.orderListId = OL.orderListId
+                 inner join Cart C on OL.cartId = C.cartId
+                 inner join User U on C.userId = U.userId
+        where R.productId = #{productId}
+        limit #{offset}, 5
+    </select>
+
     <select id="getProductKeywords" parameterType="int" resultType="String">
         select IFNULL(productKeyword, '') as productKeyword
         from ProductKeyword
@@ -238,6 +424,18 @@
                  inner join User U on Comment.userId = U.userId
         where Comment.productId = #{productId}
           and Comment.status = 'Y'
+    </select>
+
+    <select id="getProductCommentsWithPage" parameterType="int" resultType="com.example.demo.src.product.model.entity.Comment">
+        select Comment.commentId,
+               IFNULL(profileImageUrl, '') as commentUserProfileImageUrl,
+               userName as commentUserName,
+               IFNULL(content, '') as commentContent
+        from Comment
+                 inner join User U on Comment.userId = U.userId
+        where Comment.productId = #{productId}
+          and Comment.status = 'Y'
+        limit #{offset}, 5
     </select>
 
     <select id="getMakerInfo" parameterType="int" resultType="com.example.demo.src.product.model.entity.Maker">
@@ -326,4 +524,26 @@
     <update id="setLikeStatus" parameterType="PostLikeProductReq">
         Update LikeList set status = #{status} where userId = #{userId} and productId = #{productId}
     </update>
+
+    <select id="getProductCoupons" parameterType="int" resultType="GetCouponRes">
+        select productCouponId as couponId,
+               couponName,
+               rate,
+               amount,
+               priceMin,
+               DATE_FORMAT(startDate, '%Y.%m.%d')     as startDate,
+               DATE_FORMAT(endDate, '%Y.%m.%d')       as endDate,
+               TIMESTAMPDIFF(DAY, CURDATE(), endDate) as remainingDay,
+               ProductCoupon.status
+        from ProductCoupon
+        where productId = #{productId} and ProductCoupon.status = 'Y'
+    </select>
+
+    <select id="checkCoupon" parameterType="int" resultType="int">
+        select exists (select couponId from Coupon where productCouponId = #{productCouponId} and userId = #{userId} and status='Y')
+    </select>
+
+    <insert id="takeCoupon" parameterType="int">
+        insert into Coupon (productCouponId, userId) values(#{productCouponId}, #{userId})
+    </insert>
 </mapper>

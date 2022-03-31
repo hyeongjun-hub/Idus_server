@@ -26,7 +26,7 @@ public class CartController {
     private final JwtService jwtService;
 
     /**
-     * 33. 장바구니에 작품담기 API
+     * 34. 장바구니에 작품담기 API
      *
      * @return BaseResponse<PostCartRes>
      */
@@ -48,7 +48,7 @@ public class CartController {
     }
 
     /**
-     * 34. 장바구니 조회 API
+     * 35. 장바구니 조회 API
      *
      * @return BaseResponse<List<GetCartRes>>
      */
@@ -60,7 +60,7 @@ public class CartController {
     }
 
     /**
-     * 35. 장바구니 작품 수정 API
+     * 36. 장바구니 작품 수정 API
      *
      * @return BaseResponse<List<PostCartRes>>
      */
@@ -72,7 +72,7 @@ public class CartController {
     }
 
     /**
-     * 36. 장바구니 작품 삭제 API
+     * 37. 장바구니 작품 삭제 API
      *
      * @return BaseResponse<String>
      */

@@ -128,7 +128,6 @@
         where U.userId = #{userId}
     </select>
 
-
     <select id="getCoupons" parameterType="int" resultType="GetCouponRes">
         select couponId,
                couponName,
