@@ -326,4 +326,26 @@
     <update id="setLikeStatus" parameterType="PostLikeProductReq">
         Update LikeList set status = #{status} where userId = #{userId} and productId = #{productId}
     </update>
+
+    <select id="getProductCoupons" parameterType="int" resultType="GetCouponRes">
+        select productCouponId as couponId,
+               couponName,
+               rate,
+               amount,
+               priceMin,
+               DATE_FORMAT(startDate, '%Y.%m.%d')     as startDate,
+               DATE_FORMAT(endDate, '%Y.%m.%d')       as endDate,
+               TIMESTAMPDIFF(DAY, CURDATE(), endDate) as remainingDay,
+               ProductCoupon.status
+        from ProductCoupon
+        where productId = #{productId} and ProductCoupon.status = 'Y'
+    </select>
+
+    <select id="checkCoupon" parameterType="int" resultType="int">
+        select exists (select couponId from Coupon where productCouponId = #{productCouponId} and userId = #{userId} and status='Y')
+    </select>
+
+    <insert id="takeCoupon" parameterType="int">
+        insert into Coupon (productCouponId, userId) values(#{productCouponId}, #{userId})
+    </insert>
 </mapper>

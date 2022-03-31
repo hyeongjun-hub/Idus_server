@@ -88,19 +88,20 @@ public enum BaseResponseStatus {
 
     //[POST] /products
     CREATE_FAIL_LIKE_LIST(false, 4019, "작품 찜 테이블 추가에 실패하였습니다."),
+    ADD_FAIL_USER_COUPON(false, 4020, "유저 쿠폰 테이블 추가에 실패하였습니다."),
 
     //[POST] /carts
-    GET_CART_NO(false, 4020, "유효한 장바구니가 없습니다."),
+    GET_CART_NO(false, 4021, "유효한 장바구니가 없습니다."),
     CREATE_FAIL_DELIVERY_TIP(false, 4022, "장바구니 배송비 업데이트에 실패하였습니다."),
-    CREATE_FAIL_CART(false, 4020, "장바구니 생성에 실패하였습니다."),
-    UPDATE_FAIL_PRICE(false, 4021, "장바구니 가격 업데이트에 실패하였습니다."),
-    UPDATE_FAIL_CART_CLEAN(false, 4022, "장바구니 삭제에 실패하였습니다."),
-    UPDATE_FAIL_CART_DELIVERY_TIP(false, 4023, "장바구니 배송비 업데이트에 실패하였습니다."),
+    CREATE_FAIL_CART(false, 4023, "장바구니 생성에 실패하였습니다."),
+    UPDATE_FAIL_PRICE(false, 4024, "장바구니 가격 변경에 실패하였습니다."),
+    UPDATE_FAIL_CART_CLEAN(false, 4025, "장바구니 삭제에 실패하였습니다."),
+    UPDATE_FAIL_CART_DELIVERY_TIP(false, 4026, "장바구니 배송비 업데이트에 실패하였습니다."),
 
     //[PATCH] /carts
-    EDIT_FAIL_CART_COUNT(false, 4025, "장바구니 수량 변경에 실패하였습니다."),
-    EDIT_FAIL_CART_PRICE(false, 4026, "장바구니 가격 변경에 실패하였습니다."),
-    EDIT_FAIL_CART_REQUEST(false, 4027, "장바구니 요청사항 변경에 실패하였습니다."),
+    EDIT_FAIL_CART_COUNT(false, 4027, "장바구니 수량 변경에 실패하였습니다."),
+    EDIT_FAIL_CART_PRICE(false, 4028, "장바구니 가격 변경에 실패하였습니다."),
+    EDIT_FAIL_CART_REQUEST(false, 4029, "장바구니 요청사항 변경에 실패하였습니다."),
 
     //[POST] /orders
     UPDATE_FAIL_CART_STATUS(false, 4030, "장바구니 상태 변경에 실패하였습니다."),

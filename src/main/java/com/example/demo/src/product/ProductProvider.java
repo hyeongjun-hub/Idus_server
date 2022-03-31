@@ -7,6 +7,7 @@ import com.example.demo.src.product.model.entity.ProductKeyword;
 import com.example.demo.src.review.model.entity.Review;
 import com.example.demo.src.product.model.request.GetOptionReq;
 import com.example.demo.src.product.model.response.*;
+import com.example.demo.src.user.model.response.GetCouponRes;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -150,5 +151,10 @@ public class ProductProvider {
             a.setOption(productMapper.getOptionInfo(new GetOptionReq(a.getTitle(), productId)));
         }
         return getOptionRes;
+    }
+
+    public List<GetCouponRes> getProductCoupons(int productId) throws BaseException {
+        List<GetCouponRes> getCouponRes = productMapper.getProductCoupons(productId);
+        return getCouponRes;
     }
 }
