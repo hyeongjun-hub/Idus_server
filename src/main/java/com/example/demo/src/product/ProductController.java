@@ -5,6 +5,7 @@ import com.example.demo.config.BaseResponse;
 import com.example.demo.src.product.model.entity.Comment;
 import com.example.demo.src.product.model.entity.Maker;
 import com.example.demo.src.product.model.entity.ProductKeyword;
+import com.example.demo.src.product.model.entity.Query;
 import com.example.demo.src.review.model.entity.Review;
 import com.example.demo.src.product.model.response.*;
 import com.example.demo.src.user.model.response.GetCouponRes;
@@ -117,10 +118,18 @@ public class ProductController {
      * @return BaseException<List<GetProductRes>>
      */
     @GetMapping("/categories")
-    public BaseResponse<List<GetProductRes>> getCategoryProducts(@RequestParam("categoryId") int categoryId, @RequestParam(value = "page", required = false) Integer page) throws BaseException {
+    public BaseResponse<List<GetProductRes>> getCategoryProducts(@RequestParam("categoryId") int categoryId, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "delivery", required = false) String delivery, @RequestParam(value = "price", required = false) String price, @RequestParam(value = "discountRate", required = false) String discountRate, @RequestParam(value = "order", required = false) String order) throws BaseException {
         List<GetProductRes> getCategoryProducts = null;
-        if(page != null) getCategoryProducts = productProvider.getCategoryProducts(categoryId, page);
-        else getCategoryProducts = productProvider.getCategoryProducts(categoryId);
+        if(page != null) {
+            if(delivery != null || price != null || discountRate != null || order != null){
+                Query query = new Query(categoryId, delivery, price, discountRate, order, (page-1)*10);
+                getCategoryProducts = productProvider.getCategoryProducts(query);
+            }
+            else getCategoryProducts = productProvider.getCategoryProducts(categoryId, page);
+        }
+        else {
+            getCategoryProducts = productProvider.getCategoryProducts(categoryId);
+        }
         return new BaseResponse<>(getCategoryProducts);
     }
 
