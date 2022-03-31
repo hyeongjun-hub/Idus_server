@@ -7,6 +7,7 @@ import com.example.demo.src.product.model.entity.Maker;
 import com.example.demo.src.product.model.entity.ProductKeyword;
 import com.example.demo.src.review.model.entity.Review;
 import com.example.demo.src.product.model.response.*;
+import com.example.demo.src.user.model.response.GetCouponRes;
 import com.example.demo.utils.JwtService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -139,7 +140,7 @@ public class ProductController {
 
     /**
      * 28. 작품 옵션 조회 API
-     * @return BaseException
+     * @return BaseException<List<GetOptionsRes>>
      */
     @GetMapping("/{productId}/option")
     public BaseResponse<List<GetOptionRes>> getProductOptions(@PathVariable("productId") int productId) throws BaseException {
@@ -149,7 +150,7 @@ public class ProductController {
 
     /**
      * 29. 작품 찜 API
-     * @throws BaseException
+     * @return BaseException<String></String>
      */
     @PostMapping("/{productId}/like")
     public BaseResponse<String> likeProduct(@PathVariable("productId") int productId) throws BaseException {
@@ -157,4 +158,27 @@ public class ProductController {
         String likeResult = productService.likeProduct(userId, productId);
         return new BaseResponse<>(likeResult);
     }
+
+    /**
+     * 30. 작품 쿠폰 조회 API
+     * @return BaseException
+     */
+    @GetMapping("/{productId}/coupon")
+    public BaseResponse<List<GetCouponRes>> getProductCoupons(@PathVariable("productId") int productId) throws BaseException {
+        List<GetCouponRes> getCouponRes = productProvider.getProductCoupons(productId);
+        return new BaseResponse<>(getCouponRes);
+    }
+
+    /**
+     * 31. 작품 쿠폰 받기 API
+     * @return BaseException<String></String>
+     */
+    @PostMapping("/{productCouponId}")
+    public BaseResponse<String> takeCoupon(@PathVariable("productCouponId") int productCouponId) throws BaseException {
+        int userId = jwtService.getUserId();
+        String result = productService.takeCoupon(userId, productCouponId);
+        return new BaseResponse<>(result);
+    }
+
+
 }

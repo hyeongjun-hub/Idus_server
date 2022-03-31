@@ -7,6 +7,7 @@ import com.example.demo.src.review.model.entity.Review;
 import com.example.demo.src.product.model.request.GetOptionReq;
 import com.example.demo.src.product.model.request.PostLikeProductReq;
 import com.example.demo.src.product.model.response.*;
+import com.example.demo.src.user.model.response.GetCouponRes;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -61,4 +62,11 @@ public interface ProductMapper {
     String getLikeStatus(@Param("userId") int userId, @Param("productId") int productId);
 
     int setLikeStatus(PostLikeProductReq postLikeProductReq);
+
+    List<GetCouponRes> getProductCoupons(int productId);
+
+    // check coupon
+    int checkCoupon(@Param("userId") int userId, @Param("productCouponId") int productCouponId);
+
+    int takeCoupon(@Param("userId") int userId, @Param("productCouponId") int productCouponId);
 }

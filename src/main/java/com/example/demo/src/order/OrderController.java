@@ -25,7 +25,7 @@ public class OrderController {
     private final JwtService jwtService;
 
     /**
-     * 37. 주문하기 API
+     * 38. 주문하기 API
      *
      * @param postOrderReq
      * @return BaseResponse<Integer>
