@@ -1,9 +1,7 @@
 package com.example.demo.src.user;
 
 import com.example.demo.src.product.model.response.GetProductRes;
-import com.example.demo.src.user.model.entity.Address;
-import com.example.demo.src.user.model.entity.KaKaoUser;
-import com.example.demo.src.user.model.entity.User;
+import com.example.demo.src.user.model.entity.*;
 import com.example.demo.src.user.model.request.*;
 import com.example.demo.src.user.model.response.*;
 import com.example.demo.utils.KaKaoLoginService;
@@ -151,6 +149,20 @@ public class UserController {
     }
 
     /**
+     * 10. 유저 적립금 사용내역 조회 API
+     * @return BaseResponse<List<GetCouponRes>>
+     */
+    @GetMapping("/point")
+    public BaseResponse<GetPointRes> getPointList() throws BaseException {
+        int userId = jwtService.getUserId();
+        System.out.println("userId = " + userId);
+        int userPoint = userProvider.getUserPoint(userId);
+        List<Point> pointList = userProvider.getPointList(userId);
+        GetPointRes getPointRes = new GetPointRes(userPoint, pointList);
+        return new BaseResponse<>(getPointRes);
+    }
+
+    /**
      * 11. 유저 쿠폰 조회 API
      * @return BaseResponse<List<GetCouponRes>>
      */
@@ -211,25 +223,18 @@ public class UserController {
     }
 
     /**
-     * 회원 포인트조회 API
-     * @return BaseResponse<Integer>
-     */
-    @GetMapping("/point")
-    public BaseResponse<Integer> getPoint() throws BaseException {
-        int userId = jwtService.getUserId();
-        int point = userProvider.getPoint(userId);
-        return new BaseResponse<>(point);
-    }
-
-    /**
-     * 회원 선물조회 API
+     * 14. 유저 선물 조회 API
      * @return BaseResponse<List < GetPresentRes>>
      */
-    @GetMapping("/present")
-    public BaseResponse<List<GetPresentRes>> getPresents() throws BaseException {
+    @GetMapping("/gift")
+    public BaseResponse<GetGiftRes> getGifts() throws BaseException {
         int userId = jwtService.getUserId();
-        List<GetPresentRes> getPresentRes = userProvider.getPresents(userId);
-        return new BaseResponse<>(getPresentRes);
+        //받은 gift
+        List<Gift> takeGiftList = userProvider.getTakeGift(userId);
+        //준 gift
+        List<Gift> giveGiftList = userProvider.getGiveGift(userId);
+        GetGiftRes getGiftRes = new GetGiftRes(takeGiftList, giveGiftList);
+        return new BaseResponse<>(getGiftRes);
     }
 
 }

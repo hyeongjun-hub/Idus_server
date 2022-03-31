@@ -6,6 +6,7 @@ import com.example.demo.src.order.model.response.GetOrderDetailRes;
 import com.example.demo.src.order.model.response.GetOrderRes;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public interface OrderMapper {
     String getSmallCartStatus(int smallCartId);
 
     int createOrder(PostOrderReq postOrderReq);
+    int createGiftOrder(PostOrderReq postOrderReq);
 
     // update
     int updateCartStatus(int cartId);
@@ -27,8 +29,14 @@ public interface OrderMapper {
     int updatePoint(@Param("userId") int userId, @Param("point") int point);
     int updateOrderCount(int productId);
 
+    // 포인트 이용 내역 추가
+    int addUsePoint(@Param("orderListId") int orderListId, @Param("usePoint") int usePoint);
+
     // 후원 내역 추가
     int addSupport(@Param("userId") int userId, @Param("makerId") int makerId);
+
+    // 선물 내역 추가
+    int addGift(@Param("orderListId") int orderListId, @Param("takerId") int takerId);
 
     int getProductId(int smallCartId);
     int getUserId(int orderListId);

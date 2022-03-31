@@ -2,6 +2,8 @@ package com.example.demo.src.user;
 
 import com.example.demo.src.product.model.response.GetProductRes;
 import com.example.demo.src.user.model.entity.Address;
+import com.example.demo.src.user.model.entity.Gift;
+import com.example.demo.src.user.model.entity.Point;
 import com.example.demo.src.user.model.entity.User;
 import com.example.demo.src.user.model.request.*;
 import com.example.demo.src.user.model.response.*;
@@ -42,13 +44,13 @@ public interface UserMapper {
 
     int getUserIdByEmail(String userEmail);
 
-    int getPoint(int userId);
+    int getUserPoint(int userId);
+
+    List<Point> getPoint(int userId);
 
     List<GetCouponRes> getCoupons(int userId);
     List<GetProductRes> getLikeProducts(int userId);
     List<GetFollowRes> getFollowMakers(int userId);
-
-    List<GetPresentRes> getPresents(int userId);
 
     List<Address> getAddress(int userId);
 
@@ -67,5 +69,9 @@ public interface UserMapper {
     void logout(int userId);
 
     void updateIsLogin(int userId);
+
+    List<Gift> getTakeGift(int userId);
+    List<Gift> getGiveGift(int userId);
+
 
 }

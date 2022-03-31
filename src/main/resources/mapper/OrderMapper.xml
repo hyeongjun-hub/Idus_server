@@ -27,10 +27,23 @@
         insert into Support (userId, makerId) values (#{userId}, #{makerId});
     </insert>
 
+    <insert id="addGift" parameterType="int">
+        insert into Gift (orderListId, takerId) values (#{orderListId}, #{takerId});
+    </insert>
+
     <insert id="createOrder" parameterType="PostOrderReq">
         insert into OrderList (cartId, paymentMethodId, taker, phone, address, usePoint, isSupport, priceSum, finalPrice, isProtectNum, rewardPoint)
         values
         (#{cartId}, #{paymentMethodId}, #{taker}, #{phone}, #{address}, #{usePoint}, #{isSupport}, #{priceSum}, #{finalPrice}, #{isProtectNum}, #{rewardPoint});
+        <selectKey keyProperty="orderListId" resultType="int" order="AFTER">
+            select LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <insert id="createGiftOrder" parameterType="PostOrderReq">
+        insert into OrderList (cartId, paymentMethodId, taker, phone, address, usePoint, isSupport, priceSum, finalPrice, isProtectNum, rewardPoint, isGift, takerId, message)
+        values
+        (#{cartId}, #{paymentMethodId}, #{taker}, #{phone}, #{address}, #{usePoint}, #{isSupport}, #{priceSum}, #{finalPrice}, #{isProtectNum}, #{rewardPoint}, #{isGift}, #{takerId}, #{message});
         <selectKey keyProperty="orderListId" resultType="int" order="AFTER">
             select LAST_INSERT_ID()
         </selectKey>
@@ -57,6 +70,10 @@
     <update id="updatePoint" parameterType="int">
         update User set point = point + ${point} where userId = #{userId}
     </update>
+
+    <insert id="addUsePoint" parameterType="int">
+        insert into PointList (orderListId, point) values (#{orderListId}, #{usePoint})
+    </insert>
 
     <update id="updateOrderCount" parameterType="int">
         update Product set orderCount = orderCount + 1 where productId = #{productId}
