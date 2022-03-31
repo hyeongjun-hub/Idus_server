@@ -3,6 +3,7 @@ package com.example.demo.src.user;
 import com.example.demo.src.product.model.response.GetProductRes;
 import com.example.demo.src.user.model.entity.Address;
 import com.example.demo.src.user.model.entity.KaKaoUser;
+import com.example.demo.src.user.model.entity.Point;
 import com.example.demo.src.user.model.entity.User;
 import com.example.demo.src.user.model.request.*;
 import com.example.demo.src.user.model.response.*;
@@ -151,6 +152,20 @@ public class UserController {
     }
 
     /**
+     * 10. 유저 적립금 사용내역 조회 API
+     * @return BaseResponse<List<GetCouponRes>>
+     */
+    @GetMapping("/point")
+    public BaseResponse<GetPointRes> getPointList() throws BaseException {
+        int userId = jwtService.getUserId();
+        System.out.println("userId = " + userId);
+        int userPoint = userProvider.getUserPoint(userId);
+        List<Point> pointList = userProvider.getPointList(userId);
+        GetPointRes getPointRes = new GetPointRes(userPoint, pointList);
+        return new BaseResponse<>(getPointRes);
+    }
+
+    /**
      * 11. 유저 쿠폰 조회 API
      * @return BaseResponse<List<GetCouponRes>>
      */
@@ -208,17 +223,6 @@ public class UserController {
         userService.logoutUser(userId);
         PostUserDelRes logoutRes = new PostUserDelRes(userId);
         return new BaseResponse<>(logoutRes);
-    }
-
-    /**
-     * 회원 포인트조회 API
-     * @return BaseResponse<Integer>
-     */
-    @GetMapping("/point")
-    public BaseResponse<Integer> getPoint() throws BaseException {
-        int userId = jwtService.getUserId();
-        int point = userProvider.getPoint(userId);
-        return new BaseResponse<>(point);
     }
 
     /**

@@ -57,10 +57,27 @@ public class OrderService {
             }
         }
         // User의 point를 적립
-        System.out.println("postOrderReq = " + postOrderReq.getUsePoint());
-        result = orderMapper.updatePoint(userId, postOrderReq.getUsePoint());
-        if (result == 0) {
-            throw new BaseException(UPDATE_FAIL_USER_POINT);
+        if(postOrderReq.getRewardPoint() > 0) {
+            result = orderMapper.addUsePoint(orderListId, +postOrderReq.getRewardPoint());
+            if (result == 0) {
+                throw new BaseException(CREATE_FAIL_USE_POINT);
+            }
+            result = orderMapper.updatePoint(userId, postOrderReq.getRewardPoint());
+            if (result == 0) {
+                throw new BaseException(UPDATE_FAIL_USER_POINT);
+            }
+        }
+        // User의 point 사용내용 생성
+        if(postOrderReq.getUsePoint() > 0) {
+            result = orderMapper.addUsePoint(orderListId, -postOrderReq.getUsePoint());
+            if (result == 0) {
+                throw new BaseException(CREATE_FAIL_USE_POINT);
+            }
+            // User의 point 차감
+            result = orderMapper.updatePoint(userId, -postOrderReq.getUsePoint());
+            if (result == 0) {
+                throw new BaseException(UPDATE_FAIL_USER_POINT);
+            }
         }
         // Product의 orderCount +1
         for (int smallCart : smallCartIdList) {

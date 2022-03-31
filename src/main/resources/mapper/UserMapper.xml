@@ -101,9 +101,33 @@
         select userId from User where email = #{email}
     </select>
 
-    <select id="getPoint" parameterType="int" resultType="int">
-        select point as point from User where userId = #{userId}
+    <select id="getUserPoint" parameterType="int" resultType="int">
+        select point as userPoint from User where userId = #{userId}
     </select>
+
+    <select id="getPoint" parameterType="int" resultType="com.example.demo.src.user.model.entity.Point">
+        select pointListId,
+               DATE_FORMAT(PointList.createdAt, '%Y.%m.%d') as createdAt,
+        (select productName
+                from PointList
+                inner join OrderList O on PointList.orderListId = O.orderListId
+                inner join Cart C2 on O.cartId = C2.cartId
+                inner join SmallCart S on C2.cartId = S.cartId
+                inner join Product P2 on S.productId = P2.productId
+        limit 1) as productName,
+        PointList.point as usePoint,
+        (case
+            when PointList.point >= 0 then CONCAT(G.gradeName, " 적립")
+            else "사용"
+        end) as pointString
+        from PointList
+        inner join OrderList OL on PointList.orderListId = OL.orderListId
+        inner join Cart C on OL.cartId = C.cartId
+        inner join User U on C.userId = U.userId
+        inner join Grade G on U.gradeId = G.gradeId
+        where U.userId = #{userId}
+    </select>
+
 
     <select id="getCoupons" parameterType="int" resultType="GetCouponRes">
         select couponId,

@@ -4,6 +4,7 @@ package com.example.demo.src.user;
 import com.example.demo.config.BaseException;
 import com.example.demo.src.product.model.response.GetProductRes;
 import com.example.demo.src.user.model.entity.Address;
+import com.example.demo.src.user.model.entity.Point;
 import com.example.demo.src.user.model.entity.User;
 import com.example.demo.src.user.model.response.*;
 import lombok.AllArgsConstructor;
@@ -53,12 +54,20 @@ public class UserProvider {
         }
     }
 
-    public int getPoint(int userId) throws BaseException {
+    public int getUserPoint(int userId) throws BaseException {
         try{
-            int point = userMapper.getPoint(userId);
-            return point;
+            return userMapper.getUserPoint(userId);
         } catch (Exception ignored) {
-            throw new BaseException(PASSWORD_DECRYPTION_ERROR);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<Point> getPointList(int userId) throws BaseException {
+        try{
+            List<Point> pointList = userMapper.getPoint(userId);
+            return pointList;
+        } catch (Exception ignored) {
+            throw new BaseException(DATABASE_ERROR);
         }
     }
 
