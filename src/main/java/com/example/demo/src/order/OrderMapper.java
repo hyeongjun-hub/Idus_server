@@ -27,6 +27,9 @@ public interface OrderMapper {
     int updatePoint(@Param("userId") int userId, @Param("point") int point);
     int updateOrderCount(int productId);
 
+    // 포인트 이용 내역 추가
+    int addUsePoint(@Param("orderList") int orderList, @Param("usePoint") int usePoint);
+
     // 후원 내역 추가
     int addSupport(@Param("userId") int userId, @Param("makerId") int makerId);
 
