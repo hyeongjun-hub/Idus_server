@@ -3,6 +3,7 @@ package com.example.demo.src.product;
 import com.example.demo.src.product.model.entity.Comment;
 import com.example.demo.src.product.model.entity.Maker;
 import com.example.demo.src.product.model.entity.ProductKeyword;
+import com.example.demo.src.product.model.entity.Query;
 import com.example.demo.src.review.model.entity.Review;
 import com.example.demo.src.product.model.request.GetOptionReq;
 import com.example.demo.src.product.model.request.PostLikeProductReq;
@@ -41,6 +42,7 @@ public interface ProductMapper {
 
     List<GetProductRes> getCategoryProducts(int categoryId);
     List<GetProductRes> getCategoryProductsWithPage(@Param("categoryId")int categoryId, @Param("offset") int offset);
+    List<GetProductRes> getCategoryProductsWithPageAndFilter(Query query);
 
     List<GetProductRes> getSearchProducts(String word);
     List<GetProductRes> getSearchProductsWithPage(@Param("word")String word, @Param("offset")int offset);
