@@ -4,6 +4,7 @@ import com.example.demo.config.BaseException;
 import com.example.demo.src.product.model.entity.Comment;
 import com.example.demo.src.product.model.entity.Maker;
 import com.example.demo.src.product.model.entity.ProductKeyword;
+import com.example.demo.src.product.model.entity.Query;
 import com.example.demo.src.review.model.entity.Review;
 import com.example.demo.src.product.model.request.GetOptionReq;
 import com.example.demo.src.product.model.response.*;
@@ -152,6 +153,11 @@ public class ProductProvider {
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
+    }
+
+    public List<GetProductRes> getCategoryProducts(Query query) throws BaseException {
+            List<GetProductRes> categoryProducts = productMapper.getCategoryProductsWithPageAndFilter(query);
+            return categoryProducts;
     }
 
     public List<GetProductRes> getSearchProducts(String word) throws BaseException {
