@@ -4,6 +4,7 @@ package com.example.demo.src.user;
 import com.example.demo.config.BaseException;
 import com.example.demo.src.product.model.response.GetProductRes;
 import com.example.demo.src.user.model.entity.Address;
+import com.example.demo.src.user.model.entity.Gift;
 import com.example.demo.src.user.model.entity.Point;
 import com.example.demo.src.user.model.entity.User;
 import com.example.demo.src.user.model.response.*;
@@ -97,24 +98,34 @@ public class UserProvider {
         }
     }
 
-    public List<GetPresentRes> getPresents(int userId) throws BaseException{
-        try{
-            List<GetPresentRes> getPresentRes = userMapper.getPresents(userId);
-            return getPresentRes;
-        }
-        catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
-
     public List<Address> getAddress(int userId) throws BaseException{
         try{
             List<Address> getAddressRes = userMapper.getAddress(userId);
             return getAddressRes;
         }
         catch (Exception exception) {
-            System.out.println("exception.getMessage() = " + exception.getMessage());
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public List<Gift> getTakeGift(int userId) throws BaseException{
+        try{
+            List<Gift> getTakeGiftList = userMapper.getTakeGift(userId);
+            return getTakeGiftList;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<Gift> getGiveGift(int userId) throws BaseException{
+        try{
+            List<Gift> getGiveGiftList = userMapper.getGiveGift(userId);
+            return getGiveGiftList;
+        }
+        catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 }

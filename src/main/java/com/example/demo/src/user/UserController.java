@@ -1,10 +1,7 @@
 package com.example.demo.src.user;
 
 import com.example.demo.src.product.model.response.GetProductRes;
-import com.example.demo.src.user.model.entity.Address;
-import com.example.demo.src.user.model.entity.KaKaoUser;
-import com.example.demo.src.user.model.entity.Point;
-import com.example.demo.src.user.model.entity.User;
+import com.example.demo.src.user.model.entity.*;
 import com.example.demo.src.user.model.request.*;
 import com.example.demo.src.user.model.response.*;
 import com.example.demo.utils.KaKaoLoginService;
@@ -226,14 +223,18 @@ public class UserController {
     }
 
     /**
-     * 회원 선물조회 API
+     * 14. 유저 선물 조회 API
      * @return BaseResponse<List < GetPresentRes>>
      */
-    @GetMapping("/present")
-    public BaseResponse<List<GetPresentRes>> getPresents() throws BaseException {
+    @GetMapping("/gift")
+    public BaseResponse<GetGiftRes> getGifts() throws BaseException {
         int userId = jwtService.getUserId();
-        List<GetPresentRes> getPresentRes = userProvider.getPresents(userId);
-        return new BaseResponse<>(getPresentRes);
+        //받은 gift
+        List<Gift> takeGiftList = userProvider.getTakeGift(userId);
+        //준 gift
+        List<Gift> giveGiftList = userProvider.getGiveGift(userId);
+        GetGiftRes getGiftRes = new GetGiftRes(takeGiftList, giveGiftList);
+        return new BaseResponse<>(getGiftRes);
     }
 
 }
