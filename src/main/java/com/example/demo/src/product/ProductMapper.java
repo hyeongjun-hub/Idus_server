@@ -20,22 +20,30 @@ public interface ProductMapper {
     List<GetTodayRes> getTodayProducts();
 
     List<GetLiveRes> getLiveProducts();
+    List<GetLiveRes> getLiveProductsWithPage(@Param("offset")int offset);
 
     List<GetNewRes> getNewProducts();
+    List<GetNewRes> getNewProductsWithPage(int offset);
 
     List<GetProductRes> getFirstBuy();
+    List<GetProductRes> getFirstBuyWithPage(int offset);
 
     List<GetProductRes> getRelateProducts(int userId);
+    List<GetProductRes> getRelateProductsWithPage(@Param("userId")int userId, @Param("offset")int offset);
 
     int getProductId(int userId);
 
     List<GetProductRes> getMaybeProducts(int productId);
+    List<GetProductRes> getMaybeProductsWithPage(@Param("productId")int productId, @Param("offset") int offset);
 
     List<GetProductRes> getTodayMore();
+    List<GetProductRes> getTodayMoreWithPage(int offset);
 
     List<GetProductRes> getCategoryProducts(int categoryId);
+    List<GetProductRes> getCategoryProductsWithPage(@Param("categoryId")int categoryId, @Param("offset") int offset);
 
     List<GetProductRes> getSearchProducts(String word);
+    List<GetProductRes> getSearchProductsWithPage(@Param("word")String word, @Param("offset")int offset);
 
     GetDetailRes getProductDetail(int productId);
 
