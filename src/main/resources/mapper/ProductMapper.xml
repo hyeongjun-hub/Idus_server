@@ -279,6 +279,38 @@
         where categoryId = #{categoryId} and Product.status = 'Y'
     </select>
 
+    <select id="getCategoryProductsWithPageAndFilter" parameterType="Query" resultType="GetProductRes">
+        select Product.productId,
+               Product.categoryId,
+               productName,
+               makerName,
+               IFNULL(thumbnailImageUrl, "") as thumbnailImageUrl,
+               price,
+               discountRate,
+               tag,
+               (select AVG(star) from Review where Product.productId = Review.productId) as star,
+               (select COUNT(star) from Review where Product.productId = Review.productId) as reviewCount,
+               IFNULL((select content from Review R where R.productId=Product.productId limit 1), '') as review,
+               vip,
+               (select count(likeListId) from LikeList inner join Product P on LikeList.productId = P.productId where P.productId = Product.productId and LikeList.status = 'Y') as likeCount
+        from Product
+                 inner join Maker M on Product.makerId = M.makerId
+        where categoryId = #{categoryId} and Product.status = 'Y'
+        <if test="delivery != null">
+            and Product.deliveryTip ${delivery}
+        </if>
+        <if test="price != null">
+            and Product.price ${price}
+        </if>
+        <if test="discountRate != null">
+            and Product.discountRate ${discountRate}
+        </if>
+        <if test="order != null">
+            order by ${order} desc
+        </if>
+        limit #{offset}, 10
+    </select>
+
     <select id="getCategoryProductsWithPage" parameterType="int" resultType="GetProductRes">
         select Product.productId,
                Product.categoryId,
