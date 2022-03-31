@@ -198,5 +198,24 @@ public class ProductController {
         return new BaseResponse<>(result);
     }
 
+    /**
+     * 32. 구매후기 더보기 조회 API
+     * @return BaseException<List<Review>>
+     */
+    @GetMapping("/{productId}/review")
+    public BaseResponse<List<Review>> getReviewMore(@PathVariable("productId") int productId, @RequestParam(value = "page", required = false) Integer page) throws BaseException {
+        List<Review> getReview = productProvider.getProductReviews(productId, page);
+        return new BaseResponse<>(getReview);
+    }
+
+    /**
+     * 33. 이전 댓글 더보기 조회 API
+     * @return BaseException<GetDetailTotalRes>>
+     */
+    @GetMapping("/{productId}/comment")
+    public BaseResponse<List<Comment>> getProductDetail(@PathVariable("productId") int productId , @RequestParam(value = "page", required = false) Integer page) throws BaseException {
+        List<Comment> getComment = productProvider.getProductComments(productId, page);
+        return new BaseResponse<>(getComment);
+    }
 
 }

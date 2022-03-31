@@ -48,10 +48,12 @@ public interface ProductMapper {
     GetDetailRes getProductDetail(int productId);
 
     List<Review> getProductReviews(int productId);
+    List<Review> getProductReviewsWithPage( @Param("productId") int productId, @Param("offset") int offset);
 
     List<ProductKeyword> getProductKeywords(int productId);
 
     List<Comment> getProductComments(int productId);
+    List<Comment> getProductCommentsWithPage(@Param("productId")int productId, @Param("offset") int offset);
 
     Maker getMakerInfo(int productId);
 

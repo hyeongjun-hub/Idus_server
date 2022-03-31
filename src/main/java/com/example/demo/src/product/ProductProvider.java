@@ -190,6 +190,15 @@ public class ProductProvider {
         }
     }
 
+    public List<Review> getProductReviews(int productId, int page) throws BaseException {
+        try {
+            List<Review> getReviews = productMapper.getProductReviewsWithPage(productId, (page-1)*5);
+            return getReviews;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
     public List<ProductKeyword> getProductKeywords(int productId) throws BaseException {
         try {
             List<ProductKeyword> getKeyword = productMapper.getProductKeywords(productId);
@@ -202,6 +211,15 @@ public class ProductProvider {
     public List<Comment> getProductComments(int productId) throws BaseException {
         try {
             List<Comment> getComment = productMapper.getProductComments(productId);
+            return getComment;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<Comment> getProductComments(int productId, int page) throws BaseException {
+        try {
+            List<Comment> getComment = productMapper.getProductCommentsWithPage(productId, (page-1)*5);
             return getComment;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
