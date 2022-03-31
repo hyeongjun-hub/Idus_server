@@ -98,7 +98,7 @@
     </select>
 
     <select id="getUserIdByEmail" parameterType="string" resultType="int">
-        select userId from User where email = #{email}
+        select userId from User where email = #{email} and status = 'Y'
     </select>
 
     <select id="getUserPoint" parameterType="int" resultType="int">
