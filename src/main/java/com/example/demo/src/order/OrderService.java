@@ -35,7 +35,18 @@ public class OrderService {
             }
         }
         // 주문내역 생성
-        orderMapper.createOrder(postOrderReq);
+        if(postOrderReq.getIsGift() == null) {
+            int orderResult = orderMapper.createOrder(postOrderReq);
+            if(orderResult == 0){
+                throw new BaseException(DATABASE_ERROR);
+            }
+        } else {
+            // 선물일 때
+            int orderResult = orderMapper.createGiftOrder(postOrderReq);
+            if(orderResult == 0){
+                throw new BaseException(DATABASE_ERROR);
+            }
+        }
         int orderListId = postOrderReq.getOrderListId();
         // cart의 status를 N으로 변경
         int result = orderMapper.updateCartStatus(postOrderReq.getCartId());
@@ -58,7 +69,7 @@ public class OrderService {
         }
         // User의 point를 적립
         if(postOrderReq.getRewardPoint() > 0) {
-            result = orderMapper.addUsePoint(orderListId, +postOrderReq.getRewardPoint());
+            result = orderMapper.addUsePoint(orderListId, postOrderReq.getRewardPoint());
             if (result == 0) {
                 throw new BaseException(CREATE_FAIL_USE_POINT);
             }
@@ -67,7 +78,7 @@ public class OrderService {
                 throw new BaseException(UPDATE_FAIL_USER_POINT);
             }
         }
-        // User의 point 사용내용 생성
+        // User의 point 사용 내용 생성
         if(postOrderReq.getUsePoint() > 0) {
             result = orderMapper.addUsePoint(orderListId, -postOrderReq.getUsePoint());
             if (result == 0) {
@@ -95,6 +106,13 @@ public class OrderService {
                 if (result == 0) {
                   throw new BaseException(CREATE_FAIL_SUPPORT);
                 }
+            }
+        }
+        // gift 테이블 컬럼 추가
+        if (postOrderReq.getIsGift() != null) {
+            result = orderMapper.addGift(orderListId, postOrderReq.getTakerId());
+            if (result == 0) {
+                throw new BaseException(CREATE_FAIL_GIFT);
             }
         }
         return orderListId;

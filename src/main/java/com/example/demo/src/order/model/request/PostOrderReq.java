@@ -45,7 +45,7 @@ public class PostOrderReq {
     private String isProtectNum;
     @Length(max = 1, message = "한 글자만 입력가능합니다.")
     private String isGift;
-    private int takeUserId;
+    private int takerId;
     private String message;
     @PositiveOrZero(message = "0 또는 양수를 입력하세요.")
     @NotNull(message = "적립금을 입력해주세요.")

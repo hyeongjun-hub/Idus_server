@@ -110,6 +110,7 @@ public enum BaseResponseStatus {
     UPDATE_FAIL_PRODUCT_ORDER_COUNT(false, 4034, "작품 주문 횟수 업데이트에 실패하였습니다."),
     CREATE_FAIL_SUPPORT(false, 4035, "후원 내역 생성에 실패하였습니다."),
     CREATE_FAIL_USE_POINT(false, 4036, "적립 내역 생성에 실패하였습니다."),
+    CREATE_FAIL_GIFT(false, 4037, "선물 내역 생성에 실패하였습니다."),
 
     //[POST] /reviews
     CREATE_FAIL_REVIEW(false, 4040, "구매후기 생성에 실패하였습니다."),
