@@ -102,6 +102,10 @@ JDBC template -> MyBatis
 * null값 수정
   * 결과값에 null값을 포함해서 나오면 데이터를 다루기 어렵기 때문에 데이터베이스에 애초에 null을 잘 저장하지 않는 것이 좋다. 
   * 따라서 IFNULL 문법을 통해 query문들을 수정했고 database의 dafault 값들을 null에서 ''으로 바꾸는 작업을 하였다.
+* 1차 위클리 스크럼
+![image](https://user-images.githubusercontent.com/77392219/161232232-99a7acaf-45df-42bf-9c2e-13e180e6a7ca.png)
+  * UI와 user domain api 연동확인
+  * 느낀점: 처음으로 내가 만든 api가 사용되는 것을 확인하여서 감명깊었음
 
 ## 2022-03-25 진행상황(7일차)
 * order domain의 우선순위 api 구축(100%)
@@ -133,6 +137,11 @@ JDBC template -> MyBatis
   * 유저 쿠폰 조회 api
   * 유저 찜 박품 목록 조회 api
   * 유저 팔로우 작가 목록 조회 api
+* 2차 위클리 스크럼
+![image](https://user-images.githubusercontent.com/77392219/161231952-be2723bb-5d05-4a7c-85cd-1af71186bec8.png)
+  * product domain api 연동 확인
+  * 1차 피드백과 계획 공유
+  * 느낀점: 굉장히 배려를 많이 해주시고 소통이 잘되어서 원활하게 개발할 수 있었음
 
 ## 2022-03-29 진행상황(11일차)
 * product domain의 모든 api 구축(100%)
