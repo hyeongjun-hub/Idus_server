@@ -137,6 +137,6 @@
                  inner join OrderList OL on SmallCart.cartId = OL.cartId
                  inner join ProductOption PO on OD.productOptionId = PO.productOptionId
                  inner join Product P on PO.productId = P.productId
-        where OL.orderListId = #{orderListId}
+        where OL.orderListId = #{orderListId} and SmallCart.status="N"
     </select>
 </mapper>
