@@ -1,4 +1,16 @@
 # RC 4기 Rising Test, Idus_A 
+데이터저장소 : firebase <br>
+JDBC template -> MyBatis
+* mybatis의 특징
+  * 쉬운 접근성과 코드의 간결함
+    * JDBC의 모든 기능을 Mybatis가 대부분 제공한다.
+    * 복잡한 JDBC코드를 걷어내며 깔끔한 소스코드를 유지할 수 있다.
+    * 수동적인 파라미터 설정과 쿼리 결과에 대한 맵핑 구문을 제거할 수 있다.
+  * SQL문과 프로그래밍 코드의 분리
+    * SQL에 변경이 있을 때마다 자바 코드를 수정하거나 컴파일하지 않아도 된다.
+  * 다양한 프로그래밍 언어로 구현가능
+    Java, C#, .NET, Ruby
+[출처](https://byul91oh.tistory.com/232)
   
 ## 2022-03-19 진행상황(1일차)
 * 로컬 서버 구축
@@ -14,7 +26,7 @@
   * Password : 54dqy6
 * Datagrip에 쿼리문 작성
   * Dummy data 입력
-* local/prod server에서 api 호출 확인
+* local/prod server(AWS EC2)에서 api 호출 확인
 * user domain의 우선순위 api들 구축 (100%)
   * user join 
   * login
@@ -132,6 +144,15 @@
 
 ## 2022-03-30 진행상황(12일차)
 * 2차 피드백
+  * tinyint(1)과 char(1) 둘 중 하나를 고를 때 근거가 부족
+  * JDBC template vs myBatis vs jpa + 근거
+  * 코드리뷰 
+    * 자바스럽게 메소드를 잘게 쪼개자
+    * setter 쓰지 말고 생성자 overloading
+    * 반복되는 코드는 interceptor 나 filter, AOP..
+    * 책 추천
+      * 이펙티브 자바, 클린코드
+    * s3 추천
 * cart domain 모든 api 구축(100%)
   * 장바구니 수정 api
     * 수량을 바꾸면 장바구니의 전체 가격이 수정되도록 로직 추가
@@ -158,5 +179,11 @@
   * price
   * discountRate
   * order by 
-```myBatis의 <if> 문법으로 필터가 전부 선택되지 않아도 필터링 되도록 처리 할 수 있었다. ```
+
+```
+myBatis의 <if> 문법으로 필터가 전부 선택되지 않아도 필터링 되도록 처리 할 수 있었다. 
+```
+
 * 제출
+  * https://drive.google.com/file/d/1HRzNq9OVmKyOZ5VeeWCmxL38OgMtTnSr/view?usp=sharing
+
