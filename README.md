@@ -145,8 +145,18 @@
   * 유저 적립금 이용 내역 조회 api
   * 유저 선물 조회 api
 * 주문하기의 req 값으로 isGift를 추가하여 따로 선물하기라는 api를 만들지 않고 주문에 포함시켰다 -> api 인덱스 변경
-* product domain 모든 api 구축(0%)
+* product domain 모든 api 구축(100%)
   * 작품 쿠폰 조회 api
   * 작품 쿠폰 받기 api
   * 구매후기 더보기 api
   * 이전 댓글 더보기 api
+
+## 2022-04-01 진행상황(14일차)
+* 모든 api 구축
+* category 작품들 필터링 구현
+  * deliveryTip
+  * price
+  * discountRate
+  * order by 
+```myBatis의 <if> 문법으로 필터가 전부 선택되지 않아도 필터링 되도록 처리 할 수 있었다. ```
+* 제출
