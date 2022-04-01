@@ -123,7 +123,7 @@ JDBC template -> MyBatis
 * issue: review를 한 번만 작성할 수 있다는 생각에 주문내역과 review 테이블을 연결하였는데 그러다보니 review에서 작성한 product 정보를 따로 가져올 수 가 없었다 
   * resolve: review 테이블을 smallCart와 연결하여 각 smallCart에 review를 달고 review를 달면 smallCart status 값을 'R'로 변경하도록 로직을 짰고, 가져올때는 'R'인 값만 가져올 수 있도록 하였다.
 * productOption result 값 수정
-  * front 분이 title별로 데이터 값을 나눠서 달라고 요청하였기 때문에 수정
+  * front 분이 title별로 데이터 값을 나눠 달라고 요청하였기 때문에 수정
 
 ## 2022-03-27 진행상황(9일차)
 * api 명세서 수정
@@ -196,3 +196,10 @@ myBatis의 <if> 문법으로 필터가 전부 선택되지 않아도 필터링 �
 * 제출
   * https://drive.google.com/file/d/1HRzNq9OVmKyOZ5VeeWCmxL38OgMtTnSr/view?usp=sharing
 
+## 이후 계획
+코드 리팩토링
+1. 런타임 에러를 제거
+2. java enum을 사용
+3. tiny int (1)로 변경
+4. 메소드 분할
+5. 인터셉터
