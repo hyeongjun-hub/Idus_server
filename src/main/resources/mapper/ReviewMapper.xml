@@ -18,7 +18,7 @@
                  inner join Product P on Review.productId = P.productId
         where C.userId = #{userId}
           and SC.status = 'R'
-          and Review.status = 'Y'
+          and (Review.status = 'Y' or Review.status = 'E')
     </select>
 
     <select id="getId" parameterType="int" resultType="int">
