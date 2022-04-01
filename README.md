@@ -187,12 +187,10 @@ JDBC template -> MyBatis
   * deliveryTip
   * price
   * discountRate
-  * order by 
-
+  * order by
 ```
 myBatis의 <if> 문법으로 필터가 전부 선택되지 않아도 필터링 되도록 처리 할 수 있었다. 
 ```
-
 * 제출
   * https://drive.google.com/file/d/1HRzNq9OVmKyOZ5VeeWCmxL38OgMtTnSr/view?usp=sharing
 

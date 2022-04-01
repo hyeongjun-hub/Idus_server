@@ -27,7 +27,6 @@ public class CartService {
     @Transactional(rollbackFor = {BaseException.class})
     public int createCart(int userId, PostCartReq postCartReq) throws BaseException {
         // 중복 체크
-        // 있으면 return
         if (cartMapper.checkCart(userId) == 1) {
             return cartMapper.getCartId(userId);
         }
@@ -38,8 +37,11 @@ public class CartService {
         if (result == 0) {
             throw new BaseException(CREATE_FAIL_CART);
         }
-        System.out.println("postCreateCartReq.getCartId() = " + postCreateCartReq.getCartId());
-        return postCreateCartReq.getCartId();
+        try{
+            return postCreateCartReq.getCartId();
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 
     @Transactional(rollbackFor = {BaseException.class})
@@ -56,7 +58,11 @@ public class CartService {
         if (result == 0) {
             throw new BaseException(CREATE_FAIL_DELIVERY_TIP);
         }
-        return postSmallCartReq.getSmallCartId();
+        try{
+            return postSmallCartReq.getSmallCartId();
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 
     @Transactional(rollbackFor = {BaseException.class})

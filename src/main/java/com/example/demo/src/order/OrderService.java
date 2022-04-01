@@ -115,7 +115,11 @@ public class OrderService {
                 throw new BaseException(CREATE_FAIL_GIFT);
             }
         }
-        return orderListId;
+        try{
+            return orderListId;
+        } catch (Exception exc) {
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 
     public void checkUser(int userId, int orderListId) throws BaseException {

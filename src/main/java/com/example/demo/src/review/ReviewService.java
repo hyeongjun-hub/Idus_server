@@ -39,7 +39,11 @@ public class ReviewService {
             throw new BaseException(UPDATE_FAIL_CART_STATUS);
         }
         int reviewId = postReviewReq.getReviewId();
-        return new PostReviewRes(reviewId, postReviewReq.getContent());
+        try{
+            return new PostReviewRes(reviewId, postReviewReq.getContent());
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 
     @Transactional(rollbackFor = {BaseException.class})
