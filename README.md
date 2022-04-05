@@ -1,5 +1,5 @@
 # RC 4기 Rising Test, Idus_A 
-데이터저장소 : firebase <br>
+데이터저장소 : [firebase](gs://idus-80a9a.appspot.com/) <br>
 JDBC template -> MyBatis
 * mybatis의 특징
   * 쉬운 접근성과 코드의 간결함
