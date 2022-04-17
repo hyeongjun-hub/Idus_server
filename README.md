@@ -22,8 +22,8 @@ JDBC template -> MyBatis
 ## 2022-03-20 진행상황(2일차)
 * ERD 설계 완료
   ![](https://user-images.githubusercontent.com/77392219/159211206-0745dabf-7e12-45d9-ad7d-640721967318.png)
-  * [AqueryTool 링크 (읽기전용)](https://aquerytool.com/aquerymain/index/?rurl=61c36d0c-50c8-4842-a357-d41aff6251e7&)
-  * Password : 54dqy6
+  * [AqueryTool 링크 (읽기전용)](https://aquerytool.com/aquerymain/index/?rurl=0914c757-7891-4371-acd3-e763035e2128&)
+  * Password : 7kbyn3
 * Datagrip에 쿼리문 작성
   * Dummy data 입력
 * local/prod server(AWS EC2)에서 api 호출 확인
@@ -196,9 +196,10 @@ myBatis의 <if> 문법으로 필터가 전부 선택되지 않아도 필터링 �
 
 ## 이후 계획
 코드 리팩토링
-1. 런타임 에러를 제거
-2. java enum을 사용
+1. 런타임 에러를 제거 (o)
+2. java enum을 사용 
 3. Jackson 어노테이션을 이용해 entity 수정
 4. tiny int (1)로 변경
 5. 메소드 분할
 6. 인터셉터
+7. database id로 변경
