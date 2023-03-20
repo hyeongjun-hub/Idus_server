@@ -193,13 +193,3 @@ myBatis의 <if> 문법으로 필터가 전부 선택되지 않아도 필터링 �
 ```
 * 제출
   * https://drive.google.com/file/d/1HRzNq9OVmKyOZ5VeeWCmxL38OgMtTnSr/view?usp=sharing
-
-## 이후 계획
-코드 리팩토링
-1. 런타임 에러를 제거 (o)
-2. java enum을 사용 
-3. Jackson 어노테이션을 이용해 entity 수정
-4. tiny int (1)로 변경
-5. 메소드 분할
-6. 인터셉터
-7. database id로 변경
